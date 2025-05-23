@@ -44,6 +44,11 @@
                 @apply text-primary after:w-full;
             }
         }
+        a{
+            text-decoration: underline;
+            margin-bottom: 20px;
+            color: rgb(3, 121, 168);
+        }
     </style>
 </head>
 
@@ -51,26 +56,26 @@
     <!-- 导航栏 -->
     <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm transition-all duration-300">
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <a href="#" class="flex items-center gap-2">
-                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
-                    <i class="fa-solid fa-feather"></i>
-                </div>
-                <span class="text-xl font-bold">我的博客</span>
-            </a>
+            <!-- <a href="#" class="flex items-center gap-2"> -->
+            <!-- <div class="w-10 h-10">
+                    <img style="border-radius: 20px;background-color: white;" src="./favicon.ico">
+                </div> -->
+            <span class="text-xl font-bold">我的博客</span>
+            <!-- </a> -->
 
             <!-- 桌面导航 -->
-            <nav class="hidden md:flex items-center space-x-1">
+            <!-- <nav class="hidden md:flex items-center space-x-1">
                 <a href="#" class="nav-link active">首页</a>
                 <a href="#" class="nav-link">文章</a>
                 <a href="#" class="nav-link">分类</a>
                 <a href="#" class="nav-link">标签</a>
                 <a href="#" class="nav-link">关于</a>
-            </nav>
+            </nav> -->
 
             <!-- 移动端菜单按钮 -->
-            <button id="menu-toggle" class="md:hidden text-dark hover:text-primary">
+            <!-- <button id="menu-toggle" class="md:hidden text-dark hover:text-primary">
                 <i class="fa-solid fa-bars text-xl"></i>
-            </button>
+            </button> -->
         </div>
 
         <!-- 移动端导航菜单 -->
@@ -88,316 +93,30 @@
     <!-- 主内容区 -->
     <main class="flex-grow container mx-auto px-4 py-8">
         <div class="flex flex-col lg:flex-row gap-8">
-            <!-- 文章列表区 -->
-            <div class="w-full lg:w-2/3">
-                <!-- 特色文章 -->
-                <div class="mb-12">
-                    <div class="relative rounded-xl overflow-hidden group h-[350px]">
-                        <img src="https://picsum.photos/800/450" alt="特色文章"
-                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                        <div
-                            class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
-                            <span
-                                class="inline-block px-3 py-1 bg-secondary/90 text-white text-sm font-medium rounded-full mb-3 w-max">
-                                特色
-                            </span>
-                            <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">探索前端开发的未来趋势</h2>
-                            <p class="text-white/80 mb-4 line-clamp-2">
-                                随着技术的快速发展，前端开发领域正经历着前所未有的变革。本文将深入探讨2025年最值得关注的前端开发趋势。</p>
-                            <div class="flex items-center gap-3">
-                                <img src="https://picsum.photos/40/40" alt="作者头像"
-                                    class="w-10 h-10 rounded-full object-cover">
-                                <div>
-                                    <p class="text-white font-medium">张小明</p>
-                                    <p class="text-white/60 text-sm">2025-05-20 · 10分钟阅读</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- 最新文章标题 -->
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold">最新文章</h2>
-                    <a href="#" class="text-primary hover:underline flex items-center gap-1">
-                        查看全部 <i class="fa-solid fa-arrow-right text-sm"></i>
-                    </a>
-                </div>
+            <!-- 关于博主 -->
+            <div
+                style="width: 100%;background-color: white;padding-top: 20px;padding-bottom: 20px;border-radius: 20px;height: 400px;">
+                <div style="align-items: center;display: flex;flex-direction:column;margin-top: 50px;">
+                    <img src="./favicon.ico" alt="头像"
+                        class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4">
+                    <h3 class="text-xl font-bold mb-1">KennyHito</h3>
+                    <p class="text-muted mb-4">iOS开发 | Web开发</p>
+                    <p class="text-sm text-muted mb-4">認準了就不要放棄,放棄了就不要回頭!</p>
 
-                <!-- 文章列表 -->
-                <div class="space-y-8">
-                    <!-- 文章卡片 1 -->
-                    <article class="bg-white rounded-xl overflow-hidden shadow-md blog-card-hover">
-                        <div class="flex flex-col md:flex-row">
-                            <div class="md:w-1/3 h-52 md:h-auto relative">
-                                <img src="https://picsum.photos/400/300?random=1" alt="文章封面"
-                                    class="w-full h-full object-cover">
-                                <span
-                                    class="absolute top-3 left-3 px-2 py-1 bg-primary/90 text-white text-xs font-medium rounded">
-                                    JavaScript
-                                </span>
-                            </div>
-                            <div class="md:w-2/3 p-6">
-                                <h3 class="text-xl font-bold mb-2 hover:text-primary transition-colors">
-                                    <a href="#">JavaScript 中的异步编程：从回调到 Async/Await</a>
-                                </h3>
-                                <p class="text-muted mb-4 line-clamp-3">本文将带你了解 JavaScript 异步编程的发展历程，从最初的回调函数，到
-                                    Promise，再到现代的 Async/Await 语法，深入分析它们的优缺点和适用场景。</p>
-                                <div class="flex flex-wrap items-center justify-between gap-3">
-                                    <div class="flex items-center gap-2">
-                                        <img src="https://picsum.photos/32/32?random=101" alt="作者头像"
-                                            class="w-8 h-8 rounded-full object-cover">
-                                        <span class="text-sm">李小华</span>
-                                    </div>
-                                    <div class="flex items-center gap-4 text-sm text-muted">
-                                        <span><i class="fa-regular fa-calendar mr-1"></i> 2025-05-18</span>
-                                        <span><i class="fa-regular fa-eye mr-1"></i> 1,280</span>
-                                        <span><i class="fa-regular fa-comment mr-1"></i> 32</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- 文章卡片 2 -->
-                    <article class="bg-white rounded-xl overflow-hidden shadow-md blog-card-hover">
-                        <div class="flex flex-col md:flex-row">
-                            <div class="md:w-1/3 h-52 md:h-auto relative">
-                                <img src="https://picsum.photos/400/300?random=2" alt="文章封面"
-                                    class="w-full h-full object-cover">
-                                <span
-                                    class="absolute top-3 left-3 px-2 py-1 bg-primary/90 text-white text-xs font-medium rounded">
-                                    前端框架
-                                </span>
-                            </div>
-                            <div class="md:w-2/3 p-6">
-                                <h3 class="text-xl font-bold mb-2 hover:text-primary transition-colors">
-                                    <a href="#">React vs Vue vs Angular：2025 年如何选择前端框架</a>
-                                </h3>
-                                <p class="text-muted mb-4 line-clamp-3">
-                                    面对众多的前端框架，开发者常常难以抉择。本文将从性能、生态系统、学习曲线和适用场景等多个维度对比三大主流框架，帮助你做出最合适的选择。</p>
-                                <div class="flex flex-wrap items-center justify-between gap-3">
-                                    <div class="flex items-center gap-2">
-                                        <img src="https://picsum.photos/32/32?random=102" alt="作者头像"
-                                            class="w-8 h-8 rounded-full object-cover">
-                                        <span class="text-sm">王大锤</span>
-                                    </div>
-                                    <div class="flex items-center gap-4 text-sm text-muted">
-                                        <span><i class="fa-regular fa-calendar mr-1"></i> 2025-05-15</span>
-                                        <span><i class="fa-regular fa-eye mr-1"></i> 2,540</span>
-                                        <span><i class="fa-regular fa-comment mr-1"></i> 78</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- 文章卡片 3 -->
-                    <article class="bg-white rounded-xl overflow-hidden shadow-md blog-card-hover">
-                        <div class="flex flex-col md:flex-row">
-                            <div class="md:w-1/3 h-52 md:h-auto relative">
-                                <img src="https://picsum.photos/400/300?random=3" alt="文章封面"
-                                    class="w-full h-full object-cover">
-                                <span
-                                    class="absolute top-3 left-3 px-2 py-1 bg-primary/90 text-white text-xs font-medium rounded">
-                                    CSS
-                                </span>
-                            </div>
-                            <div class="md:w-2/3 p-6">
-                                <h3 class="text-xl font-bold mb-2 hover:text-primary transition-colors">
-                                    <a href="#">CSS Grid 与 Flexbox：现代布局的完美组合</a>
-                                </h3>
-                                <p class="text-muted mb-4 line-clamp-3">CSS Grid 和 Flexbox 是现代 Web
-                                    布局的两大支柱。本文将探讨如何结合使用这两种技术，创建既灵活又强大的响应式布局。</p>
-                                <div class="flex flex-wrap items-center justify-between gap-3">
-                                    <div class="flex items-center gap-2">
-                                        <img src="https://picsum.photos/32/32?random=103" alt="作者头像"
-                                            class="w-8 h-8 rounded-full object-cover">
-                                        <span class="text-sm">赵小花</span>
-                                    </div>
-                                    <div class="flex items-center gap-4 text-sm text-muted">
-                                        <span><i class="fa-regular fa-calendar mr-1"></i> 2025-05-10</span>
-                                        <span><i class="fa-regular fa-eye mr-1"></i> 1,890</span>
-                                        <span><i class="fa-regular fa-comment mr-1"></i> 45</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                </div>
-
-                <!-- 分页 -->
-                <div class="mt-10 flex justify-center">
-                    <nav class="flex items-center space-x-1">
-                        <a href="#"
-                            class="px-3 py-2 rounded-md border border-gray-200 text-muted hover:bg-gray-50 disabled:opacity-50"
-                            aria-disabled="true">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </a>
-                        <a href="#" class="px-4 py-2 rounded-md bg-primary text-white">1</a>
-                        <a href="#" class="px-4 py-2 rounded-md border border-gray-200 hover:bg-gray-50">2</a>
-                        <a href="#" class="px-4 py-2 rounded-md border border-gray-200 hover:bg-gray-50">3</a>
-                        <span class="px-2 text-muted">...</span>
-                        <a href="#" class="px-4 py-2 rounded-md border border-gray-200 hover:bg-gray-50">12</a>
-                        <a href="#" class="px-3 py-2 rounded-md border border-gray-200 hover:bg-gray-50">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </a>
-                    </nav>
                 </div>
             </div>
-
-            <!-- 侧边栏 -->
-            <div class="w-full lg:w-1/3">
-                <!-- 搜索框 -->
-                <div class="bg-white rounded-xl p-6 mb-6 shadow-md">
-                    <h3 class="text-lg font-bold mb-4">搜索文章</h3>
-                    <div class="relative">
-                        <input type="text" placeholder="输入关键词..."
-                            class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all">
-                        <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-muted"></i>
+            <div
+                style="width: 100%;background-color: white;padding-top: 20px;padding-bottom: 20px;border-radius: 20px;height: 400px;">
+                <div style="display: flex;flex-direction:column;margin-top: 50px;margin-left: 50px;">
+                    <h3 class="text-xl font-bold mb-1">各类链接</h3>
+                    <div style="display: flex;flex-direction: column;margin-top: 30px;">
+                        <a href="https://github.com/KennyHito" target="_blank">1、点这里,去瞅瞅我的GitHub!</a>
+                        <a href="https://twitter.com/KennyHito" target="_blank">2、点这里,去瞅瞅我的Twitter |
+                            X!</a>
+                        <a href="https://www.youtube.com/@KennyHito">3、点这里,去瞅瞅我的YouTube!</a>
+                        <a href="https://goooo.huajic.cfd/auth/register?code=d39H">4、点这里,去瞅瞅我的VPN!</a>
                     </div>
-                </div>
-
-                <!-- 关于博主 -->
-                <div class="bg-white rounded-xl p-6 mb-6 shadow-md">
-                    <div class="flex flex-col items-center text-center">
-                        <img src="https://picsum.photos/120/120" alt="博主头像"
-                            class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md mb-4">
-                        <h3 class="text-xl font-bold mb-1">陈小明</h3>
-                        <p class="text-muted mb-4">全栈开发者 | 技术作家</p>
-                        <p class="text-sm text-muted mb-4">热爱分享前端与后端开发的经验和见解，探索技术的无限可能。</p>
-                        <div class="flex space-x-3">
-                            <a href="#"
-                                class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-muted hover:bg-primary hover:text-white transition-colors">
-                                <i class="fa-brands fa-github"></i>
-                            </a>
-                            <a href="#"
-                                class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-muted hover:bg-primary hover:text-white transition-colors">
-                                <i class="fa-brands fa-twitter"></i>
-                            </a>
-                            <a href="#"
-                                class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-muted hover:bg-primary hover:text-white transition-colors">
-                                <i class="fa-brands fa-linkedin"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 分类 -->
-                <div class="bg-white rounded-xl p-6 mb-6 shadow-md">
-                    <h3 class="text-lg font-bold mb-4">文章分类</h3>
-                    <ul class="space-y-2">
-                        <li>
-                            <a href="#"
-                                class="flex justify-between items-center py-2 px-3 rounded-md hover:bg-gray-50 transition-colors">
-                                <span><i class="fa-solid fa-code mr-2 text-primary"></i>前端开发</span>
-                                <span class="bg-gray-100 text-muted text-xs px-2 py-1 rounded-full">42</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex justify-between items-center py-2 px-3 rounded-md hover:bg-gray-50 transition-colors">
-                                <span><i class="fa-solid fa-server mr-2 text-primary"></i>后端开发</span>
-                                <span class="bg-gray-100 text-muted text-xs px-2 py-1 rounded-full">28</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex justify-between items-center py-2 px-3 rounded-md hover:bg-gray-50 transition-colors">
-                                <span><i class="fa-solid fa-database mr-2 text-primary"></i>数据库</span>
-                                <span class="bg-gray-100 text-muted text-xs px-2 py-1 rounded-full">15</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex justify-between items-center py-2 px-3 rounded-md hover:bg-gray-50 transition-colors">
-                                <span><i class="fa-solid fa-mobile mr-2 text-primary"></i>移动开发</span>
-                                <span class="bg-gray-100 text-muted text-xs px-2 py-1 rounded-full">19</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#"
-                                class="flex justify-between items-center py-2 px-3 rounded-md hover:bg-gray-50 transition-colors">
-                                <span><i class="fa-solid fa-cloud mr-2 text-primary"></i>云计算</span>
-                                <span class="bg-gray-100 text-muted text-xs px-2 py-1 rounded-full">12</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- 热门标签 -->
-                <div class="bg-white rounded-xl p-6 mb-6 shadow-md">
-                    <h3 class="text-lg font-bold mb-4">热门标签</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#JavaScript</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#React</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#Vue</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#Node.js</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#TypeScript</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#CSS</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#HTML</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#Webpack</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#Git</a>
-                        <a href="#"
-                            class="px-3 py-1.5 bg-gray-100 text-muted rounded-full text-sm hover:bg-primary hover:text-white transition-colors">#性能优化</a>
-                    </div>
-                </div>
-
-                <!-- 热门文章 -->
-                <div class="bg-white rounded-xl p-6 mb-6 shadow-md">
-                    <h3 class="text-lg font-bold mb-4">热门文章</h3>
-                    <div class="space-y-4">
-                        <a href="#" class="flex gap-3 group">
-                            <img src="https://picsum.photos/80/80?random=10" alt="文章缩略图"
-                                class="w-20 h-20 rounded-lg object-cover">
-                            <div>
-                                <h4 class="font-medium line-clamp-2 group-hover:text-primary transition-colors">深入理解
-                                    JavaScript 闭包与内存管理</h4>
-                                <p class="text-sm text-muted mt-1">2025-04-28 · 2.4k 阅读</p>
-                            </div>
-                        </a>
-                        <a href="#" class="flex gap-3 group">
-                            <img src="https://picsum.photos/80/80?random=11" alt="文章缩略图"
-                                class="w-20 h-20 rounded-lg object-cover">
-                            <div>
-                                <h4 class="font-medium line-clamp-2 group-hover:text-primary transition-colors">React 18
-                                    新特性全面解析</h4>
-                                <p class="text-sm text-muted mt-1">2025-05-05 · 1.8k 阅读</p>
-                            </div>
-                        </a>
-                        <a href="#" class="flex gap-3 group">
-                            <img src="https://picsum.photos/80/80?random=12" alt="文章缩略图"
-                                class="w-20 h-20 rounded-lg object-cover">
-                            <div>
-                                <h4 class="font-medium line-clamp-2 group-hover:text-primary transition-colors">
-                                    微前端架构实践与挑战</h4>
-                                <p class="text-sm text-muted mt-1">2025-05-12 · 1.5k 阅读</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- 订阅 -->
-                <div class="bg-gradient-to-br from-primary/90 to-primary rounded-xl p-6 text-white shadow-md">
-                    <h3 class="text-xl font-bold mb-2">订阅我的博客</h3>
-                    <p class="mb-4 text-white/80">获取最新技术文章和行业动态，不错过任何精彩内容。</p>
-                    <form class="space-y-3">
-                        <input type="email" placeholder="输入你的邮箱地址"
-                            class="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 placeholder-white/60 text-white focus:outline-none focus:ring-2 focus:ring-white/30">
-                        <button type="submit"
-                            class="w-full py-2 px-4 bg-white text-primary font-medium rounded-lg hover:bg-white/90 transition-colors">
-                            立即订阅
-                        </button>
-                    </form>
                 </div>
             </div>
         </div>
@@ -408,14 +127,14 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <div class="flex items-center gap-2 mb-4">
+                    <!-- <div class="flex items-center gap-2 mb-4">
                         <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
                             <i class="fa-solid fa-feather"></i>
                         </div>
                         <span class="text-xl font-bold">我的博客</span>
-                    </div>
-                    <p class="text-gray-400 mb-4">分享技术、记录成长，探索编程世界的无限可能。</p>
-                    <div class="flex space-x-4">
+                    </div> -->
+                    <p class="text-gray-400 mb-4">活到老、学到老，探索编程世界的无限可能。</p>
+                    <!-- <div class="flex space-x-4">
                         <a href="#" class="text-gray-400 hover:text-white transition-colors">
                             <i class="fa-brands fa-github"></i>
                         </a>
@@ -428,22 +147,10 @@
                         <a href="#" class="text-gray-400 hover:text-white transition-colors">
                             <i class="fa-brands fa-instagram"></i>
                         </a>
-                    </div>
+                    </div> -->
                 </div>
 
-                <div>
-                    <h3 class="text-lg font-bold mb-4">快速链接</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">文章</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">分类</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">标签</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">关于我</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">联系我</a></li>
-                    </ul>
-                </div>
-
-                <div>
+                <!-- <div>
                     <h3 class="text-lg font-bold mb-4">联系方式</h3>
                     <ul class="space-y-3">
                         <li class="flex items-start gap-3">
@@ -459,17 +166,17 @@
                             <span class="text-gray-400">北京市海淀区中关村科技园区</span>
                         </li>
                     </ul>
-                </div>
+                </div> -->
             </div>
 
-            <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <!-- <div class="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-400 text-sm">© 2025 我的博客. 保留所有权利.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
                     <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">隐私政策</a>
                     <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">使用条款</a>
                     <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cookie 政策</a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </footer>
 
