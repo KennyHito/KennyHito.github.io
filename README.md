@@ -1,4 +1,4 @@
-# ⚠️温馨提示：该网站已绑定域名，直接点击[https://itdevelop.cloud](https://itdevelop.cloud/) 即可访问。
+# ⚠️温馨提示：支持域名方式访问，直接点击[https://itdevelop.cloud](https://itdevelop.cloud/) 跳转。
 
 # 探索站 (ExploreNet)
 
