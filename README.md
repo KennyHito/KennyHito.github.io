@@ -1,21 +1,32 @@
 # 知识分享站
 
-> 专注 AI 领域的深度内容博客，拆分工具实操、前沿资讯与个人学习沉淀，无广告、纯公益干货分享。
-
-知识分享站是一个基于 **Vue 3 + Vite** 构建的个人静态网站，聚焦人工智能领域，以「拆解 AI 技术、落地 AI 应用、洞察 AI 趋势」为核心，提供通俗易懂、实战性强的原创内容。
+知识分享站是一个基于 **Vue 3 + Vite** 构建的轻量个人静态网站，聚焦人工智能与实用工具领域，以「拆解技术、落地应用、共享价值」为核心，提供通俗易懂、实战性强的原创内容。
 
 ## ✨ 功能特性
 
 - **四大板块**
   - 🏠 **首页**：站点介绍 + 网站直达入口（工具 / 资讯 / 关于）
-  - 🧰 **工具**：主流 AI 工具与平台实操指南，附带官方直达链接（如 OpenClaw、WorkBuddy、Coze 等）
-  - 📰 **资讯**：按日期分组归档的前沿 AI / 科技资讯，点击日期可展开 / 收起，最新内容默认展开
+  - 🧰 **工具**：主流 AI 工具、平台与免费开放 API 的实操指南，附带官方直达链接
+  - 📰 **资讯**：按日期分组归档的前沿 AI / 科技资讯，点击日期可展开 / 收起，最新内容默认展开；页面叠加「资讯由 AI 自动生成，如有侵权，请联系删除。」半透明水印，自动适配亮 / 暗主题
   - 👤 **关于**：作者介绍、学习经历与 GitHub 开源项目导航
 - **亮 / 暗双主题**：基于 CSS 变量的主题系统，支持一键切换，偏好通过 `localStorage` 持久化；首屏内联脚本提前设置主题属性，**无主题闪烁**
 - **Hash 路由**：基于 URL hash 的轻量路由（`#/home`、`#/tools`、`#/news`、`#/about`），刷新可保持当前页、可直接访问指定板块
 - **响应式布局**：移动端（≤734px）自动切换为单列，导航 Tab 支持横向滚动
 - **页面切换动画**：纯 CSS 进入动画，并尊重系统「减少动态效果」无障碍设置
 - **吸顶毛玻璃导航**：滚动时固定顶部，半透明 + 背景模糊
+
+## 🧰 工具清单
+
+| 工具 | 简介 | 链接 |
+| --- | --- | --- |
+| ⭐️ 科学上网 VPN（合规学习用途） | 合规查阅海外 AI 官方文档、技术资料的合规网络工具 | [前往官网](https://go.huajic.com/?path=auth/register&code=d39H) |
+| OpenClaw 智能体 | 轻量化、低代码 AI 多智能体框架，支持插件拓展、知识库对接 | [官方文档](https://docs.openclaw.ai/zh-CN) |
+| ⭐️ WorkBuddy 自动化 AI 办公助手 | 腾讯云推出的全场景 AI 办公工作台，网页 / 桌面双模式 | [官网](https://www.codebuddy.cn/docs/workbuddy/Overview) |
+| Coze 零代码搭建 AI 智能体 | 字节跳动开源可商用的零代码智能体平台 | [官网](https://www.coze.cn) |
+| 每日一言 API（免费开放） | 免费随机语录接口，适合博客座右铭、启动页文案 | [查看接口](https://api.xygeng.cn/one) |
+| 随机猫咪图片 API（免费开放） | 免费随机高清猫咪图片，适合占位图、表情包 | [查看接口](https://api.thecatapi.com/v1/images/search) |
+| Ollama 本地大模型运行 | 开源免费本地大模型运行框架，支持多模型、跨平台 | [官网](https://ollama.com/) |
+| DeepSeek API 开放平台 | 高性价比大模型 API，兼容 OpenAI 协议 | [开放平台](https://platform.deepseek.com/) |
 
 ## 🛠 技术栈
 
@@ -33,7 +44,7 @@
 ```
 ExploreNet/
 ├── index.html              # 入口 HTML，含主题预设置内联脚本
-├── vite.config.js          # Vite 配置（端口 5173，host 开启）
+├── vite.config.js          # Vite 配置
 ├── package.json
 ├── favicon.ico / main_icon.png
 └── src/
@@ -49,12 +60,13 @@ ExploreNet/
     ├── composables/
     │   └── useTheme.js      # 主题状态与切换逻辑（全局单例）
     ├── data/
+    │   ├── home.js          # 首页 features / intro 数据源
     │   ├── tools.js         # 工具板块数据源
     │   └── news.js          # 资讯板块数据源（按日期分组）
     └── pages/
         ├── HomePage.vue     # 首页
         ├── ToolsPage.vue    # 工具页
-        ├── NewsPage.vue     # 资讯页
+        ├── NewsPage.vue     # 资讯页（含水印）
         └── AboutPage.vue    # 关于页
 ```
 
@@ -78,8 +90,10 @@ npm run preview
 
 ## 🔧 自定义与扩展
 
+- **首页内容**：编辑 `src/data/home.js`，可调整 `features`（站点直达卡片）与 `intro`（站点介绍文案）。
 - **新增 / 修改工具**：编辑 `src/data/tools.js`，每条记录支持 `name`、`desc`、`features`、`steps`、`scenarios`、`link`、`linkText` 等字段，卡片会自动渲染。
 - **新增 / 修改资讯**：编辑 `src/data/news.js`，按日期分组（`date` + `expanded` + `items[]`），`expanded: true` 的日期默认展开。
+- **资讯水印文案**：修改 `src/pages/NewsPage.vue` 中 SVG 背景图的 `text` 内容。
 - **调整主题配色**：在 `src/style.css` 的 `:root` 与 `[data-theme="dark"]` 中修改 CSS 变量（如 `--accent` 强调色、`--bg` 背景色等）。
 - **新增页面 / 板块**：在 `src/pages/` 下新建页面组件，并在 `src/App.vue` 的 `tabs` 数组中注册即可（路由由 hash 自动驱动）。
 
