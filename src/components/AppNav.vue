@@ -12,7 +12,7 @@ const emit = defineEmits(['switch'])
   <nav class="nav">
     <div class="nav-left">
       <button class="nav-logo" @click="emit('switch', 'home')" aria-label="返回首页" title="返回首页">
-        <img src="/main_icon.png" alt="探索站" width="32" height="32" />
+        <img src="/main_icon.png" alt="知识分享站" width="32" height="32" />
       </button>
       <div class="nav-tabs">
         <a v-for="t in tabs" :key="t.key" class="tab" :class="{ active: t.key === current }"
