@@ -1,7 +1,125 @@
 export const newsGroups = [
   {
-    "date": "2026-07-27",
+    "date": "2026-07-28",
     "expanded": true,
+    "items": [
+      {
+        "title": "Kimi K3 开放日：模型权重、技术报告和关键 Infra 技术同步开放",
+        "summary": "月之暗面发布 2.8 万亿参数的混合专家模型 Kimi K3，支持原生视觉理解和 100 万 token 上下文窗口。其规模化效率较 Kimi K2.5 提升 2.5 倍，并同步开源模型权重、技术报告及 MoonEP、FlashKDA、AgentEnv 三项 Infra 技术。",
+        "tags": [
+          "#模型发布",
+          "#Kimi"
+        ]
+      },
+      {
+        "title": "Kimi 发布视觉感知基准 PerceptionBench",
+        "summary": "Kimi.ai 发布 PerceptionBench，一个从当前前沿模型在 42 个基准上的失败模式中归纳出的视觉感知基准。该基准将视觉感知拆解为 10 种原子能力，并构建了 3000 道验证题，每道题只考察单一感知能力，无需推理或外部知识。",
+        "tags": [
+          "#产品发布",
+          "#Kimi"
+        ]
+      },
+      {
+        "title": "Google AI Overviews 搜索结果出现率升至43%",
+        "summary": "Google AI Overviews 在搜索结果中的出现率一年内从15%升至43%，AI Mode月访问量从1.26亿增至2.79亿。用户搜索长度增加，正从短关键词转向更长的自然对话式查询。",
+        "tags": [
+          "#行业动态",
+          "#Google"
+        ]
+      },
+      {
+        "title": "NVIDIA 等多家行业领袖联合成立 Open Secure AI Alliance，推动 AI 安全与防御开源化",
+        "summary": "NVIDIA、Microsoft、Hugging Face、IBM 等数十家机构联合成立 Open Secure AI Alliance，旨在通过开源模型、工具和框架构建可审查、可定制的 AI 安全防御体系。",
+        "tags": [
+          "#行业动态",
+          "#NVIDIA"
+        ]
+      },
+      {
+        "title": "Cognizant 与 Anthropic 扩大合作，成为 Claude Partner Network 全球首要合作伙伴",
+        "summary": "Cognizant 与 Anthropic 扩大合作，成为 Claude Partner Network 中的 Global Premier Partner，并将 Claude 嵌入其 Flowsource 等平台。已有超过 3 万名员工完成 Claude 培训，其为一家生物制药公司构建的智能合约系统将合同审核时间缩短最高 40%，提取准确率超过 88%。",
+        "tags": [
+          "#行业动态",
+          "#Anthropic"
+        ]
+      },
+      {
+        "title": "Apple 提出 GH-ESD：面向实例级视觉任务的假设驱动错误切片发现方法",
+        "summary": "Apple 机器学习研究团队提出 GH-ESD（Grounded Hypothesis-Driven Error Slice Discovery），一种针对目标检测与分割等实例级视觉任务的错误切片发现方法。现有方法主要适用于图像级分类，难以捕捉由上下文关系和空间视觉模式导致的实例级失败。GH-ESD 通过基于假设的驱动方式，系统性地发现模型在语义连贯子集上的系统性失效。",
+        "tags": [
+          "#论文研究",
+          "#苹果"
+        ]
+      },
+      {
+        "title": "用AI Skill自动生成可协作HTML PPT",
+        "summary": "Vista 基于 bento PPT 改造了一个 Skill，输入内容或主题即可自动生成可编辑、在线演示并支持协作的 HTML PPT。安装指令为 `npx skills add joeseesun/qiaomu-bento-ppt`，推荐使用 Kimi K3 或 Opus 4.8+ 等前端审美好的模型。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "GitHub Copilot 发布“Harness”工作流：用单一工具完成原型、规划、实现与代码审查",
+        "summary": "GitHub Copilot 推出“Harness”工作流，让开发者通过单一 AI 工具完成从原型设计、规划、实现到代码审查的完整软件开发流程，无需追逐多种新 AI 工具。该工作流强调实用性与集成性，旨在减少工具切换带来的效率损耗。",
+        "tags": [
+          "#技巧与观点",
+          "#微软"
+        ]
+      },
+      {
+        "title": "用Claude和Python构建技能驱动的金融分析智能体",
+        "summary": "本教程基于Anthropic的financial-services仓库，用纯Python复现其技能驱动架构。通过解析SKILL.md文件构建可搜索技能注册表，并创建可复用SkillAgent，将金融分析剧本注入Anthropic Messages API，支持迭代工具调用循环。",
+        "tags": [
+          "#技巧与观点",
+          "#Anthropic"
+        ]
+      },
+      {
+        "title": "OpenAI 称越来越多员工用 ChatGPT 做其他岗位的工作",
+        "summary": "OpenAI 分析超 80 万条与工作相关的 ChatGPT 消息后发现，43.5% 的岗位特定查询涉及另一职业，营销和工程任务交叉最多。用户用 AI 处理合同审查、数据分析、网站故障排查等原由专家负责的工作。OpenAI 认为这是岗位职责正在变化的早期信号，该趋势在缺乏专业团队的小公司尤为明显。",
+        "tags": [
+          "#技巧与观点",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "GitHub Copilot app 入门指南：多 Agent 会话工作区与 Canvas 预览",
+        "summary": "GitHub Copilot app 将 AI 编码工具升级为多 Agent 会话工作区，支持同时管理多个任务线程而不丢失进度。用户可为每个会话绑定项目上下文，通过 `/create-canvas` 命令在浏览器 Canvas 中预览 UI 并直接点选修改，还能启用 Agent Merge 自动处理 PR 审查反馈和合并冲突。",
+        "tags": [
+          "#技巧与观点",
+          "#微软"
+        ]
+      },
+      {
+        "title": "浪费20亿Token后，我开源了帮Agent定义目标的Leader.skill",
+        "summary": "作者开源了Leader.skill，用于将模糊的人类需求转化为Agent可独立执行数小时的目标任务书。该Skill基于“目标七问”方法论，涵盖目的、完成态、反作弊、边界等维度，并推荐用Claude Fable 5或Kimi K3规划目标，再交由GPT-5.6 Sol或GLM-5.2等模型长程执行。项目已开源。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "OpenRouter 新增图像生成模型专用 API 端点",
+        "summary": "OpenRouter 通过专用 `/api/v1/images` 端点提供图像生成模型服务，图像理解仍通过 `/chat/completions` 端点完成，两者共用同一 API Key 和计费体系。该平台同时公布了两种任务的完整接口合约，并修复了此前出现的“no endpoints found”错误。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "甲骨文与OpenAI的3000亿美元交易后股价暴跌，市场对循环融资模式失去信心",
+        "summary": "2025年9月10日甲骨文宣布与OpenAI达成3000亿美元交易后股价一度飙升43%，但如今已从307美元跌至约120美元。市场对循环融资模式日益警惕，昨日英伟达考虑为OpenAI主导的数据中心提供2500亿美元支持的消息传出后，其股价开盘下跌超4.5%。苹果因未过度投资AI反而市值超越英伟达，SpaceX则从6月高点225美元下跌超50%。",
+        "tags": [
+          "#技巧与观点",
+          "#资本"
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2026-07-27",
+    "expanded": false,
     "items": [
       {
         "title": "xAI 发布 Grok CLI 并支持 /tutorial 命令",
