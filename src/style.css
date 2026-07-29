@@ -515,7 +515,7 @@ main {
 /* 子列表（如 Vue 教程链接区）容器 */
 .intro-sublist {
   margin: 10px 0 4px;
-  padding: 12px 16px;
+  padding: 4px 20px;
   /* 主题自适应背景，避免暗色下白底看不清 */
   background: var(--surface);
   border-radius: 12px;

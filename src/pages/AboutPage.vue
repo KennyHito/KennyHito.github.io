@@ -25,7 +25,7 @@ const navigate = inject('navigate')
               href="https://github.com/KennyHito/StudyiOS" target="_blank" rel="noopener">StudyiOS</a>。
           </p>
           <div>
-            💻 Vue 是学习尚硅谷 B站教学视频，感兴趣的可以看看禹神讲解。
+            <p>💻 Vue 是学习尚硅谷 B站教学视频，感兴趣的可以看看禹神讲解。</p>
             <div class="intro-sublist">
               <p>①、尚硅谷前端入门 html+css 零基础教程，零基础前端开发 html5+css3 视频 <a class="inline-link"
                   href="https://github.com/KennyHito/WebBasic" target="_blank" rel="noopener">WebBasic</a>。</p>
@@ -37,7 +37,8 @@ const navigate = inject('navigate')
               <p>③、尚硅谷 Vue3 入门到实战，最新版 vue3+TypeScript 前端开发教程 <a class="inline-link"
                   href="https://github.com/KennyHito/HelloVue3" target="_blank" rel="noopener">HelloVue3</a>。</p>
             </div>
-            🍋 若以上某个项目对你有所帮助，希望可以在 GitHub 上点个 Star 和 Fork 🤗！
+            <p>🍋 若以上某个项目对你有所帮助，希望可以在 <a class="inline-link" href="https://github.com/KennyHito" target="_blank"
+                rel="noopener">GitHub</a> 上点个 Star 和 Fork 🤗！</p>
           </div>
         </div>
       </div>
