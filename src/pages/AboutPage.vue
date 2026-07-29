@@ -13,6 +13,8 @@ const navigate = inject('navigate')
         <div class="intro-list">
           <p>☕️ 你好呀！</p>
           <p>🦌 本人历经初创公司、互联网公司，目前在金融公司！</p>
+          <p>🌟 搭建的个人网站，<a class="inline-link" href="https://itdevelop.cloud/" target="_blank"
+              rel="noopener">点击前往网站</a>。</p>
           <p>
             🍇 本人<a class="inline-link" href="https://go.huajic.com/?path=auth/register&code=d39H" target="_blank"
               rel="noopener">自用梯子🪜</a>，可先注册试用 24 小时，个人觉得还是很稳定！（可能网页会提示不安全，不用管，直接继续访问即可。）
