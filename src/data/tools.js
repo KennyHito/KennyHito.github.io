@@ -3,20 +3,23 @@ export const tools = [
     key: 'vpn',
     name: '⭐️ 科学上网VPN（合规学习用途）',
     desc: '本板块仅分享用于查阅海外 AI 官方文档、技术资料的合规网络工具，仅供个人技术学习、学术查阅使用，请严格遵守国家《网络安全法》及相关法律法规，合法合规使用网络资源。',
+    features: ['海外文档访问', '技术资料查阅', '学术研究'],
+    steps: [],
     example: '',
     exampleDesc: '',
     link: 'https://go.huajic.com/?path=auth/register&code=d39H',
     linkText: '前往官网'
   },
   {
-    key: 'openclaw',
-    name: 'OpenClaw智能体',
-    desc: 'OpenClaw（龙虾智能体）是一款轻量化、低代码 AI 多智能体框架，主打高效自动化工作流搭建，支持插件拓展、知识库对接、多渠道部署，无需深厚编程基础，即可搭建专属办公自动化、数据处理、智能问答 AI 应用。',
+    key: 'deepseek',
+    name: 'DeepSeek API 开放平台',
+    desc: 'DeepSeek（深度求索）开放平台提供高性价比的大模型 API 服务，支持 DeepSeek-V3 通用对话模型与 DeepSeek-R1 深度推理模型，兼容 OpenAI 接口协议，开发者可一键迁移接入。适合智能体、代码助手、数据分析等 AI 应用，以更低成本获得顶尖的中文与推理能力。',
+    features: ['高性价比', 'OpenAI 兼容', '中文能力强'],
     steps: [],
     example: '',
     exampleDesc: '',
-    link: 'https://docs.openclaw.ai/zh-CN',
-    linkText: '前往OpenClaw官方文档'
+    link: 'https://platform.deepseek.com/',
+    linkText: '前往DeepSeek开放平台'
   },
   {
     key: 'wordbuddy',
@@ -30,6 +33,28 @@ export const tools = [
     linkText: '前往WordBuddy官网'
   },
   {
+    key: 'openclaw',
+    name: 'OpenClaw智能体',
+    desc: 'OpenClaw（龙虾智能体）是一款轻量化、低代码 AI 多智能体框架，主打高效自动化工作流搭建，支持插件拓展、知识库对接、多渠道部署，无需深厚编程基础，即可搭建专属办公自动化、数据处理、智能问答 AI 应用。',
+    features: ['低代码搭建', '多智能体协作', '插件拓展', '知识库对接', '多渠道部署'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://docs.openclaw.ai/zh-CN',
+    linkText: '前往OpenClaw官方文档'
+  },
+  {
+    key: 'ollama',
+    name: 'Ollama 本地大模型运行',
+    desc: 'Ollama 是一款开源免费的本地大语言模型运行框架，支持 macOS、Linux、Windows，一键拉取并运行 Llama、Mistral、Qwen 等主流开源模型。可在本地离线对话、构建私有 AI 智能体，数据不出本机，保障隐私安全，是开发者本地调试、搭建私有化 AI 应用的首选工具。',
+    features: ['本地部署', '多模型支持', '跨平台', '开源免费'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://ollama.com/',
+    linkText: '前往Ollama官网'
+  },
+  {
     key: 'coze',
     name: 'Coze零代码搭建 AI 智能体',
     desc: '扣子 Coze 是字节跳动推出、开源可商用的零代码 AI 智能体开发平台，无需编程，可视化拖拽即可搭建专属 Bot 与自动化工作流。内置丰富插件、私有知识库与多智能体协同能力，可搭建客服、办公助手、数据处理机器人，支持一键发布至豆包、飞书、抖音等渠道，适配个人、团队批量搭建复用 AI 工具，适合打造长期业务自动化流程。',
@@ -39,5 +64,27 @@ export const tools = [
     exampleDesc: '',
     link: 'https://www.coze.cn',
     linkText: '前往Coze官网'
+  },
+  {
+    key: 'hitokoto-api',
+    name: '每日一言 API（免费开放）',
+    desc: '免费开放的每日一言接口，随机返回励志、文艺、经典的语录句子。适合作为个人博客座右铭、项目启动页文案，或为 AI 聊天机器人、智能体提供每日问候素材，让页面更有温度。',
+    features: ['随机语录', 'JSON 接口', '免费调用'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://api.xygeng.cn/one',
+    linkText: '查看接口'
+  },
+  {
+    key: 'cat-api',
+    name: '随机猫咪图片 API（免费开放）',
+    desc: '免费可爱的随机猫咪图片接口，每次请求返回不同的高清猫咪照片。适合用于网页占位图、加载动画、聊天机器人表情包，或作为开发调试时的轻松素材，为项目和团队氛围增添一份趣味。',
+    features: ['随机猫图', '高清图片', 'JSON 接口', '免费调用'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://api.thecatapi.com/v1/images/search',
+    linkText: '查看接口'
   }
 ]
