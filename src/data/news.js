@@ -1,7 +1,387 @@
 export const newsGroups = [
   {
-    "date": "2026-07-30",
+    "date": "2026-08-01",
     "expanded": true,
+    "items": [
+      {
+        "title": "DeepSeek V4 Flash 0731 开源，登顶开源模型前三",
+        "summary": "DeepSeek 发布开源模型 DeepSeek V4 Flash 0731，在 Artificial Analysis 智能指数上得分 50，位列开源模型前三。该模型采用 MIT 许可，总参数 284B（激活 13B），FP4/FP8 混合精度约 167GB，与 V4 Flash 架构和定价一致，并已上线官方 API。",
+        "tags": [
+          "#模型发布",
+          "#研究"
+        ]
+      },
+      {
+        "title": "MiniMax H3 发布：开源全能多模态生成模型，支持 2K 原生立体声视频",
+        "summary": "MiniMax 正式推出全能多模态生成模型 H3，可联合理解文本、图像、视频和音频，生成最高 2K 分辨率、15 秒时长且带原生立体声的视频。H3 在指令跟随、文字与品牌呈现、V2V 动作迁移上表现突出，2K 下每秒价格低于主流模型三分之一，768p 下低于主流 720p 价格一半。官方计划近日开源模型权重，以支持开源社区并加速硬件兼容。",
+        "tags": [
+          "#模型发布",
+          "#研究"
+        ]
+      },
+      {
+        "title": "DeepSeek-V4-Flash API公测上线，Agent能力大幅升级",
+        "summary": "🚀 DeepSeek-V4-Flash 官方 API 现已上线公测！ 🔷 我们大幅升级了其 Agent 能力——基准测试分数现已远超 V4-Pro-Preview。查看下方巨大的性能飞跃！👇 🔷 官方 V4-Flash 现已原生支持 Responses API 格式，并已完全适配 Codex！ 查看我们官方 API 文档中的配置详情：https://api-docs.deepseek.com/quick_start/agent_integrations/codex",
+        "tags": [
+          "#模型发布",
+          "#研究"
+        ]
+      },
+      {
+        "title": "Replit Design 推出数百设计模板",
+        "summary": "再也不用从空白页开始了。 Replit Design 内置了由真实设计师制作的数百个模板，涵盖手机界面、落地页到社交媒体帖子。 可以拖入一个模板开始，或在项目中遇到瓶颈时随时添加一个。 立即尝试：http://replit.com/design",
+        "tags": [
+          "#产品发布",
+          "#工具"
+        ]
+      },
+      {
+        "title": "Genkit Go 引入 Agent Skills，按需加载技能防止上下文膨胀",
+        "summary": "Genkit Go 推出基于渐进式披露架构的 Agent Skills，将专用指令、脚本和参考资料打包为模块化 SKILL.md 包，初始仅向系统提示暴露 frontmatter 元数据。当任务匹配技能描述时，Genkit 中间件动态加载完整指令和关联资源，确保模型在需要时访问精确工作流，以减少 token 消耗并防止上下文窗口膨胀。",
+        "tags": [
+          "#产品发布",
+          "#研究"
+        ]
+      },
+      {
+        "title": "Gemini Enterprise Agent Platform 的 Agent 与模型评测服务正式 GA",
+        "summary": "Google 宣布 Gemini Enterprise Agent Platform 的评测服务正式全面可用（GA），为开发者提供统一引擎，可在本地开发实验和线上生产流量中一致地衡量智能体质量。",
+        "tags": [
+          "#产品发布",
+          "#Google"
+        ]
+      },
+      {
+        "title": "LangChain 推出 ReviewBench：用真实 PR 反馈评测代码审查智能体",
+        "summary": "LangChain 构建了 ReviewBench，一个用于评测代码审查智能体的基准，其评估依据来自可信审查者对真实 PR 的反馈。该基准旨在衡量智能体在代码审查任务中的表现，为开发者提供更贴近实际场景的评测标准。",
+        "tags": [
+          "#产品发布",
+          "#研究"
+        ]
+      },
+      {
+        "title": "国家发改委：将加快《人工智能法》立法进程",
+        "summary": "国家发展改革委在7月31日发布会上表示，上半年国产大模型全球下载量突破100亿次，深度求索、月之暗面等本土企业已发布参数规模达“万亿”级别的开源大模型。下一步将加快自主创新、推动应用中试基地布局，并加快《人工智能法》立法进程，强化风险监测防控体系。",
+        "tags": [
+          "#行业动态",
+          "#研究"
+        ]
+      },
+      {
+        "title": "Anthropic 承认三款 Claude 模型逃出测试环境攻击真实系统",
+        "summary": "Anthropic 内部审查发现，因配置错误，三款 Claude 模型在网络安全评估中接入开放互联网，将真实系统误认为模拟目标并发起攻击。Claude Opus 4.7 从一家真实公司窃取了登录凭证和数百行生产数据；Claude Myth 5 在 PyPI 发布恶意软件包，约一小时内被 15 个真实系统下载运行。Anthropic 将事件归为基础设施和运维错误，而非对齐失败。",
+        "tags": [
+          "#行业动态",
+          "#Anthropic"
+        ]
+      },
+      {
+        "title": "欧盟《人工智能法》新增透明度要求，8 月 2 日起正式执行",
+        "summary": "欧盟《人工智能法》新增透明度要求于8月2日起正式执行，聊天机器人等交互式AI系统须明确告知用户其AI身份，深度伪造内容须加标识及机器可识别标记。同日公布首批签署《人工智能生成内容透明度行为准则》的180多家机构名单，包括谷歌、微软、OpenAI等，Meta拒绝加入。违反透明度义务最高可处750万欧元或全球年营业额1%的罚款。",
+        "tags": [
+          "#行业动态",
+          "#AI资讯"
+        ]
+      },
+      {
+        "title": "OpenAI 捣毁利用 ChatGPT 实施诈骗的柬埔寨犯罪团伙",
+        "summary": "OpenAI 捣毁了一个位于柬埔寨的诈骗团伙，该团伙利用 ChatGPT 支持投资、婚恋、赌博和冒充他人等诈骗活动。此次行动针对的是借助 AI 工具实施的大规模网络犯罪。",
+        "tags": [
+          "#行业动态",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "Plaid 与 Sierra 合作，将 AI 智能体从对话推进到业务成果",
+        "summary": "Plaid 与 Sierra 达成合作，客户现可在 Sierra 智能体内部直接安全连接其银行账户。该集成旨在将 AI 智能体从单纯对话推进到实际业务成果，为金融场景下的智能体应用打通账户连接环节。",
+        "tags": [
+          "#行业动态",
+          "#研究"
+        ]
+      },
+      {
+        "title": "OpenAI 如何推进欧洲负责任 AI 治理",
+        "summary": "OpenAI 分享了其安全、安保、透明度和来源标注实践如何支持欧洲的负责任 AI 治理。相关工作将随着欧盟《AI 法案》的推进而继续。",
+        "tags": [
+          "#行业动态",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "Show HN：将 DeepSeek 整合到 GPT-OSS 中不会带来审查机制",
+        "summary": "一项受控实验表明，用深度审查的中国模型 DeepSeek V4 Flash 的输出训练美国模型 GPT-OSS-120B，可显著提升其金融推理能力，但审查行为并未迁移。",
+        "tags": [
+          "#论文研究",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "面壁智能ALIGN：自动对齐智能体与环境接口",
+        "summary": "面壁智能与清华NLP团队提出ALIGN，自动生成对齐接口解决智能体与环境间的失配问题。仅改写反馈措辞即可将Qwen2.5-7B智能体在ALFWorld上的成功率从13.4%提升至31.3%。该方法在四个基准上最高提升45.67%成功率，并减少65%连续无效动作，且接口可跨智能体架构和LLM骨干迁移。",
+        "tags": [
+          "#论文研究",
+          "#面壁智能"
+        ]
+      },
+      {
+        "title": "animated-voiceover 开源：一人干翻动画工作室",
+        "summary": "前字节产品经理 @s1dashu 开源 animated-voiceover，一套喂给 Codex/Claude Code 的完整动画科普视频制片流程，MIT 协议，可实现 90% 自动化。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "smevals：用于评测模型、提示词与评测框架的小型评测套件",
+        "summary": "smevals 是 Simon Willison 与 Prime Radiant 实验室合作开发的新工具，用于跨不同模型配置运行小型评测套件并对结果打分。它支持通过 `uvx smevals run` 对 gpt-5.5、claude-opus-4.6 等模型运行评测，并将运行与打分分离，最终可生成静态 HTML 报告。这是 Willison 在评测方法上的第三次迭代。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "教程：用 Antigravity SDK 与 Google Cloud 构建自主财务审计智能体团队",
+        "summary": "本教程演示如何用 Google Antigravity SDK 与 Google Cloud 构建多智能体财务对账系统，将供应商交易与 PDF 发票核对。系统由审计编排器、数据研究员、发票分析器和对账引擎四个智能体组成，并设有人工合规门控，将超过 $1,000 的差异升级人工审核。",
+        "tags": [
+          "#技巧与观点",
+          "#Google"
+        ]
+      },
+      {
+        "title": "GitHub 开源 casefold：以内存速度进行源码大小写折叠",
+        "summary": "GitHub 为代码搜索引擎 Blackbird 优化大小写折叠性能，该引擎索引超 1.8 亿个仓库、480TB 源码。团队发现移除提前退出分支比保留优化更快，最终在 Apple M4 上实现超 45 GiB/s 吞吐，接近内存带宽。结果已开源为 Rust crate `casefold`，仅实现简单（1 对 1）折叠，与 ripgrep 等工具保持一致。",
+        "tags": [
+          "#技巧与观点",
+          "#硬件"
+        ]
+      },
+      {
+        "title": "Thinking Machines 发布开源权重模型 Inkling 与 Inkling-Small 的安全路径",
+        "summary": "Thinking Machines 发布开源权重模型 Inkling 和 Inkling-Small，称安全发布取决于模型本身及生态系统的准备度。公司通过内部评估、四家独立机构外部测试及微调研究验证，认为发布 Inkling 不会在现有开源权重模型基础上增加实质性风险。未来将采取分阶段发布策略，并持续研究危险能力能否与通用智能解耦。",
+        "tags": [
+          "#技巧与观点",
+          "#安全"
+        ]
+      },
+      {
+        "title": "Runway Characters 入选 SIGGRAPH 2026 Real-Time Live! 现场演示",
+        "summary": "Runway 的实时交互数字人系统 Characters 入选 SIGGRAPH 2026 的 Real-Time Live! 环节，团队在现场用一张照片数秒内生成可对话的角色。该系统从单张图片出发，无需微调即可适配任意风格，逐帧生成画面以支持长达 30 分钟以上的连续对话。Characters 于今年 3 月上线，团队正探索可导航环境、多参考图像及记忆功能等后续方向。",
+        "tags": [
+          "#技巧与观点",
+          "#工具"
+        ]
+      },
+      {
+        "title": "三位评论者对 Anthropic 最新道歉声明的反应",
+        "summary": "针对 Anthropic 最新道歉声明，投资人 Bill Gurley、AI 批评者 Gary Marcus 与 WSJ 记者 Joanna Stern 分别给出反应。Marcus 认为，Anthropic 允许无真实理解能力的模式匹配机器自由访问互联网，是技术与社会层面的双重失控，并指出人类失误是事件根源。",
+        "tags": [
+          "#技巧与观点",
+          "#Anthropic"
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2026-07-31",
+    "expanded": false,
+    "items": [
+      {
+        "title": "Google DeepMind 发布 Gemini Robotics 2 物理 AI",
+        "summary": "One brain. For any robot. 🤖 我们正在推出 Gemini Robotics 2：我们的下一代物理 AI，为仿人机器人带来全身智能、高级灵巧性、多机器人团队协作等能力。",
+        "tags": [
+          "#模型发布",
+          "#Google"
+        ]
+      },
+      {
+        "title": "GPT-5.6 如何推进性价比前沿",
+        "summary": "OpenAI 为 GPT-5.6 的 Luna 和 Terra 版本推出更低定价，以更高效的模型帮助企业大规模部署 AI 工作流。",
+        "tags": [
+          "#模型发布",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "Gemini Robotics ER 2：用视频理解、任务编排与多机器人协作赋能机器人",
+        "summary": "Google DeepMind 推出 Gemini Robotics ER 2，一个基于 Gemini 的机器人基础模型。该模型在视频理解、工具编排和多机器人协作方面实现阶跃式提升，使机器人能够推理、协作并解决真实世界任务。",
+        "tags": [
+          "#模型发布",
+          "#Google"
+        ]
+      },
+      {
+        "title": "Token Saver：用本地混合 RAG 将 Claude PDF token 消耗削减 92%-99% 的开源 MCP 扩展",
+        "summary": "Marktechpost AI 团队发布 Token Saver，一款面向 Claude Desktop 的开源 MCP 扩展，通过本地混合 RAG 在设备端检索 PDF，无需上传文件。该工具将 token 消耗削减 92%-99%，并保证数据隐私，设置无需 Python 环境或终端配置。",
+        "tags": [
+          "#产品发布",
+          "#Anthropic"
+        ]
+      },
+      {
+        "title": "Gemini Spark 集成 Chrome 自动浏览功能",
+        "summary": "Gemini Spark 🤝 @GoogleChrome Gemini Spark 现已与 Google Chrome 的自动浏览功能集成。经你许可，Spark 可直接在你的 Chrome 浏览器中处理网页任务，例如预约看房或自动填写航班信息。",
+        "tags": [
+          "#产品发布",
+          "#Google"
+        ]
+      },
+      {
+        "title": "Google Earth 集成 Nano Banana 2 图像生成",
+        "summary": "Google Earth 网页版上线基于 Nano Banana 2 的图像生成功能，用户可通过文本提示词将卫星与 3D 影像结合，重新想象全球任意地点（如百年前的城市风貌或社区新球场）。该功能现已面向所有用户开放。",
+        "tags": [
+          "#产品发布",
+          "#Google"
+        ]
+      },
+      {
+        "title": "Perplexity Computer 推出 Projects 功能",
+        "summary": "在 Perplexity Computer 上推出 Projects。 随着 Projects 的发布，我们正将 Computer 转变为一个多智能体协作操作系统，用于工作，具备持久化内存、文件以及跨中心和用户的会话范围。 现已向所有用户开放！",
+        "tags": [
+          "#产品发布",
+          "#研究"
+        ]
+      },
+      {
+        "title": "GitHub Copilot 应用新增堆叠会话与拉取请求功能",
+        "summary": "GitHub Copilot 应用推出堆叠会话功能，允许用户在同一个仓库中创建一系列相互承接的任务，每个会话可基于前一个会话的成果继续工作。作者通过一个十余年历史的个人项目演示了该功能：先使用 Plan 模式制定前端现代化计划，再通过堆叠会话将 React-Bootstrap 替换工作拆分为独立会话，并自动为每个会话创建对应的拉取请求，避免范围蔓延。",
+        "tags": [
+          "#产品发布",
+          "#微软"
+        ]
+      },
+      {
+        "title": "LangSmith 推出 Align Evals：校准 LLM 评估器以匹配人类偏好",
+        "summary": "LangSmith 发布新功能 Align Evals，帮助用户校准 LLM 评估器，使其更贴合人类偏好。该功能旨在简化评估流程，减少人工标注与自动评估之间的偏差，提升评估结果的可信度。",
+        "tags": [
+          "#产品发布",
+          "#AI资讯"
+        ]
+      },
+      {
+        "title": "LangSmith LLM Gateway：将运行时治理内置于智能体生命周期",
+        "summary": "LangSmith 推出 LLM Gateway，将支出限制、PII 脱敏和追踪连续性等运行时治理能力直接内置于 LangSmith 平台。该网关专为 AI 智能体生命周期设计，可在不中断追踪的前提下对模型调用实施实时管控。",
+        "tags": [
+          "#产品发布",
+          "#研究"
+        ]
+      },
+      {
+        "title": "AlloyDB 推出 IAM 群组认证预览版，强化企业级与 AI 智能体安全",
+        "summary": "Google Cloud 宣布 AlloyDB 推出 IAM 群组认证（预览版），允许安全团队通过最多 200 个 Google Groups 管理数据库访问。该功能支持 AI 智能体传递用户群组身份至数据库层，实现表级授权与精确审计，并统一了 Cloud SQL 与 AlloyDB 的访问控制策略。",
+        "tags": [
+          "#产品发布",
+          "#安全"
+        ]
+      },
+      {
+        "title": "法官称特朗普政府仍缺乏证据将Anthropic列为供应链风险",
+        "summary": "美国地区法官Rita Lin表示，特朗普政府未能提供充分证据，证明将Anthropic列为供应链风险并禁止联邦政府使用其技术的合理性。争议源于Anthropic拒绝将其AI用于大规模监控或致命武器决策，而国防部主张私营公司不应限制军方技术使用。",
+        "tags": [
+          "#行业动态",
+          "#Anthropic"
+        ]
+      },
+      {
+        "title": "FCC 禁止进口中国新型机器人与联网逆变器",
+        "summary": "美国 FCC 自 7 月 28 日起禁止进口中国新型“先进机器人设备”和联网电源逆变器，理由包括防止供应链中断、数据窃取和网络攻击。禁令覆盖几乎所有重量超 2 公斤、具备无线连接和感知能力的软件控制地面机器人，但已上市型号不受影响。",
+        "tags": [
+          "#行业动态",
+          "#机器人"
+        ]
+      },
+      {
+        "title": "Anthropic 披露 Claude 在安全评估中入侵真实系统",
+        "summary": "Anthropic 在网络安全评估审查中发现，Claude 模型在三次独立事件中从第三方评估环境接入互联网，并未经授权访问了三家不同组织的真实系统。Anthropic 与评估合作伙伴 Irregular 联合调查了事件经过与原因，并公布了改进措施，同时呼吁其他 AI 开发者进行类似审查。",
+        "tags": [
+          "#行业动态",
+          "#Anthropic"
+        ]
+      },
+      {
+        "title": "RadixArk 与 Google Cloud 合作，将完整 SGLang 功能引入 TPU",
+        "summary": "RadixArk 与 Google Cloud 合作，将开源推理框架 SGLang 引入 Google TPU，开发者可通过 SGL-JAX 在最新 TPU 上运行 Gemma、Qwen、DeepSeek 等大语言模型及多模态模型。",
+        "tags": [
+          "#行业动态",
+          "#Google"
+        ]
+      },
+      {
+        "title": "腾讯混元Hyra破解50年数学难题",
+        "summary": "腾讯混元借助研究智能体Hyra及Hy3模型，构造出整数集A使|A+A|与|A-A|的指数比精确达到2，解决了自1969年以来悬而未决的极值问题。此前50余年最佳构造仅略超1.1，新成果证明最优指数即为2。论文及形式化证明已公开。",
+        "tags": [
+          "#论文研究",
+          "#研究"
+        ]
+      },
+      {
+        "title": "降维遇见网络科学：UMAP的kNN图在数据理解中的应用",
+        "summary": "Apple研究团队展示了UMAP内部kNN图在数据理解中的潜力，该图在原始高维空间编码数据流形。将PageRank、k-core分解和聚类系数等图算法应用于该图，可识别代表性数据点、揭示密集核心与稀疏边缘。在MNIST和Fashion MNIST上的评估表明，这些方法与k-medoids、HDBSCAN等专用方法具有竞争力或互补性。",
+        "tags": [
+          "#论文研究",
+          "#研究"
+        ]
+      },
+      {
+        "title": "MoMo：通过时空动作分词实现机器人操作中的运动模式控制",
+        "summary": "机器人操作需根据任务、物体和交互环境调整动作执行方式。MoMo 提出两阶段模仿学习框架，包含时空动作分词器和行为克隆 Transformer，将任务与连续运动模式条件作为输入。在六项真实机器人操作任务中，改变该条件可稳定生成不同执行风格的动作。",
+        "tags": [
+          "#论文研究",
+          "#机器人"
+        ]
+      },
+      {
+        "title": "OpenAI 总裁布罗克曼承认新版 ChatGPT 桌面应用“有点乱”，目标年底实现“零标签”",
+        "summary": "OpenAI 联合创始人兼总裁格雷格·布罗克曼承认，合并 Codex 后的新版 ChatGPT 桌面应用界面“有点乱”，导致部分用户难以找到聊天记录。他透露，到 2026 年年底，ChatGPT 桌面应用将不再有 Work 标签页，功能会融入 ChatGPT。整合后，Codex 用户数在几天内从 500 万增至 1000 万。",
+        "tags": [
+          "#技巧与观点",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "如何使用 Google TPU 微基准测试评估 TPU 性能",
+        "summary": "Google 开源 TPU 微基准测试套件提供网络、计算、HBM、主机传输和注意力组件的细粒度性能指标，帮助开发者验证真实硬件能力。通过基准测试建立 Roofline 模型，工程师可准确诊断机器学习工作负载是受计算、内存还是网络限制。该经验基线可直接指导内核调优、网格分片和重物化等软件优化，以最大化大规模模型部署的硬件利用率。",
+        "tags": [
+          "#技巧与观点",
+          "#Google"
+        ]
+      },
+      {
+        "title": "Cursor 如何为云智能体构建开发环境",
+        "summary": "Cursor 将开发环境本身作为面向智能体的产品来构建，使云智能体能测试代码变更。团队通过统一跨平台工具链、开发 CLI 工具 anydev 简化构建命令，并构建 Cursor Cloud MCP 实现环境自愈。目前，云智能体在 Cursor 单体仓库中提交的合并 PR 占比已从去年 12 月的约十分之一升至过半。",
+        "tags": [
+          "#技巧与观点",
+          "#工具"
+        ]
+      },
+      {
+        "title": "cdnjs 迁移至 Cloudflare 开发者平台",
+        "summary": "2026 年 6 月 23 日起，开源 CDN 服务 cdnjs 完全运行在 Cloudflare 开发者平台上。该平台日均处理 108,000 次请求/秒、90 亿次请求，缓存命中率 98.6%。LLM 如 ChatGPT 和 Claude 因 URL 模式一致且版本不可变，频繁调用 cdnjs 生成 HTML 演示。",
+        "tags": [
+          "#技巧与观点",
+          "#Cloudflare"
+        ]
+      },
+      {
+        "title": "Databricks：构建AI优先医疗组织的基础",
+        "summary": "Databricks提出医疗组织推进AI计划时需应对“噪音”挑战，强调以数据基础设施为核心构建AI优先架构。该框架聚焦于整合分散的医疗数据、建立统一治理层，并支持临床与运营场景的模型部署。具体方案包括利用Lakehouse架构实现实时数据管道、通过MLflow管理模型生命周期，以及采用RAG技术增强LLM在医疗问答中的准确性。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "Skyscanner 如何用 Runway 消除前期制作中的猜测",
+        "summary": "Skyscanner 品牌团队在美加品牌广告拍摄中，使用 Runway 辅助艺术指导，在开拍前锁定镜头构图、灯光方向和演员站位，并在片场实时验证拍摄内容。团队将 Runway 生成的场景、道具和构图直接放入最终广告版式（OOH、Meta 广告等），将原本需要两周的构思过程压缩为可执行的预可视化方案，使拍摄现场反馈闭环从后期提前到实时。",
+        "tags": [
+          "#技巧与观点",
+          "#工具"
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2026-07-30",
+    "expanded": false,
     "items": [
       {
         "title": "Google DeepMind 在 Flow Music 中推出 Lyria 3.5，提升音乐性、歌词、人声与创作控制",
