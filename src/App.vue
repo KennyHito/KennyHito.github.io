@@ -71,6 +71,37 @@ onMounted(() => window.addEventListener('hashchange', onHashChange))
 // 组件卸载时移除 hashchange 监听，避免内存泄漏
 onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
 
+// ===== 回到顶部按钮 =====
+// 是否已滚动超过一屏（用于是否显示按钮）
+const showBackTop = ref(false)
+// 显示阈值：超过一屏高度才出现
+function onScroll() {
+  try {
+    showBackTop.value = window.scrollY > window.innerHeight
+  } catch (e) {
+    /* 某些内嵌环境无 scrollY，忽略 */
+  }
+}
+// 平滑滚动回顶部
+function backToTop() {
+  try {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  } catch (e) {
+    try {
+      window.scrollTo(0, 0)
+    } catch (_) {
+      /* 忽略 */
+    }
+  }
+}
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true })
+  // 初始执行一次，处理刷新后非顶部的场景
+  onScroll()
+})
+onUnmounted(() => window.removeEventListener('scroll', onScroll))
+
 // 供子页面（如首页快捷入口）触发 tab 切换
 provide('navigate', navigate)
 </script>
@@ -85,4 +116,66 @@ provide('navigate', navigate)
   </main>
   <!-- 底部页脚 -->
   <AppFooter />
+
+  <!-- 回到顶部：滚动超过一屏后悬浮于右下角 -->
+  <transition name="backtop-fade">
+    <button v-if="showBackTop" class="back-to-top" @click="backToTop" aria-label="回到顶部" title="回到顶部">
+      ↑
+    </button>
+  </transition>
 </template>
+
+<style scoped>
+/* 回到顶部按钮：固定右下角，悬浮于内容之上 */
+.back-to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 100px;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-md);
+  transition: background var(--transition), transform 0.1s ease, opacity var(--transition);
+}
+
+/* 悬停与按下反馈 */
+.back-to-top:hover {
+  background: var(--bg-secondary);
+}
+
+.back-to-top:active {
+  transform: scale(0.92);
+}
+
+/* 按钮出现 / 消失的淡入淡出动画 */
+.backtop-fade-enter-active,
+.backtop-fade-leave-active {
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.backtop-fade-enter-from,
+.backtop-fade-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* 移动端适当内缩，避免贴边 */
+@media (max-width: 734px) {
+  .back-to-top {
+    right: 16px;
+    bottom: 66px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+}
+</style>
