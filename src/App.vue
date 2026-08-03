@@ -72,12 +72,12 @@ onMounted(() => window.addEventListener('hashchange', onHashChange))
 onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
 
 // ===== 回到顶部按钮 =====
-// 是否已滚动超过一屏（用于是否显示按钮）
+// 是否已滚动超过半屏（用于是否显示按钮）
 const showBackTop = ref(false)
-// 显示阈值：超过一屏高度才出现
+// 显示阈值：超过半屏高度即出现
 function onScroll() {
   try {
-    showBackTop.value = window.scrollY > window.innerHeight
+    showBackTop.value = window.scrollY > window.innerHeight / 2
   } catch (e) {
     /* 某些内嵌环境无 scrollY，忽略 */
   }
@@ -120,7 +120,9 @@ provide('navigate', navigate)
   <!-- 回到顶部：滚动超过一屏后悬浮于右下角 -->
   <transition name="backtop-fade">
     <button v-if="showBackTop" class="back-to-top" @click="backToTop" aria-label="回到顶部" title="回到顶部">
-      ↑
+      <svg class="back-to-top__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <path d="M12 5l-7 7h4v7h6v-7h4z" fill="currentColor" />
+      </svg>
     </button>
   </transition>
 </template>
@@ -138,13 +140,18 @@ provide('navigate', navigate)
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--accent);
-  font-size: 20px;
-  line-height: 1;
   cursor: pointer;
   display: grid;
   place-items: center;
   box-shadow: var(--shadow-md);
   transition: background var(--transition), transform 0.1s ease, opacity var(--transition);
+}
+
+/* 上箭头图标 */
+.back-to-top__icon {
+  width: 20px;
+  height: 20px;
+  display: block;
 }
 
 /* 悬停与按下反馈 */
@@ -175,7 +182,11 @@ provide('navigate', navigate)
     bottom: 66px;
     width: 40px;
     height: 40px;
-    font-size: 18px;
+  }
+
+  .back-to-top__icon {
+    width: 18px;
+    height: 18px;
   }
 }
 </style>
