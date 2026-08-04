@@ -86,5 +86,27 @@ export const tools = [
     exampleDesc: '',
     link: 'https://api.thecatapi.com/v1/images/search',
     linkText: '查看接口'
+  },
+  {
+    key: 'dog-api',
+    name: '随机狗狗图片 API（免费开放）',
+    desc: '免费开放的狗狗图片接口，每次请求随机返回不同品种狗狗的高清照片，数据源自公开的犬种图库。适合用于网页占位图、加载动画、聊天机器人表情包，或与猫咪接口搭配做成趣味图集，为项目增添轻松可爱的氛围。',
+    features: ['随机狗图', '多品种', 'JSON 接口', '免费调用'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://dog.ceo/api/breeds/image/random',
+    linkText: '查看接口'
+  },
+  {
+    key: 'hitokoto-cn',
+    name: 'Hitokoto 一言 API（免费开放）',
+    desc: '免费开放的一言接口，随机返回来自动漫、游戏、小说、网络或原创的精选句子，涵盖多种语句类型可按需筛选。适合作为个人博客座右铭、项目启动页文案，或为 AI 聊天机器人、智能体提供每日问候与文案素材，让页面更具氛围感。',
+    features: ['随机句子', '多类型筛选', 'JSON 接口', '免费调用'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://v1.hitokoto.cn/',
+    linkText: '查看接口'
   }
 ]
