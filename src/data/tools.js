@@ -22,17 +22,6 @@ export const tools = [
     linkText: '前往OpenClaw官方文档'
   },
   {
-    key: 'ollama',
-    name: 'Ollama 本地大模型运行',
-    desc: 'Ollama 是一款开源免费的本地大语言模型运行框架，支持 macOS、Linux、Windows，一键拉取并运行 Llama、Mistral、Qwen 等主流开源模型。可在本地离线对话、构建私有 AI 智能体，数据不出本机，保障隐私安全，是开发者本地调试、搭建私有化 AI 应用的首选工具。',
-    features: ['本地部署', '多模型支持', '跨平台', '开源免费'],
-    steps: [],
-    example: '',
-    exampleDesc: '',
-    link: 'https://ollama.com/',
-    linkText: '前往Ollama官网'
-  },
-  {
     key: 'wordbuddy',
     name: '⭐️ WorkBuddy自动化 AI 办公助手',
     desc: 'WorkBuddy 是腾讯云推出的轻量化全场景 AI 办公智能工作台，网页免安装、桌面端本地运行双模式，主打替用户执行电脑实操任务。覆盖文档处理、数据分析、代码开发、创意设计，内置标准化技能包与软件连接器，支持定时自动化、微信远程操控，本地运算保障数据隐私，面向企业员工与个体创业者，开箱即用，降低办公重复劳动成本。',
@@ -66,6 +55,17 @@ export const tools = [
     linkText: '前往DeepSeek开放平台'
   },
   {
+    key: 'ollama',
+    name: 'Ollama 本地大模型运行',
+    desc: 'Ollama 是一款开源免费的本地大语言模型运行框架，支持 macOS、Linux、Windows，一键拉取并运行 Llama、Mistral、Qwen 等主流开源模型。可在本地离线对话、构建私有 AI 智能体，数据不出本机，保障隐私安全，是开发者本地调试、搭建私有化 AI 应用的首选工具。',
+    features: ['本地部署', '多模型支持', '跨平台', '开源免费'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://ollama.com/',
+    linkText: '前往Ollama官网'
+  },
+  {
     key: 'github-user-search',
     name: 'GitHub 用户搜索 API（官方免费）',
     desc: 'GitHub 官方提供的用户搜索接口，在链接末尾拼接 GitHub 用户名即可查询该用户的基本信息、仓库数、粉丝数等公开资料，返回标准 JSON。适合做开发者主页检索、贡献者查证、技术社区用户分析，或接入智能体实现「查一下某个 GitHub 用户」的对话能力。',
@@ -74,6 +74,28 @@ export const tools = [
     example: '例如：https://api.github.com/search/users?q=KennyHito',
     exampleDesc: '将链接末尾的 KennyHito 替换为任意 GitHub 用户名即可查询',
     link: 'https://api.github.com/search/users?q=',
+    linkText: '查看接口'
+  },
+  {
+    key: 'hitokoto-api',
+    name: '每日一言 API（免费开放）',
+    desc: '免费开放的每日一句接口，随机返回一句励志、文艺或经典的语录，内容简洁、即取即用，无需任何参数。适合作为个人博客座右铭、项目启动页文案，或为 AI 聊天机器人、智能体提供每日问候素材，让页面更有温度。',
+    features: ['随机语录', 'JSON 接口', '免费调用'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://api.xygeng.cn/one',
+    linkText: '查看接口'
+  },
+  {
+    key: 'hitokoto-cn',
+    name: 'Hitokoto 一言 API（免费开放）',
+    desc: '基于 Hitokoto 社区的海量句子库，内容来自网络真实用户的投稿与评论，随机返回来自动漫、游戏、小说、网络或原创的精选语句，支持通过 ?c= 参数按类型（如动画、游戏、诗词）筛选，并附带句子来源与作者信息。适合做语录墙、随机签名、内容创作灵感库，或接入智能体按主题调取特定风格的文案。',
+    features: ['随机句子', '多类型筛选', 'JSON 接口', '免费调用'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://v1.hitokoto.cn/',
     linkText: '查看接口'
   },
   {
@@ -96,28 +118,6 @@ export const tools = [
     example: '',
     exampleDesc: '',
     link: 'https://dog.ceo/api/breeds/image/random',
-    linkText: '查看接口'
-  },
-  {
-    key: 'hitokoto-api',
-    name: '每日一言 API（免费开放）',
-    desc: '免费开放的每日一句接口，随机返回一句励志、文艺或经典的语录，内容简洁、即取即用，无需任何参数。适合作为个人博客座右铭、项目启动页文案，或为 AI 聊天机器人、智能体提供每日问候素材，让页面更有温度。',
-    features: ['随机语录', 'JSON 接口', '免费调用'],
-    steps: [],
-    example: '',
-    exampleDesc: '',
-    link: 'https://api.xygeng.cn/one',
-    linkText: '查看接口'
-  },
-  {
-    key: 'hitokoto-cn',
-    name: 'Hitokoto 一言 API（免费开放）',
-    desc: '基于 Hitokoto 社区的海量句子库，随机返回来自动漫、游戏、小说、网络或原创的精选语句，支持通过 ?c= 参数按类型（如动画、游戏、诗词）筛选，并附带句子来源与作者信息。适合做语录墙、随机签名、内容创作灵感库，或接入智能体按主题调取特定风格的文案。',
-    features: ['随机句子', '多类型筛选', 'JSON 接口', '免费调用'],
-    steps: [],
-    example: '',
-    exampleDesc: '',
-    link: 'https://v1.hitokoto.cn/',
     linkText: '查看接口'
   }
 ]

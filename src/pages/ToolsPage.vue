@@ -6,7 +6,7 @@ import { useMasonry } from '../composables/useMasonry.js'
 
 const gridRef = ref(null)
 // 使用瀑布流 composable：自动按内容高度紧密排列卡片
-useMasonry(gridRef, { gap: 20, maxCols: 3 })
+useMasonry(gridRef, { gap: 20, maxCols: 2 })
 
 </script>
 
