@@ -66,14 +66,14 @@ export const tools = [
     linkText: '前往DeepSeek开放平台'
   },
   {
-    key: 'hitokoto-api',
-    name: '每日一言 API（免费开放）',
-    desc: '免费开放的每日一言接口，随机返回励志、文艺、经典的语录句子。适合作为个人博客座右铭、项目启动页文案，或为 AI 聊天机器人、智能体提供每日问候素材，让页面更有温度。',
-    features: ['随机语录', 'JSON 接口', '免费调用'],
+    key: 'github-user-search',
+    name: 'GitHub 用户搜索 API（官方免费）',
+    desc: 'GitHub 官方提供的用户搜索接口，在链接末尾拼接 GitHub 用户名即可查询该用户的基本信息、仓库数、粉丝数等公开资料，返回标准 JSON。适合做开发者主页检索、贡献者查证、技术社区用户分析，或接入智能体实现「查一下某个 GitHub 用户」的对话能力。',
+    features: ['官方接口', '用户名检索', 'JSON 返回', '免费调用'],
     steps: [],
-    example: '',
-    exampleDesc: '',
-    link: 'https://api.xygeng.cn/one',
+    example: '例如：https://api.github.com/search/users?q=KennyHito',
+    exampleDesc: '将链接末尾的 KennyHito 替换为任意 GitHub 用户名即可查询',
+    link: 'https://api.github.com/search/users?q=',
     linkText: '查看接口'
   },
   {
@@ -99,9 +99,20 @@ export const tools = [
     linkText: '查看接口'
   },
   {
+    key: 'hitokoto-api',
+    name: '每日一言 API（免费开放）',
+    desc: '免费开放的每日一句接口，随机返回一句励志、文艺或经典的语录，内容简洁、即取即用，无需任何参数。适合作为个人博客座右铭、项目启动页文案，或为 AI 聊天机器人、智能体提供每日问候素材，让页面更有温度。',
+    features: ['随机语录', 'JSON 接口', '免费调用'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    link: 'https://api.xygeng.cn/one',
+    linkText: '查看接口'
+  },
+  {
     key: 'hitokoto-cn',
     name: 'Hitokoto 一言 API（免费开放）',
-    desc: '免费开放的一言接口，随机返回来自动漫、游戏、小说、网络或原创的精选句子，涵盖多种语句类型可按需筛选。适合作为个人博客座右铭、项目启动页文案，或为 AI 聊天机器人、智能体提供每日问候与文案素材，让页面更具氛围感。',
+    desc: '基于 Hitokoto 社区的海量句子库，随机返回来自动漫、游戏、小说、网络或原创的精选语句，支持通过 ?c= 参数按类型（如动画、游戏、诗词）筛选，并附带句子来源与作者信息。适合做语录墙、随机签名、内容创作灵感库，或接入智能体按主题调取特定风格的文案。',
     features: ['随机句子', '多类型筛选', 'JSON 接口', '免费调用'],
     steps: [],
     example: '',
