@@ -1,7 +1,77 @@
 export const newsGroups = [
   {
-    "date": "2026-08-02",
+    "date": "2026-08-03",
     "expanded": true,
+    "items": [
+      {
+        "title": "Grok 支持分析任意视频",
+        "summary": "Grok 可以分析任何视频 https://grok.com/share/bGVnYWN5_8013f7a3-f604-4351-8cd7-acecf3ef165b",
+        "tags": [
+          "#产品发布",
+          "#xAI"
+        ]
+      },
+      {
+        "title": "Cloudflare 开启 Agents Week：探讨面向智能体的 Agent Cloud 形态",
+        "summary": "Cloudflare 启动为期五天的 Agents Week，核心议题是“Agent Cloud”应具备何种形态。其认为现有云和网络皆为人设计，而智能体有速度、结构与访问上的独特需求，因此 Agent Cloud 需同时构建面向智能体原生的底层能力，并充当现有网络与智能体网络之间的转换层。本周将围绕执行层、智能体开发生命周期、安全控制及智能体网络等主题展开。",
+        "tags": [
+          "#行业动态",
+          "#Cloudflare"
+        ]
+      },
+      {
+        "title": "Codex 用 Sol 指挥 Luna Max 省额度翻倍产出",
+        "summary": "Codex 高阶玩法：让 Sol 在 `~/.codex/agents/` 下创建 `luna-worker.toml` 子代理，模型设 `gpt-5.6-luna`、reasoning effort 设 max，Sol 负责拆任务与审代码，具体实现自动委托给 Luna Max。",
+        "tags": [
+          "#技巧与观点",
+          "#工具"
+        ]
+      },
+      {
+        "title": "OpenAI 新模型 Astra 数学表现出色，但被过度吹捧",
+        "summary": "OpenAI 内部测试的新模型 Astra 在数学问题上表现惊艳，但 Gary Marcus 指出相关讨论犯了“合成谬误”：擅长某类数学不等于擅长所有数学、科学乃至一切认知任务。数学之所以成为突破口，是因为它便于用符号工具验证且能廉价生成海量合成数据，而开放世界问题无法如此模拟。此外，OpenAI 未公布方法细节，尚无法评估其真实意义。",
+        "tags": [
+          "#技巧与观点",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "最新开源模型盘点（#23）：Laguna S2.1、Inkling 与 Kimi K3 展现开源模型在帕累托前沿的价值",
+        "summary": "Thinking Machines 发布首个模型 Inkling，为 975B-A41B 多模态 MoE，支持文本、图像和音频输入，并推出 276B-A12B 小版本。",
+        "tags": [
+          "#技巧与观点",
+          "#Kimi"
+        ]
+      },
+      {
+        "title": "德国法院裁定AI音乐生成器Suno侵犯版权，驳回合理使用抗辩",
+        "summary": "慕尼黑法院裁定，AI音乐生成器Suno在训练过程及输出结果中均侵犯版权，并驳回其合理使用抗辩。法院认定Suno 3.5和4版本模型可复现六首知名歌曲的原创元素，构成“记忆化”侵权，且责任归于Suno而非用户。该判决还认定美国版权法下的合理使用不适用于此案，目前尚未最终生效。",
+        "tags": [
+          "#行业动态",
+          "#工具"
+        ]
+      },
+      {
+        "title": "Google DeepMind 在 Flow Music 中推出 Lyria 3.5，提升音乐性、歌词、人声与创作控制",
+        "summary": "Google DeepMind 今日在 Google Flow Music 中发布新一代音乐生成模型 Lyria 3.5，带来音乐性、歌词质量、人声表现力与创作控制的多项提升。新模型能生成更自然复杂的旋律结构，歌词对提示词的遵循度和结构意识更强，人声更逼真且富有情感，同时支持更便捷地控制输出节奏与时长。",
+        "tags": [
+          "#模型发布",
+          "#Google"
+        ]
+      },
+      {
+        "title": "微软转售前沿：Azure 年营收破千亿但增速被 Google Cloud 反超",
+        "summary": "Azure 上财年营收首破 1000 亿美元，同比增长 43%，但 Google Cloud 增速达 82%，几乎是 Azure 的两倍。Google 拥有自研模型与芯片，云运营利润率从 20.7% 扩至 35.6%；微软则主要依赖英伟达商用芯片，且 6780 亿美元合同 backlog 中近半数来自 OpenAI 单一客户。",
+        "tags": [
+          "#技巧与观点",
+          "#微软"
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2026-08-02",
+    "expanded": false,
     "items": [
       {
         "title": "德国法院裁定AI音乐生成器Suno侵犯版权，驳回合理使用抗辩",
