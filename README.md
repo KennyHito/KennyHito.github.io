@@ -6,7 +6,7 @@
 
 - **四大板块**
   - 🏠 **首页**：站点介绍 + 网站直达入口（工具 / 资讯 / 关于）
-  - 🧰 **工具**：主流 AI 工具、平台与免费开放 API 的实操指南，附带官方直达链接
+  - 🧰 **工具**：主流 AI 工具、平台与免费开放 API 的实操指南，附带官方直达链接；卡片采用**瀑布流布局**，按内容高度自然排列、左右无需等高
   - 📰 **资讯**：按日期分组归档的前沿 AI / 科技资讯，点击日期可展开 / 收起，最新内容默认展开；页面叠加「资讯由 AI 自动生成，如有侵权，请联系删除。」半透明水印，自动适配亮 / 暗主题
   - 👤 **关于**：作者介绍、学习经历与 GitHub 开源项目导航
 - **亮 / 暗双主题**：基于 CSS 变量的主题系统，支持一键切换，偏好通过 `localStorage` 持久化；首屏内联脚本提前设置主题属性，**无主题闪烁**
@@ -14,19 +14,23 @@
 - **响应式布局**：移动端（≤734px）自动切换为单列，导航 Tab 支持横向滚动
 - **页面切换动画**：纯 CSS 进入动画，并尊重系统「减少动态效果」无障碍设置
 - **吸顶毛玻璃导航**：滚动时固定顶部，半透明 + 背景模糊
+- **回到顶部**：任意页面下滑超过半屏后，右下角出现悬浮按钮，点击平滑滚动回顶部
 
 ## 🧰 工具清单
 
 | 工具 | 简介 | 链接 |
 | --- | --- | --- |
-| ⭐️ 科学上网 VPN（合规学习用途） | 合规查阅海外 AI 官方文档、技术资料的合规网络工具 | [前往官网](https://go.huajic.com/?path=auth/register&code=d39H) |
-| OpenClaw 智能体 | 轻量化、低代码 AI 多智能体框架，支持插件拓展、知识库对接 | [官方文档](https://docs.openclaw.ai/zh-CN) |
+| ⭐️ 科学上网 VPN（合规学习用途） | 合规查阅海外 AI 官方文档、技术资料的合规网络工具 | [官网](https://go.huajic.com/?path=auth/register&code=d39H) |
+| OpenClaw 智能体 | 轻量化、低代码 AI 多智能体框架，支持插件拓展、知识库对接 | [文档](https://docs.openclaw.ai/zh-CN) |
 | ⭐️ WorkBuddy 自动化 AI 办公助手 | 腾讯云推出的全场景 AI 办公工作台，网页 / 桌面双模式 | [官网](https://www.codebuddy.cn/docs/workbuddy/Overview) |
 | Coze 零代码搭建 AI 智能体 | 字节跳动开源可商用的零代码智能体平台 | [官网](https://www.coze.cn) |
-| 每日一言 API（免费开放） | 免费随机语录接口，适合博客座右铭、启动页文案 | [查看接口](https://api.xygeng.cn/one) |
-| 随机猫咪图片 API（免费开放） | 免费随机高清猫咪图片，适合占位图、表情包 | [查看接口](https://api.thecatapi.com/v1/images/search) |
+| DeepSeek API 开放平台 | 高性价比大模型 API，兼容 OpenAI 协议 | [平台](https://platform.deepseek.com/) |
 | Ollama 本地大模型运行 | 开源免费本地大模型运行框架，支持多模型、跨平台 | [官网](https://ollama.com/) |
-| DeepSeek API 开放平台 | 高性价比大模型 API，兼容 OpenAI 协议 | [开放平台](https://platform.deepseek.com/) |
+| GitHub 用户搜索 API（官方免费） | 官方接口，链接末尾拼接用户名即可查询公开资料（示例 `?q=KennyHito`） | [接口](https://api.github.com/search/users?q=) |
+| 每日一言 API（免费开放） | 免费每日一句语录接口，即取即用、无需参数 | [接口](https://api.xygeng.cn/one) |
+| Hitokoto 一言 API（免费开放） | 社区句子库，内容来自真实用户投稿，支持按类型筛选与来源署名 | [接口](https://v1.hitokoto.cn/) |
+| 随机猫咪图片 API（免费开放） | 免费随机高清猫咪图片，适合占位图、表情包 | [接口](https://api.thecatapi.com/v1/images/search) |
+| 随机狗狗图片 API（免费开放） | 免费随机多品种狗狗图片，适合占位图、趣味图集 | [接口](https://dog.ceo/api/breeds/image/random) |
 
 ## 🛠 技术栈
 
@@ -58,7 +62,8 @@ ExploreNet/
     │   ├── ToolCard.vue     # 工具卡片
     │   └── NewsPanel.vue    # 资讯按日期折叠面板
     ├── composables/
-    │   └── useTheme.js      # 主题状态与切换逻辑（全局单例）
+    │   ├── useTheme.js      # 主题状态与切换逻辑（全局单例）
+    │   └── useMasonry.js    # 工具页瀑布流布局 composable
     ├── data/
     │   ├── home.js          # 首页 features / intro 数据源
     │   ├── tools.js         # 工具板块数据源
