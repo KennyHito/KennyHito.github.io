@@ -20,17 +20,17 @@
 
 | 工具 | 简介 | 链接 |
 | --- | --- | --- |
-| ⭐️ 科学上网 VPN（合规学习用途） | 合规查阅海外 AI 官方文档、技术资料的合规网络工具 | [官网](https://go.huajic.com/?path=auth/register&code=d39H) |
-| OpenClaw 智能体 | 轻量化、低代码 AI 多智能体框架，支持插件拓展、知识库对接 | [文档](https://docs.openclaw.ai/zh-CN) |
-| ⭐️ WorkBuddy 自动化 AI 办公助手 | 腾讯云推出的全场景 AI 办公工作台，网页 / 桌面双模式 | [官网](https://www.codebuddy.cn/docs/workbuddy/Overview) |
-| Coze 零代码搭建 AI 智能体 | 字节跳动开源可商用的零代码智能体平台 | [官网](https://www.coze.cn) |
-| DeepSeek API 开放平台 | 高性价比大模型 API，兼容 OpenAI 协议 | [平台](https://platform.deepseek.com/) |
-| Ollama 本地大模型运行 | 开源免费本地大模型运行框架，支持多模型、跨平台 | [官网](https://ollama.com/) |
-| GitHub 用户搜索 API（官方免费） | 官方接口，链接末尾拼接用户名即可查询公开资料（示例 `?q=KennyHito`） | [接口](https://api.github.com/search/users?q=) |
-| 每日一言 API（免费开放） | 免费每日一句语录接口，即取即用、无需参数 | [接口](https://api.xygeng.cn/one) |
-| Hitokoto 一言 API（免费开放） | 社区句子库，内容来自真实用户投稿，支持按类型筛选与来源署名 | [接口](https://v1.hitokoto.cn/) |
-| 随机猫咪图片 API（免费开放） | 免费随机高清猫咪图片，适合占位图、表情包 | [接口](https://api.thecatapi.com/v1/images/search) |
-| 随机狗狗图片 API（免费开放） | 免费随机多品种狗狗图片，适合占位图、趣味图集 | [接口](https://dog.ceo/api/breeds/image/random) |
+| ⭐️ 科学上网 VPN（合规学习用途） | 合规查阅海外 AI 官方文档、技术资料的合规网络工具 | <nobr>[官网](https://go.huajic.com/?path=auth/register&code=d39H)</nobr> |
+| OpenClaw 智能体 | 轻量化、低代码 AI 多智能体框架，支持插件拓展、知识库对接 | <nobr>[文档](https://docs.openclaw.ai/zh-CN)</nobr> |
+| ⭐️ WorkBuddy 自动化 AI 办公助手 | 腾讯云推出的全场景 AI 办公工作台，网页 / 桌面双模式 | <nobr>[官网](https://www.codebuddy.cn/docs/workbuddy/Overview)</nobr> |
+| Coze 零代码搭建 AI 智能体 | 字节跳动开源可商用的零代码智能体平台 | <nobr>[官网](https://www.coze.cn)</nobr> |
+| DeepSeek API 开放平台 | 高性价比大模型 API，兼容 OpenAI 协议 | <nobr>[平台](https://platform.deepseek.com/)</nobr> |
+| Ollama 本地大模型运行 | 开源免费本地大模型运行框架，支持多模型、跨平台 | <nobr>[官网](https://ollama.com/)</nobr> |
+| GitHub 用户搜索 API（官方免费） | 官方接口，链接末尾拼接用户名即可查询公开资料（示例 `?q=KennyHito`） | <nobr>[接口](https://api.github.com/search/users?q=)</nobr> |
+| 每日一言 API（免费开放） | 免费每日一句语录接口，即取即用、无需参数 | <nobr>[接口](https://api.xygeng.cn/one)</nobr> |
+| Hitokoto 一言 API（免费开放） | 社区句子库，内容来自真实用户投稿，支持按类型筛选与来源署名 | <nobr>[接口](https://v1.hitokoto.cn/)</nobr> |
+| 随机猫咪图片 API（免费开放） | 免费随机高清猫咪图片，适合占位图、表情包 | <nobr>[接口](https://api.thecatapi.com/v1/images/search)</nobr> |
+| 随机狗狗图片 API（免费开放） | 免费随机多品种狗狗图片，适合占位图、趣味图集 | <nobr>[接口](https://dog.ceo/api/breeds/image/random)</nobr> |
 
 ## 🛠 技术栈
 
