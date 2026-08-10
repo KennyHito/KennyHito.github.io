@@ -1,7 +1,77 @@
 export const newsGroups = [
   {
-    "date": "2026-08-06",
+    "date": "2026-08-09",
     "expanded": true,
+    "items": [
+      {
+        "title": "苹果 Mac 简体中文支持文档更新，“Apple 智能”阿里千问扩展现身",
+        "summary": "苹果官网 Mac 简体中文使用手册新增《在 Mac 上配合 Apple 智能使用千问》支持文档，明确 Apple 智能可配合阿里巴巴千问模型工作。千问扩展适用于 macOS 26.6 或更高版本，需中国大陆 Apple 账户及机型，支持写作工具与 Siri，用户需登录千问账户使用。",
+        "tags": [
+          "#产品发布",
+          "#阿里"
+        ]
+      },
+      {
+        "title": "OpenAI 桌面端 ChatGPT 上线语音交互功能，可语音操控电脑执行多步骤任务",
+        "summary": "OpenAI 更新 ChatGPT 桌面应用，新增对 ChatGPT Voice 的支持，用户可直接通过语音对话控制 AI 智能体并让其在电脑上执行任务。该功能基于全新语音模型系列 ChatGPT-Live，支持 ChatGPT Work 和 Codex，在 macOS 上还可借助 Appshots 访问屏幕内容。",
+        "tags": [
+          "#产品发布",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "Grok Imagine 图像编辑迎来重大升级",
+        "summary": "Grok Imagine 图像编辑功能重大升级 [引用 @XFreeze]：你可以直接悬停在 Grok Imagine 中的任意特定区域，并即时进行编辑",
+        "tags": [
+          "#产品发布",
+          "#xAI"
+        ]
+      },
+      {
+        "title": "Claude Code v2.1.225 发布：新增网关支出限额支持与工作区信任提示",
+        "summary": "Claude Code v2.1.225 为用量警告新增网关支出限额支持，达到限额时提示将显示上限、重置时间及操作者消息。该版本还为不受信任目录中的 claude agents 增加工作区信任提示，并修复了 MCP OAuth 服务器在 macOS 上的间歇性 401 错误、跨会话消息滞留及 Remote Control 会话恢复后对话历史损坏等问题。",
+        "tags": [
+          "#产品发布",
+          "#Anthropic"
+        ]
+      },
+      {
+        "title": "Cloudflare：AI 机器人流量已超越人类，预计五年后人机流量比达 1:1000 近乎“误差”",
+        "summary": "Cloudflare 在 2026 年第二季度财报电话会议上披露，AI 机器人等非人类流量已于 2026 年 5 月正式超过人类流量，比 CEO 此前预测的 2027 年底大幅提前。公司预测若趋势延续，五年后非人类流量将达人类流量的 1000 倍，人类在互联网上的存在将变得微不足道。该季度营收 6.96 亿美元，同比增长 36%，净亏损 2.057 亿美元。",
+        "tags": [
+          "#行业动态",
+          "#Cloudflare"
+        ]
+      },
+      {
+        "title": "Firebird 在亚美尼亚启动独联体地区最大 AI 工厂",
+        "summary": "Firebird 在亚美尼亚启动独联体地区最大 AI 工厂，由 NVIDIA 加速计算和 Dell Technologies 基础设施驱动，亚美尼亚总理等官员出席开幕式。",
+        "tags": [
+          "#行业动态",
+          "#NVIDIA"
+        ]
+      },
+      {
+        "title": "Jeff Dean 宣布离开谷歌，创办 DiscoLoop AI",
+        "summary": "Jeff Dean 在谷歌任职 27 年后宣布离职，将于明日正式离开。他称谷歌已从 25 人发展到 19 万余人，拥有十三款用户超十亿的产品。他将与 Sanjay Ghemawat、Oriol Vinyals 和 Quoc Le 共同创办 DiscoLoop AI。",
+        "tags": [
+          "#行业动态",
+          "#Google"
+        ]
+      },
+      {
+        "title": "SpaceX 宣布 AI 算力上太空，独家采用 Nvidia Vera Rubin",
+        "summary": "SpaceX 在财报电话会上宣布，未来所有 AI 算力（地面及轨道）将独家采用 Nvidia Vera Rubin 架构，2026 年底总算力超 2GW，2027 年底接近 10GW。同步公布 Starmind 计划，2027 年起发射搭载 Rubin GPU 与 Vera CPU 的轨道 AI 卫星星座，明年开始发射，算力经星链激光链路回传。消息公布后 AMD 股价跌 8%。",
+        "tags": [
+          "#行业动态",
+          "#硬件"
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2026-08-06",
+    "expanded": false,
     "items": [
       {
         "title": "Qwen-Image-3.0-Pro 上线 Qwen Cloud",
