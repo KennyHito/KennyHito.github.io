@@ -1,7 +1,77 @@
 export const newsGroups = [
   {
-    "date": "2026-08-09",
+    "date": "2026-08-10",
     "expanded": true,
+    "items": [
+      {
+        "title": "Seedance 2.5 上线一周新增六种创意玩法",
+        "summary": "Seedance 2.5 上线一周后，国内外社区涌现出时间静止、超级英雄变身、创意广告、K-pop MV、电商广告、拉片复刻等六类热门玩法。经实测，该版本人物面部告别“AI 油腻感”，动作自然度与镜头切换较 2.0 更合理，单次生成超长视频时长拉至 300 秒，并支持片段重拍与智能续写。通过 LibTV 年费会员，生成成本最低可至 0.4 元/秒。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "Anthropic 称已基本解决提示注入攻击",
+        "summary": "Anthropic 的 Boris Cherny 表示，通过模型训练已基本解决 Claude 模型在实际使用中的提示注入威胁。独立研究者的基准测试显示，叠加模型训练、输入探测和意图分类器等多层防御后，未见过的间接提示注入攻击成功率可降至约 0。Claude Code 的 auto 模式将于下周默认开启。",
+        "tags": [
+          "#技巧与观点",
+          "#Anthropic"
+        ]
+      },
+      {
+        "title": "用DistilBERT LoRA与TF-IDF基线做IMDb情感分析：校准、可解释性与半监督学习",
+        "summary": "本教程基于Stanford IMDb数据集构建端到端情感分析流程，对比TF-IDF逻辑回归基线与LoRA微调的DistilBERT。模型评估涵盖准确率、macro-F1、ROC-AUC及期望校准误差，并分析置信错误、长度影响与词级遮挡显著性。最后利用未标注IMDb数据做置信度伪标注，比较半监督模型与基线，保存合并后的Transformer用于推理。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "从黑客事件中汲取的教训：前沿模型攻击暴露激励与治理失衡",
+        "summary": "近期前沿模型引发的网络攻击事件促使作者反思当前激励体系难以适应快速技术变革。科技公司受增长驱动持续扩展，而政府行动迟缓，双方均未准备好应对未来12-24个月的挑战。作者认为需要更多透明度，并指出持久性强的模型更可能实施黑客行为，OpenAI的推理时扩展路径可能与此相关。",
+        "tags": [
+          "#技巧与观点",
+          "#研究"
+        ]
+      },
+      {
+        "title": "苹果 Mac 简体中文支持文档更新，“Apple 智能”阿里千问扩展现身",
+        "summary": "苹果官网 Mac 简体中文使用手册新增《在 Mac 上配合 Apple 智能使用千问》支持文档，明确 Apple 智能可配合阿里巴巴千问模型工作。千问扩展适用于 macOS 26.6 或更高版本，需中国大陆 Apple 账户及机型，支持写作工具与 Siri，用户需登录千问账户使用。",
+        "tags": [
+          "#产品发布",
+          "#阿里"
+        ]
+      },
+      {
+        "title": "OpenAI 桌面端 ChatGPT 上线语音交互功能，可语音操控电脑执行多步骤任务",
+        "summary": "OpenAI 更新 ChatGPT 桌面应用，新增对 ChatGPT Voice 的支持，用户可直接通过语音对话控制 AI 智能体并让其在电脑上执行任务。该功能基于全新语音模型系列 ChatGPT-Live，支持 ChatGPT Work 和 Codex，在 macOS 上还可借助 Appshots 访问屏幕内容。",
+        "tags": [
+          "#产品发布",
+          "#OpenAI"
+        ]
+      },
+      {
+        "title": "Grok Imagine 图像编辑迎来重大升级",
+        "summary": "Grok Imagine 图像编辑功能重大升级 [引用 @XFreeze]：你可以直接悬停在 Grok Imagine 中的任意特定区域，并即时进行编辑",
+        "tags": [
+          "#产品发布",
+          "#xAI"
+        ]
+      },
+      {
+        "title": "Claude Code v2.1.225 发布：新增网关支出限额支持与工作区信任提示",
+        "summary": "Claude Code v2.1.225 为用量警告新增网关支出限额支持，达到限额时提示将显示上限、重置时间及操作者消息。该版本还为不受信任目录中的 claude agents 增加工作区信任提示，并修复了 MCP OAuth 服务器在 macOS 上的间歇性 401 错误、跨会话消息滞留及 Remote Control 会话恢复后对话历史损坏等问题。",
+        "tags": [
+          "#产品发布",
+          "#Anthropic"
+        ]
+      }
+    ]
+  },
+  {
+    "date": "2026-08-09",
+    "expanded": false,
     "items": [
       {
         "title": "苹果 Mac 简体中文支持文档更新，“Apple 智能”阿里千问扩展现身",
