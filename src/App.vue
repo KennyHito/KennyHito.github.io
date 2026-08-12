@@ -159,6 +159,11 @@ provide('navigate', navigate)
   display: grid;
   place-items: center;
   box-shadow: var(--shadow-md);
+  /* 禁止长按选中、拖拽图片等原生行为 */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
   transition: background var(--transition), transform 0.1s ease, opacity var(--transition), color var(--transition);
 }
 
