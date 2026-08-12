@@ -41,8 +41,7 @@ onUnmounted(() => {
         <h4 class="news-toc__title">目录</h4>
         <ul class="news-toc__list">
           <li v-for="g in newsGroups" :key="g.date">
-            <a class="news-toc__link" href="#"
-              @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
+            <a class="news-toc__link" href="#" @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
           </li>
         </ul>
       </aside>
@@ -63,7 +62,7 @@ onUnmounted(() => {
     </div>
   </section>
 
-  <!-- 资讯水印：覆盖层，半透明、不阻挡交互，颜色自动适配亮/暗主题 -->
+  <!-- 资讯水印：覆盖层，半透明、不阻挡交互，颜色自动适配亮/暗主题；密度由 style.css 中 --watermark-scale 控制 -->
   <div class="news-watermark" aria-hidden="true"></div>
 </template>
 
@@ -192,13 +191,15 @@ onUnmounted(() => {
   z-index: 1;
   /* 不阻挡下方内容的点击与交互 */
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='220' viewBox='0 0 380 220'%3E%3Ctext x='50%25' y='50%25' transform='rotate(-22 190 110)' text-anchor='middle' dominant-baseline='middle' fill='rgba(0,0,0,0.12)' font-size='18' font-family='system-ui, sans-serif'%3E资讯由AI自动生成，如有侵权，请联系删除。%3C/text%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='550' height='220' viewBox='0 0 550 220'%3E%3Ctext x='50%25' y='50%25' transform='rotate(-22 230 110)' text-anchor='middle' dominant-baseline='middle' fill='rgba(0,0,0,0.18)' font-size='19' font-family='Kaiti, KaiTi, STKaiti, 楷体, serif'%3E本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。%3C/text%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 380px 220px;
+  /* 平铺单元尺寸：由全局 --watermark-scale 控制（默认 1 = 基准 550x220），
+     数值越小水印越密越多，数值越大越疏越少 */
+  background-size: calc(550px * var(--watermark-scale, 1)) calc(220px * var(--watermark-scale, 1));
 }
 
 /* 暗色主题下切换为浅色半透明水印，保持可见性 */
 [data-theme="dark"] .news-watermark {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='380' height='220' viewBox='0 0 380 220'%3E%3Ctext x='50%25' y='50%25' transform='rotate(-22 190 110)' text-anchor='middle' dominant-baseline='middle' fill='rgba(255,255,255,0.12)' font-size='18' font-family='system-ui, sans-serif'%3E资讯由AI自动生成，如有侵权，请联系删除。%3C/text%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='550' height='220' viewBox='0 0 550 220'%3E%3Ctext x='50%25' y='50%25' transform='rotate(-22 230 110)' text-anchor='middle' dominant-baseline='middle' fill='rgba(255,255,255,0.18)' font-size='19' font-family='Kaiti, KaiTi, STKaiti, 楷体, serif'%3E本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。%3C/text%3E%3C/svg%3E");
 }
 </style>
