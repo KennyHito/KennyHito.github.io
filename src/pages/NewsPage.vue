@@ -35,14 +35,7 @@ onUnmounted(() => {
 <template>
   <section class="page-section">
     <div class="container news-layout">
-      <!-- 左侧：资讯列表 -->
-      <div class="news-main">
-        <div v-for="(g, i) in newsGroups" :key="g.date + i" :id="'news-' + g.date" class="news-anchor">
-          <NewsPanel :group="g" />
-        </div>
-      </div>
-
-      <!-- 右侧：年月日目录 -->
+      <!-- 桌面端：屏幕左侧固定年月日目录 -->
       <aside ref="tocEl" class="news-toc" aria-label="资讯日期目录">
         <h4 class="news-toc__title">目录</h4>
         <ul class="news-toc__list">
@@ -52,6 +45,19 @@ onUnmounted(() => {
           </li>
         </ul>
       </aside>
+
+      <!-- 左侧/主内容：资讯列表 -->
+      <div class="news-main">
+        <!-- 移动端：顶部横向滚动的日期目录 -->
+        <nav class="news-toc-mobile" aria-label="资讯日期目录">
+          <a v-for="g in newsGroups" :key="'m' + g.date" class="news-toc-mobile__item" href="#"
+            @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
+        </nav>
+
+        <div v-for="(g, i) in newsGroups" :key="g.date + i" :id="'news-' + g.date" class="news-anchor">
+          <NewsPanel :group="g" />
+        </div>
+      </div>
     </div>
   </section>
 
@@ -130,10 +136,47 @@ onUnmounted(() => {
   background: var(--bg-secondary);
 }
 
-/* 窄屏隐藏目录，避免遮挡内容 */
+/* ===== 移动端顶部横向目录（默认隐藏，仅窄屏显示） ===== */
+.news-toc-mobile {
+  display: none;
+}
+
+/* 窄屏：隐藏左侧固定目录，改为顶部横向滚动目录 */
 @media (max-width: 860px) {
   .news-toc {
     display: none;
+  }
+
+  .news-toc-mobile {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding-bottom: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .news-toc-mobile::-webkit-scrollbar {
+    display: none;
+  }
+
+  .news-toc-mobile__item {
+    flex-shrink: 0;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 13px;
+    opacity: 0.85;
+    white-space: nowrap;
+    transition: background var(--transition), color var(--transition), opacity var(--transition);
+  }
+
+  .news-toc-mobile__item:hover {
+    opacity: 1;
+    background: var(--bg-secondary);
   }
 }
 
