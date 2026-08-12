@@ -74,10 +74,15 @@ onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
 // ===== 回到顶部按钮 =====
 // 是否已滚动超过半屏（用于是否显示按钮）
 const showBackTop = ref(false)
+// 当前阅读进度 0 ~ 100
+const scrollPercent = ref(0)
 // 显示阈值：超过半屏高度即出现
 function onScroll() {
   try {
-    showBackTop.value = window.scrollY > window.innerHeight / 2
+    const scrollTop = window.scrollY || 0
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight
+    showBackTop.value = scrollTop > window.innerHeight / 2
+    scrollPercent.value = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0
   } catch (e) {
     /* 某些内嵌环境无 scrollY，忽略 */
   }
@@ -117,12 +122,22 @@ provide('navigate', navigate)
   <!-- 底部页脚 -->
   <AppFooter />
 
-  <!-- 回到顶部：滚动超过一屏后悬浮于右下角 -->
+  <!-- 回到顶部：滚动超过半屏后悬浮于右下角 -->
   <transition name="backtop-fade">
-    <button v-if="showBackTop" class="back-to-top" @click="backToTop" aria-label="回到顶部" title="回到顶部">
-      <svg class="back-to-top__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-        <path d="M12 5l-7 7h4v7h6v-7h4z" fill="currentColor" />
+    <button v-if="showBackTop" class="back-to-top" @click="backToTop" aria-label="回到顶部">
+      <!-- 进度环 -->
+      <svg class="back-to-top__ring" viewBox="0 0 44 44" aria-hidden="true">
+        <circle class="back-to-top__ring-bg" cx="22" cy="22" r="19" />
+        <circle class="back-to-top__ring-progress" cx="22" cy="22" r="19"
+          :stroke-dasharray="119.38"
+          :stroke-dashoffset="119.38 - (119.38 * scrollPercent) / 100" />
       </svg>
+      <!-- 上箭头 -->
+      <svg class="back-to-top__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
+        <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <!-- 悬浮提示 -->
+      <span class="back-to-top__tooltip">回到顶部</span>
     </button>
   </transition>
 </template>
@@ -139,24 +154,91 @@ provide('navigate', navigate)
   border-radius: 50%;
   border: 1px solid var(--border);
   background: var(--surface);
-  color: var(--accent);
+  color: var(--title);
   cursor: pointer;
   display: grid;
   place-items: center;
   box-shadow: var(--shadow-md);
-  transition: background var(--transition), transform 0.1s ease, opacity var(--transition);
+  transition: background var(--transition), transform 0.1s ease, opacity var(--transition), color var(--transition);
+}
+
+/* 进度环 */
+.back-to-top__ring {
+  position: absolute;
+  inset: -1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.back-to-top__ring circle {
+  fill: none;
+  stroke-width: 3;
+}
+
+.back-to-top__ring-bg {
+  stroke: var(--border);
+}
+
+.back-to-top__ring-progress {
+  stroke: #ff6b35;
+  stroke-linecap: round;
+  /* 注意：不要在此处写 stroke-dasharray / stroke-dashoffset，
+     它们由模板中绑定的属性驱动（CSS 会覆盖 SVG 属性导致进度不更新） */
 }
 
 /* 上箭头图标 */
 .back-to-top__icon {
-  width: 20px;
-  height: 20px;
+  position: relative;
+  width: 18px;
+  height: 18px;
   display: block;
+  transition: color var(--transition);
+}
+
+/* 悬浮提示 */
+.back-to-top__tooltip {
+  position: absolute;
+  right: 54px;
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 13px;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+}
+
+/* 小三角 */
+.back-to-top__tooltip::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 5px 0 5px 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--border);
 }
 
 /* 悬停与按下反馈 */
 .back-to-top:hover {
   background: var(--bg-secondary);
+  color: #ff6b35;
+}
+
+.back-to-top:hover .back-to-top__tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
 }
 
 .back-to-top:active {
@@ -187,6 +269,12 @@ provide('navigate', navigate)
   .back-to-top__icon {
     width: 18px;
     height: 18px;
+  }
+
+  .back-to-top__tooltip {
+    right: 50px;
+    font-size: 12px;
+    padding: 5px 8px;
   }
 }
 </style>
