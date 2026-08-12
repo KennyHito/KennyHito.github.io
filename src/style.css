@@ -38,6 +38,8 @@
   --bg-alt: var(--bg-secondary);
   /* About 页面文字行间距，可手动调整该数值（建议范围 1.4 ~ 2.0） */
   --about-line-height: 1.5;
+  /* 资讯页左侧目录距页面底部的留白距离，可手动调整 */
+  --toc-bottom-offset: 40px;
 }
 
 /* 暗色主题：仅覆盖颜色相关变量，结构样式无需改动 */
@@ -276,13 +278,13 @@ main {
 /* ===== 通用区块 ===== */
 .page-section {
   /* 上下区块间距 */
-  padding: 66px 0;
+  padding: 20px 0;
 }
 
 /* 区块标题区（居中） */
 .section-head {
   text-align: center;
-  margin-bottom: 48px;
+  margin-bottom: 20px;
 }
 
 .section-head h2 {
@@ -492,7 +494,7 @@ main {
   font-weight: 600;
   letter-spacing: -0.01em;
   text-align: center;
-  margin: 0 0 48px;
+  margin: 0 0 20px;
 }
 
 .intro-list {
