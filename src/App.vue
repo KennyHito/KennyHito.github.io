@@ -128,13 +128,13 @@ provide('navigate', navigate)
       <!-- 进度环 -->
       <svg class="back-to-top__ring" viewBox="0 0 44 44" aria-hidden="true">
         <circle class="back-to-top__ring-bg" cx="22" cy="22" r="19" />
-        <circle class="back-to-top__ring-progress" cx="22" cy="22" r="19"
-          :stroke-dasharray="119.38"
+        <circle class="back-to-top__ring-progress" cx="22" cy="22" r="19" :stroke-dasharray="119.38"
           :stroke-dashoffset="119.38 - (119.38 * scrollPercent) / 100" />
       </svg>
       <!-- 上箭头 -->
       <svg class="back-to-top__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
-        <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+          stroke-linejoin="round" />
       </svg>
       <!-- 悬浮提示 -->
       <span class="back-to-top__tooltip">回到顶部</span>
@@ -261,7 +261,7 @@ provide('navigate', navigate)
 @media (max-width: 734px) {
   .back-to-top {
     right: 16px;
-    bottom: 66px;
+    bottom: 100px;
     width: 40px;
     height: 40px;
   }
