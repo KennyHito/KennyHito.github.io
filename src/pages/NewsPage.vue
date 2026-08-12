@@ -33,9 +33,10 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <!-- 资讯页主容器：左侧固定目录 + 右侧资讯列表（移动端改为顶部横向目录） -->
   <section class="page-section">
     <div class="container news-layout">
-      <!-- 桌面端：屏幕左侧固定年月日目录 -->
+      <!-- 桌面端（>860px）：固定在屏幕左侧的年月日目录，点击平滑定位到对应日期分组 -->
       <aside ref="tocEl" class="news-toc" aria-label="资讯日期目录">
         <h4 class="news-toc__title">目录</h4>
         <ul class="news-toc__list">
@@ -46,14 +47,15 @@ onUnmounted(() => {
         </ul>
       </aside>
 
-      <!-- 左侧/主内容：资讯列表 -->
+      <!-- 主内容区：资讯列表 -->
       <div class="news-main">
-        <!-- 移动端：顶部横向滚动的日期目录 -->
+        <!-- 移动端（≤860px）：顶部横向滚动的日期胶囊，点击同样平滑定位 -->
         <nav class="news-toc-mobile" aria-label="资讯日期目录">
           <a v-for="g in newsGroups" :key="'m' + g.date" class="news-toc-mobile__item" href="#"
             @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
         </nav>
 
+        <!-- 每个日期分组一个锚点，scrollIntoView 定位时避开吸顶导航 -->
         <div v-for="(g, i) in newsGroups" :key="g.date + i" :id="'news-' + g.date" class="news-anchor">
           <NewsPanel :group="g" />
         </div>
@@ -66,37 +68,40 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-/* ===== 左右布局：左侧资讯，右侧年月日目录 ===== */
+/* ===== 左右布局：左侧固定目录 + 右侧资讯主内容 ===== */
 .news-layout {
   display: flex;
   align-items: flex-start;
   gap: 28px;
 }
 
-/* 左侧资讯列表：占满剩余宽度 */
+/* 主内容区（资讯列表）：占满目录之外的剩余宽度 */
 .news-main {
   flex: 1;
   min-width: 0;
 }
 
-/* 每个日期分组锚点：滚动定位时避开吸顶导航 */
+/* 每个日期分组锚点：scrollIntoView 定位时避开吸顶导航 */
 .news-anchor {
   scroll-margin-top: 72px;
 }
 
-/* ===== 左侧目录：固定在屏幕最左，左侧留 40px，顶部与主内容区对齐 ===== */
+/* ===== 桌面端左侧目录：fixed 固定在屏幕左侧（距左 20px、距顶 60px），
+       透明背景可透出水印，内容超出时可滚动但隐藏滚动条 ===== */
 .news-toc {
   position: fixed;
   left: 20px;
   top: 60px;
+  /* 高于资讯水印，保持可点击 */
   z-index: 2;
-  /* 高于资讯水印，保持可读 */
   flex-shrink: 0;
   width: 190px;
+  /* 最大高度 = 视口高度 - 顶部偏移 - 底部留白（--toc-bottom-offset 可调） */
   max-height: calc(100vh - 118px - var(--toc-bottom-offset));
-  /* 内容超出时可滚动，但不显示滚动条 */
+  /* 内容超出时可滚动，但不显示滚动条（Firefox） */
   overflow-y: auto;
   scrollbar-width: none;
+  /* 透明背景，可透出下层资讯水印 */
   background: transparent;
   border: none;
   padding: 16px 14px;
