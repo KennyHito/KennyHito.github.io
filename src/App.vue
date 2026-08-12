@@ -102,10 +102,17 @@ function backToTop() {
 
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
+  // 监听内容高度变化（如资讯展开/收起导致页面变高/变矮），立即重算进度
+  const bodyObserver = new ResizeObserver(() => onScroll())
+  bodyObserver.observe(document.body)
   // 初始执行一次，处理刷新后非顶部的场景
   onScroll()
+  // 卸载时断开观察器
+  onUnmounted(() => {
+    window.removeEventListener('scroll', onScroll)
+    bodyObserver.disconnect()
+  })
 })
-onUnmounted(() => window.removeEventListener('scroll', onScroll))
 
 // 供子页面（如首页快捷入口）触发 tab 切换
 provide('navigate', navigate)
