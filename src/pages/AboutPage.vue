@@ -40,6 +40,7 @@ const navigate = inject('navigate')
             <p>🍋 若以上某个项目对你有所帮助，希望可以在 <a class="inline-link" href="https://github.com/KennyHito" target="_blank"
                 rel="noopener">GitHub</a> 上点个 Star 和 Fork 🤗！</p>
           </div>
+          <p>📮 如有问题请反馈邮箱 <a class="inline-link" href="mailto:KennyHito@gmail.com">KennyHito@gmail.com</a>。</p>
         </div>
       </div>
     </div>
