@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { newsGroups } from '../data/news.js'
+import { iconChevronLeft } from '../data/path.js'
 import NewsPanel from '../components/NewsPanel.vue'
 
 // 点击目录项，平滑滚动到对应日期分组
@@ -37,21 +38,21 @@ onUnmounted(() => {
   <section class="page-section">
     <div class="container news-layout">
       <!-- 桌面端（>860px）：固定在屏幕左侧的年月日目录，点击平滑定位到对应日期分组；支持横向展开/收起 -->
-      <aside ref="tocEl" class="news-toc" :class="{ 'news-toc--closed': !tocOpen }" aria-label="资讯日期目录">
-        <h4 class="news-toc__title">目录</h4>
-        <ul class="news-toc__list">
+      <aside ref="tocEl" class="news-toc" :class="{ 'news-toc-closed': !tocOpen }" aria-label="资讯日期目录">
+        <h4 class="news-toc-title">目录</h4>
+        <ul class="news-toc-list">
           <li v-for="g in newsGroups" :key="g.date">
-            <a class="news-toc__link" href="#" @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
+            <a class="news-toc-link" href="#" @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
           </li>
         </ul>
       </aside>
 
       <!-- 目录展开/收起切换按钮（桌面端）：展开时贴在目录右侧，收起时回到屏幕左边缘 -->
-      <button class="news-toc-toggle" :class="{ 'news-toc-toggle--closed': !tocOpen }" @click="tocOpen = !tocOpen"
+      <button class="news-toc-toggle" :class="{ 'news-toc-toggle-closed': !tocOpen }" @click="tocOpen = !tocOpen"
         aria-label="展开或收起目录" :aria-expanded="tocOpen">
-        <svg class="news-toc-toggle__icon" :class="{ 'news-toc-toggle__icon--closed': !tocOpen }" viewBox="0 0 24 24"
+        <svg class="news-toc-toggle-icon" :class="{ 'news-toc-toggle-icon-closed': !tocOpen }" viewBox="0 0 24 24"
           fill="none">
-          <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+          <path :d="iconChevronLeft" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
             stroke-linejoin="round" />
         </svg>
       </button>
@@ -60,7 +61,7 @@ onUnmounted(() => {
       <div class="news-main">
         <!-- 移动端（≤860px）：顶部横向滚动的日期胶囊，点击同样平滑定位 -->
         <nav class="news-toc-mobile" aria-label="资讯日期目录">
-          <a v-for="g in newsGroups" :key="'m' + g.date" class="news-toc-mobile__item" href="#"
+          <a v-for="g in newsGroups" :key="'m' + g.date" class="news-toc-mobile-item" href="#"
             @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
         </nav>
 
@@ -76,10 +77,10 @@ onUnmounted(() => {
        字体继承全局 --font-sans（只改 style.css 一处即可统一水印字体）；
        行间距密度由 style.css 中 --watermark-scale 控制 -->
   <div class="news-watermark" aria-hidden="true">
-    <div class="news-watermark__row" v-for="r in 5" :key="'r' + r">
-      <div class="news-watermark__cell" v-for="c in 3" :key="'c' + c">
-        <span class="news-watermark__cn">本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。</span>
-        <span class="news-watermark__en">This information is AI-generated. Please contact us for removal in case of any
+    <div class="news-watermark-row" v-for="r in 5" :key="'r' + r">
+      <div class="news-watermark-cell" v-for="c in 3" :key="'c' + c">
+        <span class="news-watermark-cn">本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。</span>
+        <span class="news-watermark-en">This information is AI-generated. Please contact us for removal in case of any
           copyright infringement.</span>
       </div>
     </div>
@@ -129,7 +130,7 @@ onUnmounted(() => {
 }
 
 /* 收起状态：整体向左滑出屏幕（宽度 130px + 距左 20px） */
-.news-toc--closed {
+.news-toc-closed {
   transform: translateX(calc(-100% - 20px));
 }
 
@@ -160,18 +161,18 @@ onUnmounted(() => {
   background: var(--bg-secondary);
 }
 
-.news-toc-toggle--closed {
+.news-toc-toggle-closed {
   left: 20px;
 }
 
-.news-toc-toggle__icon {
+.news-toc-toggle-icon {
   width: 14px;
   height: 14px;
   transition: transform 0.3s ease;
 }
 
 /* 收起时箭头旋转 180° 指向右侧（提示可展开） */
-.news-toc-toggle__icon--closed {
+.news-toc-toggle-icon-closed {
   transform: rotate(180deg);
 }
 
@@ -180,7 +181,7 @@ onUnmounted(() => {
   display: none;
 }
 
-.news-toc__title {
+.news-toc-title {
   font-size: 14px;
   font-weight: 600;
   color: var(--title);
@@ -188,13 +189,13 @@ onUnmounted(() => {
   padding: 0 6px;
 }
 
-.news-toc__list {
+.news-toc-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.news-toc__link {
+.news-toc-link {
   display: block;
   padding: 7px 10px;
   border-radius: 8px;
@@ -204,7 +205,7 @@ onUnmounted(() => {
   transition: background var(--transition), color var(--transition), opacity var(--transition);
 }
 
-.news-toc__link:hover {
+.news-toc-link:hover {
   opacity: 1;
   background: var(--bg-secondary);
 }
@@ -238,7 +239,7 @@ onUnmounted(() => {
     display: none;
   }
 
-  .news-toc-mobile__item {
+  .news-toc-mobile-item {
     flex-shrink: 0;
     padding: 6px 12px;
     border-radius: 999px;
@@ -251,7 +252,7 @@ onUnmounted(() => {
     transition: background var(--transition), color var(--transition), opacity var(--transition);
   }
 
-  .news-toc-mobile__item:hover {
+  .news-toc-mobile-item:hover {
     opacity: 1;
     background: var(--bg-secondary);
   }
@@ -287,7 +288,7 @@ onUnmounted(() => {
 
 /* 每一行：3 格水平均匀分布，中间格完整显示，两侧格允许被视口边缘截断。
    gap 随视口宽度缩放，拉开左右间距（间距大小可手动调整） */
-.news-watermark__row {
+.news-watermark-row {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
@@ -295,7 +296,7 @@ onUnmounted(() => {
 }
 
 /* 单元格：中文 + 英文两行垂直排列 */
-.news-watermark__cell {
+.news-watermark-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -303,13 +304,13 @@ onUnmounted(() => {
 }
 
 /* 中文行：不换行 */
-.news-watermark__cn {
+.news-watermark-cn {
   font-size: 11px;
   white-space: nowrap;
 }
 
 /* 英文行：允许换行，保证不同屏幕宽度下内容完整显示 */
-.news-watermark__en {
+.news-watermark-en {
   font-size: 11px;
   text-align: center;
   max-width: 500px;

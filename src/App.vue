@@ -13,6 +13,8 @@ import AboutPage from './pages/AboutPage.vue'
 import AppNav from './components/AppNav.vue'
 // 导入底部页脚组件
 import AppFooter from './components/AppFooter.vue'
+// 导入 SVG 图标 path 的 d 值
+import { iconArrowUp } from './data/path.js'
 
 // 定义全部标签页配置：key 标识、label 显示文案、comp 对应页面组件
 const tabs = [
@@ -133,18 +135,18 @@ provide('navigate', navigate)
   <transition name="backtop-fade">
     <button v-if="showBackTop" class="back-to-top" @click="backToTop" aria-label="回到顶部">
       <!-- 进度环 -->
-      <svg class="back-to-top__ring" viewBox="0 0 44 44" aria-hidden="true">
-        <circle class="back-to-top__ring-bg" cx="22" cy="22" r="19" />
-        <circle class="back-to-top__ring-progress" cx="22" cy="22" r="19" :stroke-dasharray="119.38"
+      <svg class="back-to-top-ring" viewBox="0 0 44 44" aria-hidden="true">
+        <circle class="back-to-top-ring-bg" cx="22" cy="22" r="19" />
+        <circle class="back-to-top-ring-progress" cx="22" cy="22" r="19" :stroke-dasharray="119.38"
           :stroke-dashoffset="119.38 - (119.38 * scrollPercent) / 100" />
       </svg>
       <!-- 上箭头 -->
-      <svg class="back-to-top__icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
-        <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+      <svg class="back-to-top-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
+        <path :d="iconArrowUp" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
           stroke-linejoin="round" />
       </svg>
       <!-- 悬浮提示 -->
-      <span class="back-to-top__tooltip">回到顶部</span>
+      <span class="back-to-top-tooltip">回到顶部</span>
     </button>
   </transition>
 </template>
@@ -175,7 +177,7 @@ provide('navigate', navigate)
 }
 
 /* 进度环 */
-.back-to-top__ring {
+.back-to-top-ring {
   position: absolute;
   inset: -1px;
   width: calc(100% + 2px);
@@ -184,16 +186,16 @@ provide('navigate', navigate)
   pointer-events: none;
 }
 
-.back-to-top__ring circle {
+.back-to-top-ring circle {
   fill: none;
   stroke-width: 3;
 }
 
-.back-to-top__ring-bg {
+.back-to-top-ring-bg {
   stroke: var(--border);
 }
 
-.back-to-top__ring-progress {
+.back-to-top-ring-progress {
   stroke: #ff6b35;
   stroke-linecap: round;
   /* 注意：不要在此处写 stroke-dasharray / stroke-dashoffset，
@@ -201,7 +203,7 @@ provide('navigate', navigate)
 }
 
 /* 上箭头图标 */
-.back-to-top__icon {
+.back-to-top-icon {
   position: relative;
   width: 18px;
   height: 18px;
@@ -210,7 +212,7 @@ provide('navigate', navigate)
 }
 
 /* 悬浮提示 */
-.back-to-top__tooltip {
+.back-to-top-tooltip {
   position: absolute;
   right: 54px;
   top: 50%;
@@ -230,7 +232,7 @@ provide('navigate', navigate)
 }
 
 /* 小三角 */
-.back-to-top__tooltip::after {
+.back-to-top-tooltip::after {
   content: '';
   position: absolute;
   right: -5px;
@@ -247,7 +249,7 @@ provide('navigate', navigate)
   color: #ff6b35;
 }
 
-.back-to-top:hover .back-to-top__tooltip {
+.back-to-top:hover .back-to-top-tooltip {
   opacity: 1;
   visibility: visible;
   transform: translateY(-50%) translateX(0);
@@ -278,12 +280,12 @@ provide('navigate', navigate)
     height: 40px;
   }
 
-  .back-to-top__icon {
+  .back-to-top-icon {
     width: 18px;
     height: 18px;
   }
 
-  .back-to-top__tooltip {
+  .back-to-top-tooltip {
     right: 50px;
     font-size: 12px;
     padding: 5px 8px;
