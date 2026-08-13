@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import ThemeToggle from './ThemeToggle.vue'
 
 defineProps({
@@ -14,6 +14,36 @@ const mobileMenuOpen = ref(false)
 function switchTab(key) {
   mobileMenuOpen.value = false
   emit('switch', key)
+}
+
+// 菜单展开时锁定 body 滚动，关闭时恢复
+watch(mobileMenuOpen, (open) => {
+  if (open) {
+    document.body.classList.add('body--no-scroll')
+  } else {
+    document.body.classList.remove('body--no-scroll')
+  }
+})
+
+/**
+ * 阻止 body 滚动穿透（iOS Safari 橡皮筋效果）。
+ * 仅当菜单展开且触碰点不在菜单内部时阻止默认滚动行为，
+ * 菜单内部本身仍可滚动（未来扩展）。
+ */
+function onTouchMove(e) {
+  if (!mobileMenuOpen.value) return
+  const menu = document.getElementById('nav-mobile-menu')
+  if (menu && !menu.contains(e.target)) {
+    e.preventDefault()
+  }
+}
+
+document.addEventListener('touchmove', onTouchMove, { passive: false })
+// 组件卸载时移除监听（本应用导航常驻，保留清理逻辑）
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeunload', () => {
+    document.removeEventListener('touchmove', onTouchMove)
+  })
 }
 </script>
 

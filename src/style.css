@@ -216,6 +216,13 @@ main {
   background: rgba(41, 151, 255, 0.16);
 }
 
+/* 移动端菜单展开时锁定 body 滚动，防止拖动下方页面 */
+.body--no-scroll {
+  overflow: hidden;
+  /* 移动端 Safari 需要同时禁止 touchmove 才能彻底锁住底部滚动，JS 会额外处理 */
+  touch-action: none;
+}
+
 /* ===== 响应式（全局部分） ===== */
 @media (max-width: 734px) {
   .page-section {
