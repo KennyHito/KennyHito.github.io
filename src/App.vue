@@ -69,8 +69,11 @@ function onScroll() {
   try {
     const scrollTop = window.scrollY || 0
     const docHeight = document.documentElement.scrollHeight - window.innerHeight
-    showBackTop.value = scrollTop > window.innerHeight / 2
-    scrollPercent.value = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0
+    // 钳制滚动位置：iOS 橡皮筋回弹时 scrollY 会短暂越界（负值 / 超过底部），
+    // 若不钳制会导致进度环瞬间归 0 或跳到 100
+    const clampedTop = Math.max(0, Math.min(scrollTop, docHeight))
+    showBackTop.value = clampedTop > window.innerHeight / 2
+    scrollPercent.value = docHeight > 0 ? Math.round((clampedTop / docHeight) * 100) : 0
   } catch (e) {
     /* 某些内嵌环境无 scrollY，忽略 */
   }
