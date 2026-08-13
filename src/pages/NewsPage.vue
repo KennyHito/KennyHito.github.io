@@ -47,12 +47,12 @@ onUnmounted(() => {
       </aside>
 
       <!-- 目录展开/收起切换按钮（桌面端）：展开时贴在目录右侧，收起时回到屏幕左边缘 -->
-      <button class="news-toc-toggle" :class="{ 'news-toc-toggle--closed': !tocOpen }"
-        @click="tocOpen = !tocOpen" aria-label="展开或收起目录" :aria-expanded="tocOpen">
-        <svg class="news-toc-toggle__icon" :class="{ 'news-toc-toggle__icon--closed': !tocOpen }"
-          viewBox="0 0 24 24" fill="none">
-          <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2"
-            stroke-linecap="round" stroke-linejoin="round" />
+      <button class="news-toc-toggle" :class="{ 'news-toc-toggle--closed': !tocOpen }" @click="tocOpen = !tocOpen"
+        aria-label="展开或收起目录" :aria-expanded="tocOpen">
+        <svg class="news-toc-toggle__icon" :class="{ 'news-toc-toggle__icon--closed': !tocOpen }" viewBox="0 0 24 24"
+          fill="none">
+          <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </button>
 
@@ -72,8 +72,18 @@ onUnmounted(() => {
     </div>
   </section>
 
-  <!-- 资讯水印：覆盖层，半透明、不阻挡交互，颜色自动适配亮/暗主题；密度由 style.css 中 --watermark-scale 控制 -->
-  <div class="news-watermark" aria-hidden="true"></div>
+  <!-- 资讯水印：覆盖层，半透明、不阻挡交互。文字用真实 DOM 渲染，
+       字体继承全局 --font-sans（只改 style.css 一处即可统一水印字体）；
+       行间距密度由 style.css 中 --watermark-scale 控制 -->
+  <div class="news-watermark" aria-hidden="true">
+    <div class="news-watermark__row" v-for="r in 5" :key="'r' + r">
+      <div class="news-watermark__cell" v-for="c in 3" :key="'c' + c">
+        <span class="news-watermark__cn">本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。</span>
+        <span class="news-watermark__en">This information is AI-generated. Please contact us for removal in case of any
+          copyright infringement.</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -247,22 +257,61 @@ onUnmounted(() => {
   }
 }
 
-/* 水印覆盖层：固定全屏、使用 SVG 背景图平铺，保证均匀覆盖且左右对称 */
+/* 资讯水印：固定全屏、DOM 文本平铺、整体旋转 -15° 并放大覆盖。
+   文字字体继承全局 --font-sans（改 style.css 一处即可统一水印字体），
+   颜色用半透明文字、通过 color 继承，亮/暗主题自动适配 */
 .news-watermark {
   position: fixed;
   inset: 0;
   z-index: 1;
   /* 不阻挡下方内容的点击与交互 */
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='260' viewBox='0 0 900 260'%3E%3Cg transform='rotate(-15 450 130)'%3E%3Ctext x='450' y='112' text-anchor='middle' dominant-baseline='middle' fill='rgba(0,0,0,0.2)' font-size='20' font-family='Kaiti, KaiTi, STKaiti, 楷体, serif'%3E本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。%3C/text%3E%3Ctext x='450' y='148' text-anchor='middle' dominant-baseline='middle' fill='rgba(0,0,0,0.2)' font-size='15' font-family='Georgia, Times New Roman, serif'%3EThis information is AI-generated. Please contact us for removal in case of any copyright infringement.%3C/text%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: repeat;
-  /* 平铺单元尺寸：由全局 --watermark-scale 控制（默认 1 = 基准 900x260），
-     数值越小水印越密越多，数值越大越疏越少 */
-  background-size: calc(900px * var(--watermark-scale, 1)) calc(260px * var(--watermark-scale, 1));
+  overflow: hidden;
+  /* 旋转 -15° 并放大，确保旋转后仍覆盖整个视口 */
+  transform: rotate(-15deg) scale(1.35);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  /* 行间距：由全局 --watermark-scale 控制（默认 1），数值越大越疏、越小越密 */
+  gap: calc(24px * var(--watermark-scale, 1));
+  /* 水印文字颜色（半透明），暗色主题通过下方覆盖切换 */
+  color: rgba(0, 0, 0, 0.2);
+  /* 水印字体：读取全局 --font-sans（楷体） */
+  font-family: var(--font-sans);
 }
 
 /* 暗色主题下切换为浅色半透明水印，保持可见性 */
 [data-theme="dark"] .news-watermark {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='260' viewBox='0 0 900 260'%3E%3Cg transform='rotate(-15 450 130)'%3E%3Ctext x='450' y='112' text-anchor='middle' dominant-baseline='middle' fill='rgba(255,255,255,0.2)' font-size='20' font-family='Kaiti, KaiTi, STKaiti, 楷体, serif'%3E本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。%3C/text%3E%3Ctext x='450' y='148' text-anchor='middle' dominant-baseline='middle' fill='rgba(255,255,255,0.2)' font-size='15' font-family='Georgia, Times New Roman, serif'%3EThis information is AI-generated. Please contact us for removal in case of any copyright infringement.%3C/text%3E%3C/g%3E%3C/svg%3E");
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* 每一行：3 格水平均匀分布，中间格完整显示，两侧格允许被视口边缘截断。
+   gap 随视口宽度缩放，拉开左右间距（间距大小可手动调整） */
+.news-watermark__row {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 6vw;
+}
+
+/* 单元格：中文 + 英文两行垂直排列 */
+.news-watermark__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 中文行：不换行 */
+.news-watermark__cn {
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* 英文行：允许换行，保证不同屏幕宽度下内容完整显示 */
+.news-watermark__en {
+  font-size: 11px;
+  text-align: center;
+  max-width: 500px;
 }
 </style>
