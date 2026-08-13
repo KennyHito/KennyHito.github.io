@@ -15,6 +15,9 @@
       <a class="nav-github" :href="site.github" target="_blank" rel="noopener" aria-label="前往 GitHub">
         <AppIcon name="github" :size="22" />
       </a>
+      <a class="nav-mail" :href="`mailto:${site.email}`" aria-label="发送邮件">
+        <AppIcon name="mail" :size="18" />
+      </a>
 
       <!-- 移动端：汉堡菜单按钮（展开/收起） -->
       <button class="nav-menu-btn" @click="mobileMenuOpen = !mobileMenuOpen"
@@ -242,6 +245,24 @@ if (typeof window !== 'undefined') {
   background: var(--bg-secondary);
 }
 
+/* 导航右侧邮箱图标：点击区域与 GitHub 一致，图标略小 */
+.nav-mail {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--title);
+  opacity: 0.85;
+  transition: opacity var(--transition), background var(--transition);
+}
+
+.nav-mail:hover {
+  opacity: 1;
+  background: var(--bg-secondary);
+}
+
 /* 桌面端：隐藏移动端汉堡菜单按钮、下拉菜单和遮罩层 */
 .nav-menu-btn,
 .nav-mobile-menu,
@@ -255,9 +276,10 @@ if (typeof window !== 'undefined') {
     padding: 0 14px;
   }
 
-  /* 移动端：隐藏 Tab 列表和 GitHub 入口（GitHub 已放进展开菜单底部） */
+  /* 移动端：隐藏 Tab 列表、GitHub 和邮箱入口（均已放进展开菜单底部） */
   .nav-tabs,
-  .nav-github {
+  .nav-github,
+  .nav-mail {
     display: none;
   }
 
