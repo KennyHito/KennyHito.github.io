@@ -12,16 +12,16 @@ function scrollToDate(date) {
 // 目录元素引用
 const tocEl = ref(null)
 
-// 目录上滚动：目录可滚动时只滚目录；到顶/底部边界时阻止滚动穿透到资讯
+// 桌面端左侧目录是否展开（横向展开/收起状态）
+const tocOpen = ref(true)
+
+// 目录上滚动：始终阻止默认行为（避免穿透滚动资讯/页面），手动滚动目录本身
 function onTocWheel(e) {
   const el = tocEl.value
   if (!el) return
-  const { scrollTop, scrollHeight, clientHeight } = el
-  const atTop = scrollTop <= 0
-  const atBottom = scrollTop + clientHeight >= scrollHeight
-  if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
-    e.preventDefault()
-  }
+  // 手动累加滚动距离；内容不足时 scrollTop 会自动钳制在 0 ~ 最大值之间
+  el.scrollTop += e.deltaY
+  e.preventDefault()
 }
 
 onMounted(() => {
@@ -36,8 +36,8 @@ onUnmounted(() => {
   <!-- 资讯页主容器：左侧固定目录 + 右侧资讯列表（移动端改为顶部横向目录） -->
   <section class="page-section">
     <div class="container news-layout">
-      <!-- 桌面端（>860px）：固定在屏幕左侧的年月日目录，点击平滑定位到对应日期分组 -->
-      <aside ref="tocEl" class="news-toc" aria-label="资讯日期目录">
+      <!-- 桌面端（>860px）：固定在屏幕左侧的年月日目录，点击平滑定位到对应日期分组；支持横向展开/收起 -->
+      <aside ref="tocEl" class="news-toc" :class="{ 'news-toc--closed': !tocOpen }" aria-label="资讯日期目录">
         <h4 class="news-toc__title">目录</h4>
         <ul class="news-toc__list">
           <li v-for="g in newsGroups" :key="g.date">
@@ -45,6 +45,16 @@ onUnmounted(() => {
           </li>
         </ul>
       </aside>
+
+      <!-- 目录展开/收起切换按钮（桌面端）：展开时贴在目录右侧，收起时回到屏幕左边缘 -->
+      <button class="news-toc-toggle" :class="{ 'news-toc-toggle--closed': !tocOpen }"
+        @click="tocOpen = !tocOpen" aria-label="展开或收起目录" :aria-expanded="tocOpen">
+        <svg class="news-toc-toggle__icon" :class="{ 'news-toc-toggle__icon--closed': !tocOpen }"
+          viewBox="0 0 24 24" fill="none">
+          <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
 
       <!-- 主内容区：资讯列表 -->
       <div class="news-main">
@@ -94,7 +104,7 @@ onUnmounted(() => {
   /* 高于资讯水印，保持可点击 */
   z-index: 2;
   flex-shrink: 0;
-  width: 190px;
+  width: 130px;
   /* 最大高度 = 视口高度 - 顶部偏移 - 底部留白（--toc-bottom-offset 可调） */
   max-height: calc(100vh - 118px - var(--toc-bottom-offset));
   /* 内容超出时可滚动，但不显示滚动条（Firefox） */
@@ -104,6 +114,55 @@ onUnmounted(() => {
   background: transparent;
   border: none;
   padding: 16px 14px;
+  /* 横向展开/收起时平滑滑动 */
+  transition: transform 0.3s ease;
+}
+
+/* 收起状态：整体向左滑出屏幕（宽度 130px + 距左 20px） */
+.news-toc--closed {
+  transform: translateX(calc(-100% - 20px));
+}
+
+/* 目录展开/收起切换按钮：fixed 固定在左侧，展开时位于目录右侧，收起时位于屏幕左边缘 */
+.news-toc-toggle {
+  position: fixed;
+  left: 152px;
+  top: 76px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  opacity: 0.85;
+  padding: 0;
+  /* left 与图标旋转同步过渡 */
+  transition: left 0.3s ease, transform 0.3s ease, background var(--transition), color var(--transition), opacity var(--transition);
+}
+
+.news-toc-toggle:hover {
+  opacity: 1;
+  background: var(--bg-secondary);
+}
+
+.news-toc-toggle--closed {
+  left: 20px;
+}
+
+.news-toc-toggle__icon {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+/* 收起时箭头旋转 180° 指向右侧（提示可展开） */
+.news-toc-toggle__icon--closed {
+  transform: rotate(180deg);
 }
 
 /* Webkit 内核隐藏滚动条（Chrome / Safari） */
@@ -145,9 +204,13 @@ onUnmounted(() => {
   display: none;
 }
 
-/* 窄屏：隐藏左侧固定目录，改为顶部横向滚动目录 */
+/* 窄屏：隐藏左侧固定目录及其展开按钮，改为顶部横向滚动目录 */
 @media (max-width: 860px) {
   .news-toc {
+    display: none;
+  }
+
+  .news-toc-toggle {
     display: none;
   }
 
