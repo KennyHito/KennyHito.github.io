@@ -306,6 +306,9 @@ if (typeof window !== 'undefined') {
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid var(--border);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    /* 最底部两个角圆角 */
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
   }
 
   [data-theme="dark"] .nav-mobile-menu {
