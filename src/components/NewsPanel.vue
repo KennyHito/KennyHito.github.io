@@ -30,3 +30,89 @@ function toggle() {
     </div>
   </div>
 </template>
+
+<style scoped>
+/* ===== 资讯折叠（News 页面） ===== */
+.news-group {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  margin-bottom: 16px;
+  /* 圆角裁剪内部内容 */
+  overflow: hidden;
+}
+
+/* 日期折叠标题按钮 */
+.news-date {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 18px 24px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--title);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 折叠箭头 */
+.news-date .arrow {
+  transition: transform var(--transition);
+  opacity: 0.6;
+}
+
+/* 展开时箭头旋转 180° */
+.news-group.open .news-date .arrow {
+  transform: rotate(180deg);
+}
+
+/* 折叠内容区 */
+.news-items {
+  padding: 0 24px 20px;
+}
+
+/* 隐藏状态：完全不渲染 */
+.news-items[hidden] {
+  display: none;
+}
+
+/* 单条资讯 */
+.news-item {
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+
+.news-item h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.news-item .summary {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+/* 资讯标签容器 */
+.news-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.news-tags span {
+  font-size: 12px;
+  color: var(--accent);
+  background: rgba(0, 113, 227, 0.1);
+  border-radius: 980px;
+  padding: 4px 10px;
+}
+
+[data-theme="dark"] .news-tags span {
+  background: rgba(41, 151, 255, 0.16);
+}
+</style>

@@ -68,3 +68,244 @@ function switchTab(key) {
     </nav>
   </div>
 </template>
+
+<style scoped>
+/* ===== 导航 ===== */
+.nav {
+  /* 吸顶：滚动时固定在顶部 */
+  position: sticky;
+  top: 0;
+  /* 层级高于内容，避免被遮挡 */
+  z-index: 100;
+  /* Flex：Logo 固定靠左，其余内容（Tab → 竖线 → 开关 → GitHub）靠右 */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 52px;
+  padding: 0 22px;
+  /* 半透明背景，配合毛玻璃 */
+  background: rgba(255, 255, 255, 0.72);
+  /* 背景模糊（标准） */
+  backdrop-filter: saturate(180%) blur(20px);
+  /* 背景模糊（Safari 前缀） */
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  /* 底部细分割线 */
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+/* 暗色下导航栏半透明背景 */
+[data-theme="dark"] .nav {
+  background: rgba(18, 18, 18, 0.72);
+}
+
+/* 导航左侧分组：Logo，auto 外边距将后续内容推向右侧 */
+.nav-left {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+/* 站点 Logo 按钮 */
+.nav-logo {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.1s ease;
+}
+
+/* Logo 悬停底色 */
+.nav-logo:hover {
+  background: var(--bg-secondary);
+}
+
+/* Logo 按下轻微缩小，提供点击反馈 */
+.nav-logo:active {
+  transform: scale(0.94);
+}
+
+/* 导航右侧操作区（Tab → 竖线 → 主题开关 → GitHub → 汉堡按钮） */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Tab 列表容器：居中排列 */
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* Tab 与主题开关之间的竖线分隔符 */
+.nav-divider {
+  flex-shrink: 0;
+  width: 1px;
+  height: 18px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+/* 单个 Tab 文字 */
+.tab {
+  font-size: 15px;
+  /* 未激活时略淡 */
+  opacity: 0.85;
+  /* 紧凑间距 */
+  padding: 7px 10px;
+  letter-spacing: -0.2px;
+  /* 胶囊形状 */
+  border-radius: 980px;
+  cursor: pointer;
+  /* 不换行 */
+  white-space: nowrap;
+  color: var(--text);
+  transition: opacity var(--transition), color var(--transition), background var(--transition);
+}
+
+/* Tab 悬停：仅变清晰，不加背景色 */
+.tab:hover {
+  opacity: 1;
+}
+
+/* Tab 激活态：去掉背景色，文字改为与滚动进度环一致的橙色 */
+.tab.active {
+  opacity: 1;
+  color: #ff6b35;
+}
+
+/* 导航右侧 GitHub 图标 */
+.nav-github {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--title);
+  opacity: 0.85;
+  transition: opacity var(--transition), background var(--transition);
+}
+
+.nav-github:hover {
+  opacity: 1;
+  background: var(--bg-secondary);
+}
+
+.nav-github svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* 桌面端：隐藏移动端汉堡菜单按钮和下拉菜单 */
+.nav-menu-btn,
+.nav-mobile-menu {
+  display: none;
+}
+
+/* ===== 移动端（≤734px） ===== */
+@media (max-width: 734px) {
+  .nav {
+    padding: 0 14px;
+  }
+
+  /* 移动端：隐藏 Tab 列表和分隔线（主题开关、GitHub 保留在导航栏内） */
+  .nav-tabs,
+  .nav-divider {
+    display: none;
+  }
+
+  /* 移动端汉堡菜单按钮：显示在右侧 */
+  .nav-menu-btn {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface, transparent);
+    color: var(--title);
+    cursor: pointer;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  .nav-menu-btn:hover {
+    background: var(--bg-secondary);
+  }
+
+  .nav-menu-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* 移动端下拉菜单：默认隐藏，展开后从导航栏下方滑下 */
+  .nav-mobile-menu {
+    display: none;
+    position: absolute;
+    top: 52px;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    padding: 16px 18px 18px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  [data-theme="dark"] .nav-mobile-menu {
+    background: rgba(18, 18, 18, 0.96);
+  }
+
+  .nav-mobile-menu.is-open {
+    display: block;
+    animation: menuSlideDown 0.22s ease both;
+  }
+
+  @keyframes menuSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nav-mobile-menu__tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mobile-tab {
+    display: block;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 16px;
+    color: var(--text);
+    opacity: 0.9;
+    transition: opacity var(--transition), color var(--transition), background var(--transition);
+  }
+
+  .mobile-tab.active {
+    opacity: 1;
+    color: #ff6b35;
+  }
+
+  .mobile-tab:hover {
+    opacity: 1;
+    background: var(--bg-secondary);
+  }
+}
+</style>

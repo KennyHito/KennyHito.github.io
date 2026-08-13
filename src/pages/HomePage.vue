@@ -36,6 +36,25 @@ const navigate = inject('navigate')
 </template>
 
 <style scoped>
+/* 区块标题区（居中） */
+.section-head {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.section-head h2 {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.section-head p {
+  color: var(--text);
+  opacity: 0.8;
+  font-size: 17px;
+  margin-top: 12px;
+}
+
 .bg-alt {
   background: var(--bg-secondary);
 }
@@ -60,7 +79,36 @@ const navigate = inject('navigate')
   margin-bottom: 0;
 }
 
+/* ===== 网站直达：特性双列网格 ===== */
+.feature-grid {
+  display: grid;
+  /* 两列等宽 */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.feature-grid .card .ico {
+  font-size: 28px;
+  margin-bottom: 14px;
+}
+
+.feature-grid .card h3 {
+  font-size: 21px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.feature-grid .card p {
+  font-size: 15px;
+  opacity: 0.82;
+  margin-bottom: 16px;
+}
+
 @media (max-width: 734px) {
+  /* 网格在窄屏下改为单列 */
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
   .intro-card {
     padding: 22px;
   }

@@ -21,7 +21,21 @@ useMasonry(gridRef, { gap: 20, maxCols: 2 })
 </template>
 
 <style scoped>
+/* 工具瀑布流容器：useMasonry 会按内容高度绝对定位排列卡片。
+   grid 定义作为兜底布局（JS 未执行时仍显示两列）；
+   position: relative 供绝对定位卡片作定位参照 */
 .tools-grid {
+  display: grid;
+  /* 两列等宽（兜底） */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
   position: relative;
+}
+
+@media (max-width: 734px) {
+  /* 窄屏兜底单列 */
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

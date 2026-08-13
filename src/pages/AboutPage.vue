@@ -46,3 +46,83 @@ const navigate = inject('navigate')
     </div>
   </section>
 </template>
+
+<style scoped>
+/* ===== 通用文本块（About 页面） ===== */
+.prose h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.prose p {
+  font-size: 16px;
+  opacity: 0.85;
+  margin-bottom: 14px;
+}
+
+.prose .card {
+  margin-bottom: 24px;
+}
+
+/* ===== 个人简介标题 ===== */
+.intro-title {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-align: center;
+  margin: 0 0 20px;
+}
+
+/* ===== 个人简介列表 ===== */
+.intro-list {
+  margin: 0;
+  padding: 0;
+}
+
+/* 主列表条目（段落 / 内联块） */
+.intro-list > p,
+.intro-list > div {
+  position: relative;
+  padding-left: 6px;
+  margin: 0 0 14px;
+  font-size: 16px;
+  /* 行高引用可配置变量 */
+  line-height: var(--about-line-height);
+  color: var(--text);
+}
+
+/* 子列表（如 Vue 教程链接区）容器 */
+.intro-sublist {
+  margin: 10px 0 4px;
+  padding: 4px 20px;
+  /* 主题自适应背景，避免暗色下白底看不清 */
+  background: var(--surface);
+  border-radius: 12px;
+}
+
+/* 子列表条目 */
+.intro-sublist > p,
+.intro-sublist > div {
+  position: relative;
+  margin: 0 0 10px;
+  font-size: 15px;
+  /* 与主列表共用同一行高变量 */
+  line-height: var(--about-line-height);
+  color: var(--text);
+}
+
+/* ===== 行内链接（如 GitHub 仓库、梯子链接） ===== */
+.inline-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  /* 默认无下划线，悬停时出现 */
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition);
+}
+
+.inline-link:hover {
+  border-bottom-color: var(--accent);
+}
+</style>
