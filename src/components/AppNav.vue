@@ -287,7 +287,7 @@ if (typeof window !== 'undefined') {
     outline: none;
   }
 
-  /* 移动端下拉菜单：默认隐藏，展开后从导航栏下方滑下，占半个屏幕高度 */
+  /* 移动端下拉菜单：默认隐藏，展开后从导航栏下方滑下 */
   /* 用 fixed 固定在视口：导航栏是 sticky 吸顶的，若用 absolute 定位在文档流，
      页面滚动时菜单会跟随文档滚走，与吸顶的导航栏分离而不可见 */
   .nav-mobile-menu {
@@ -296,9 +296,7 @@ if (typeof window !== 'undefined') {
     top: 52px;
     left: 0;
     right: 0;
-    /* 占半个屏幕，超出内容可滚动 */
-    height: 50vh;
-    overflow-y: auto;
+    /* 高度自适应内容，默认全部显示无需滚动 */
     z-index: 99;
     padding: 16px 18px 18px;
     background: rgba(255, 255, 255, 0.96);
