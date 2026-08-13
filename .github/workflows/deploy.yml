@@ -1,51 +1,66 @@
+# =========================================================
+# Deploy to GitHub Pages
+# 构建静态站点并发布到 GitHub Pages
+# 触发方式：
+#   1. push 到 main 分支
+#   2. 手动触发（Actions 页面点击 Run workflow）
+# =========================================================
 name: Deploy to GitHub Pages
 
 on:
+  # push 到 main 分支时自动部署
   push:
     branches: [main]
+  # 支持在 Actions 页面手动触发部署
   workflow_dispatch:
 
+# 工作流权限（最小化授权原则，只授予必要权限）
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read          # 只读代码仓库内容（build 需要检出代码）
+  pages: write            # 向 GitHub Pages 写入部署内容
+  id-token: write         # 获取 OIDC 令牌（deploy-pages 认证需要）
 
+# 并发控制：同一时间只允许一个部署任务运行
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pages            # 按组名串行化
+  cancel-in-progress: false  # 新的触发不取消正在运行的部署
 
 jobs:
+  # ============ 构建任务 ============
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest   # 使用最新的 Ubuntu 运行器
     env:
+      # 强制所有 JavaScript action 显式运行在 Node 24 上，
+      # 消除旧版 action（Node 20）的弃用警告
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - name: Checkout
+      - name: Checkout        # 检出仓库代码
         uses: actions/checkout@v5
 
-      - name: Setup Node
+      - name: Setup Node      # 配置 Node.js 环境
         uses: actions/setup-node@v5
         with:
-          node-version: 22
+          node-version: 22    # 使用 Node 22 LTS
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies  # 安装项目依赖
+        run: npm ci           # 依据 package-lock.json 精确安装，保证构建可复现
 
-      - name: Build
-        run: npm run build
+      - name: Build           # 构建静态站点
+        run: npm run build    # Vite 构建，产物输出到 dist/ 目录
 
-      - name: Upload artifact
+      - name: Upload artifact # 上传构建产物，供 deploy 任务部署
         uses: actions/upload-pages-artifact@v5
         with:
-          path: dist
+          path: dist          # 指定上传 dist 目录
 
+  # ============ 部署任务 ============
   deploy:
-    needs: build
+    needs: build          # 等待 build 任务成功后才执行
     runs-on: ubuntu-latest
     environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      name: github-pages      # 部署到 github-pages 环境
+      url: ${{ steps.deployment.outputs.page_url }}  # 部署完成后展示站点 URL
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages  # 从 artifact 发布站点
         id: deployment
         uses: actions/deploy-pages@v5
