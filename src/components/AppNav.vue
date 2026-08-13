@@ -85,6 +85,10 @@ if (typeof window !== 'undefined') {
     </div>
   </nav>
 
+  <!-- 移动端遮罩层：菜单展开时遮住下方页面内容，点击可关闭菜单 -->
+  <div class="nav-overlay" :class="{ 'is-open': mobileMenuOpen }" @click="mobileMenuOpen = false"
+    aria-hidden="true"></div>
+
   <!-- 移动端下拉菜单：Tab 列表 + 底部站点信息，减少空白 -->
   <div id="nav-mobile-menu" class="nav-mobile-menu" :class="{ 'is-open': mobileMenuOpen }"
     aria-hidden="!mobileMenuOpen">
@@ -238,9 +242,10 @@ if (typeof window !== 'undefined') {
   background: var(--bg-secondary);
 }
 
-/* 桌面端：隐藏移动端汉堡菜单按钮和下拉菜单 */
+/* 桌面端：隐藏移动端汉堡菜单按钮、下拉菜单和遮罩层 */
 .nav-menu-btn,
-.nav-mobile-menu {
+.nav-mobile-menu,
+.nav-overlay {
   display: none;
 }
 
@@ -282,7 +287,7 @@ if (typeof window !== 'undefined') {
     outline: none;
   }
 
-  /* 移动端下拉菜单：默认隐藏，展开后从导航栏下方滑下 */
+  /* 移动端下拉菜单：默认隐藏，展开后从导航栏下方滑下，占半个屏幕高度 */
   /* 用 fixed 固定在视口：导航栏是 sticky 吸顶的，若用 absolute 定位在文档流，
      页面滚动时菜单会跟随文档滚走，与吸顶的导航栏分离而不可见 */
   .nav-mobile-menu {
@@ -291,6 +296,9 @@ if (typeof window !== 'undefined') {
     top: 52px;
     left: 0;
     right: 0;
+    /* 占半个屏幕，超出内容可滚动 */
+    height: 50vh;
+    overflow-y: auto;
     z-index: 99;
     padding: 16px 18px 18px;
     background: rgba(255, 255, 255, 0.96);
@@ -307,6 +315,33 @@ if (typeof window !== 'undefined') {
   .nav-mobile-menu.is-open {
     display: block;
     animation: menuSlideDown 0.22s ease both;
+  }
+
+  /* 移动端遮罩层：菜单下方覆盖整个剩余视口，遮住页面内容 */
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    top: 52px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 98;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  .nav-overlay.is-open {
+    display: block;
+    animation: overlayFadeIn 0.22s ease both;
+  }
+
+  @keyframes overlayFadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes menuSlideDown {
