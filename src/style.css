@@ -218,22 +218,15 @@ main {
   transition: opacity var(--transition), color var(--transition), background var(--transition);
 }
 
-/* Tab 悬停：变清晰 + 浅色底 */
+/* Tab 悬停：仅变清晰，不加背景色 */
 .tab:hover {
   opacity: 1;
-  background: var(--bg-secondary);
 }
 
-/* Tab 激活态：强调色文字 + 浅强调色底 */
+/* Tab 激活态：去掉背景色，文字改为与滚动进度环一致的橙色 */
 .tab.active {
   opacity: 1;
-  color: var(--accent);
-  background: rgba(0, 113, 227, 0.1);
-}
-
-/* 暗色下激活态底色 */
-[data-theme="dark"] .tab.active {
-  background: rgba(41, 151, 255, 0.16);
+  color: #ff6b35;
 }
 
 /* 主题切换开关（日/夜）：滑动开关样式 */
