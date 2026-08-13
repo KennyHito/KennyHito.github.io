@@ -20,8 +20,8 @@ const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHello
           <p>🌟 搭建的个人网站，<a class="inline-link" :href="site.devnote" target="_blank" rel="noopener">点击前往网站</a>。
           </p>
           <p>
-            🍇 本人<a class="inline-link" :href="site.vpn" target="_blank" rel="noopener">自用梯子🪜</a>，可先注册试用 24
-            小时，个人觉得还是很稳定！（可能网页会提示不安全，不用管，直接继续访问即可。）
+            🍇 本人<a class="inline-link" :href="site.vpn" target="_blank"
+              rel="noopener">自用梯子🪜</a>，可以注册试用24小时，整体使用体验比较稳定。（注：访问链接时可能会提示不安全，忽略提示直接继续访问即可）
           </p>
           <p>🤔 主攻 iOS 和 Vue！</p>
           <p>
