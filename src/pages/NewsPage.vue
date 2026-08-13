@@ -191,15 +191,15 @@ onUnmounted(() => {
   z-index: 1;
   /* 不阻挡下方内容的点击与交互 */
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='550' height='220' viewBox='0 0 550 220'%3E%3Ctext x='50%25' y='50%25' transform='rotate(-22 230 110)' text-anchor='middle' dominant-baseline='middle' fill='rgba(0,0,0,0.18)' font-size='19' font-family='Kaiti, KaiTi, STKaiti, 楷体, serif'%3E本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。%3C/text%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='260' viewBox='0 0 900 260'%3E%3Cg transform='rotate(-15 450 130)'%3E%3Ctext x='450' y='112' text-anchor='middle' dominant-baseline='middle' fill='rgba(0,0,0,0.2)' font-size='20' font-family='Kaiti, KaiTi, STKaiti, 楷体, serif'%3E本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。%3C/text%3E%3Ctext x='450' y='148' text-anchor='middle' dominant-baseline='middle' fill='rgba(0,0,0,0.2)' font-size='15' font-family='Georgia, Times New Roman, serif'%3EThis information is AI-generated. Please contact us for removal in case of any copyright infringement.%3C/text%3E%3C/g%3E%3C/svg%3E");
   background-repeat: repeat;
-  /* 平铺单元尺寸：由全局 --watermark-scale 控制（默认 1 = 基准 550x220），
+  /* 平铺单元尺寸：由全局 --watermark-scale 控制（默认 1 = 基准 900x260），
      数值越小水印越密越多，数值越大越疏越少 */
-  background-size: calc(550px * var(--watermark-scale, 1)) calc(220px * var(--watermark-scale, 1));
+  background-size: calc(900px * var(--watermark-scale, 1)) calc(260px * var(--watermark-scale, 1));
 }
 
 /* 暗色主题下切换为浅色半透明水印，保持可见性 */
 [data-theme="dark"] .news-watermark {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='550' height='220' viewBox='0 0 550 220'%3E%3Ctext x='50%25' y='50%25' transform='rotate(-22 230 110)' text-anchor='middle' dominant-baseline='middle' fill='rgba(255,255,255,0.18)' font-size='19' font-family='Kaiti, KaiTi, STKaiti, 楷体, serif'%3E本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。%3C/text%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='260' viewBox='0 0 900 260'%3E%3Cg transform='rotate(-15 450 130)'%3E%3Ctext x='450' y='112' text-anchor='middle' dominant-baseline='middle' fill='rgba(255,255,255,0.2)' font-size='20' font-family='Kaiti, KaiTi, STKaiti, 楷体, serif'%3E本资讯由AI智能生成，若涉及侵权，敬请联系予以删除。%3C/text%3E%3Ctext x='450' y='148' text-anchor='middle' dominant-baseline='middle' fill='rgba(255,255,255,0.2)' font-size='15' font-family='Georgia, Times New Roman, serif'%3EThis information is AI-generated. Please contact us for removal in case of any copyright infringement.%3C/text%3E%3C/g%3E%3C/svg%3E");
 }
 </style>
