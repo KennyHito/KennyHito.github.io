@@ -190,7 +190,7 @@ if (typeof window !== 'undefined') {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 4px;
+  gap: 8px;
   align-items: center;
 }
 
