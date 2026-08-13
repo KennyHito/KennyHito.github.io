@@ -1,3 +1,31 @@
+<template>
+  <!-- 顶部导航栏：传入标签页配置与当前激活项，监听切换事件 -->
+  <AppNav :tabs="tabs" :current="current" @switch="navigate" />
+  <!-- 主内容区：根据当前组件动态渲染对应页面 -->
+  <main>
+    <!-- 使用动态组件渲染当前页面，key 用于强制重新创建组件实例 -->
+    <component :is="currentComp" :key="current" class="page" />
+  </main>
+  <!-- 底部页脚 -->
+  <AppFooter />
+
+  <!-- 回到顶部：滚动超过半屏后悬浮于右下角 -->
+  <transition name="backtop-fade">
+    <button v-if="showBackTop" class="back-to-top" @click="backToTop" aria-label="回到顶部">
+      <!-- 进度环 -->
+      <svg class="back-to-top-ring" viewBox="0 0 44 44" aria-hidden="true">
+        <circle class="back-to-top-ring-bg" cx="22" cy="22" r="19" />
+        <circle class="back-to-top-ring-progress" cx="22" cy="22" r="19" :stroke-dasharray="119.38"
+          :stroke-dashoffset="119.38 - (119.38 * scrollPercent) / 100" />
+      </svg>
+      <!-- 上箭头 -->
+      <AppIcon name="arrow-up" :size="18" class="back-to-top-icon" />
+      <!-- 悬浮提示 -->
+      <span class="back-to-top-tooltip">回到顶部</span>
+    </button>
+  </transition>
+</template>
+
 <script setup>
 // 从 Vue 中导入响应式状态、计算属性、依赖注入及生命周期钩子
 import { ref, computed, provide, onMounted, onUnmounted } from 'vue'
@@ -108,34 +136,6 @@ onMounted(() => {
 // 供子页面（如首页快捷入口）触发 tab 切换
 provide('navigate', navigate)
 </script>
-
-<template>
-  <!-- 顶部导航栏：传入标签页配置与当前激活项，监听切换事件 -->
-  <AppNav :tabs="tabs" :current="current" @switch="navigate" />
-  <!-- 主内容区：根据当前组件动态渲染对应页面 -->
-  <main>
-    <!-- 使用动态组件渲染当前页面，key 用于强制重新创建组件实例 -->
-    <component :is="currentComp" :key="current" class="page" />
-  </main>
-  <!-- 底部页脚 -->
-  <AppFooter />
-
-  <!-- 回到顶部：滚动超过半屏后悬浮于右下角 -->
-  <transition name="backtop-fade">
-    <button v-if="showBackTop" class="back-to-top" @click="backToTop" aria-label="回到顶部">
-      <!-- 进度环 -->
-      <svg class="back-to-top-ring" viewBox="0 0 44 44" aria-hidden="true">
-        <circle class="back-to-top-ring-bg" cx="22" cy="22" r="19" />
-        <circle class="back-to-top-ring-progress" cx="22" cy="22" r="19" :stroke-dasharray="119.38"
-          :stroke-dashoffset="119.38 - (119.38 * scrollPercent) / 100" />
-      </svg>
-      <!-- 上箭头 -->
-      <AppIcon name="arrow-up" :size="18" class="back-to-top-icon" />
-      <!-- 悬浮提示 -->
-      <span class="back-to-top-tooltip">回到顶部</span>
-    </button>
-  </transition>
-</template>
 
 <style scoped>
 /* 回到顶部按钮：固定右下角，悬浮于内容之上 */

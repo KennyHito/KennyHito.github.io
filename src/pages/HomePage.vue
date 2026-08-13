@@ -1,10 +1,3 @@
-<script setup>
-import { inject } from 'vue'
-import { features, intro } from '../data/home.js'
-
-const navigate = inject('navigate')
-</script>
-
 <template>
   <section class="page-section">
     <div class="container">
@@ -34,6 +27,13 @@ const navigate = inject('navigate')
     </div>
   </section>
 </template>
+
+<script setup>
+import { inject } from 'vue'
+import { features, intro } from '../data/home.js'
+
+const navigate = inject('navigate')
+</script>
 
 <style scoped>
 /* 区块标题区（居中） */

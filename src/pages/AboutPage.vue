@@ -1,14 +1,3 @@
-<script setup>
-import { inject } from 'vue'
-import { site, repos } from '../data/site.js'
-
-const navigate = inject('navigate')
-
-// 解构仓库列表为具名引用（顺序与 site.js 中 repos 数组一一对应）
-const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHelloVue3] = repos
-
-</script>
-
 <template>
   <section class="page-section">
     <h2 class="intro-title">Hi，大家好！</h2>
@@ -49,6 +38,16 @@ const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHello
     </div>
   </section>
 </template>
+
+<script setup>
+import { inject } from 'vue'
+import { site, repos } from '../data/site.js'
+
+const navigate = inject('navigate')
+
+// 解构仓库列表为具名引用（顺序与 site.js 中 repos 数组一一对应）
+const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHelloVue3] = repos
+</script>
 
 <style scoped>
 /* ===== 通用文本块（About 页面） ===== */

@@ -1,7 +1,3 @@
-<script setup>
-const currentYear = new Date().getFullYear()
-</script>
-
 <template>
   <footer class="footer">
     <div class="container">
@@ -9,6 +5,10 @@ const currentYear = new Date().getFullYear()
     </div>
   </footer>
 </template>
+
+<script setup>
+const currentYear = new Date().getFullYear()
+</script>
 
 <style scoped>
 /* 页脚：内容居中，仅显示文字 */

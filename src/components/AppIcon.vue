@@ -1,24 +1,3 @@
-<script setup>
-import { computed } from 'vue'
-import {
-  iconSun, iconMoon, iconChevronLeft, iconArrowUp, iconGithub,
-  iconHome, iconHomeDoor, iconTools, iconNews, iconAbout, iconMail, iconMailFlap
-} from '../data/path.js'
-
-const props = defineProps({
-  // 图标名称：sun / moon / menu / close / chevron-left / arrow-up / github / home / tools / news / about / mail
-  name: { type: String, required: true },
-  // 图标边长：数字按 px，字符串按原样（如 '1em'）
-  size: { type: [Number, String], default: 20 },
-  // 描边宽度（github 为填充型，忽略此值）
-  strokeWidth: { type: [Number, String], default: 2.2 }
-})
-
-const sizeStyle = computed(() =>
-  typeof props.size === 'number' ? props.size + 'px' : props.size
-)
-</script>
-
 <template>
   <svg
     class="app-icon"
@@ -76,3 +55,24 @@ const sizeStyle = computed(() =>
     </template>
   </svg>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+import {
+  iconSun, iconMoon, iconChevronLeft, iconArrowUp, iconGithub,
+  iconHome, iconHomeDoor, iconTools, iconNews, iconAbout, iconMail, iconMailFlap
+} from '../data/path.js'
+
+const props = defineProps({
+  // 图标名称：sun / moon / menu / close / chevron-left / arrow-up / github / home / tools / news / about / mail
+  name: { type: String, required: true },
+  // 图标边长：数字按 px，字符串按原样（如 '1em'）
+  size: { type: [Number, String], default: 20 },
+  // 描边宽度（github 为填充型，忽略此值）
+  strokeWidth: { type: [Number, String], default: 2.2 }
+})
+
+const sizeStyle = computed(() =>
+  typeof props.size === 'number' ? props.size + 'px' : props.size
+)
+</script>

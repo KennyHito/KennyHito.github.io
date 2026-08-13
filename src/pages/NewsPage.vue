@@ -1,38 +1,3 @@
-<script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { newsGroups } from '../data/news.js'
-import AppIcon from '../components/AppIcon.vue'
-import NewsPanel from '../components/NewsPanel.vue'
-
-// 点击目录项，平滑滚动到对应日期分组
-function scrollToDate(date) {
-  const el = document.getElementById('news-' + date)
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
-
-// 目录元素引用
-const tocEl = ref(null)
-
-// 桌面端左侧目录是否展开（横向展开/收起状态）
-const tocOpen = ref(true)
-
-// 目录上滚动：始终阻止默认行为（避免穿透滚动资讯/页面），手动滚动目录本身
-function onTocWheel(e) {
-  const el = tocEl.value
-  if (!el) return
-  // 手动累加滚动距离；内容不足时 scrollTop 会自动钳制在 0 ~ 最大值之间
-  el.scrollTop += e.deltaY
-  e.preventDefault()
-}
-
-onMounted(() => {
-  if (tocEl.value) tocEl.value.addEventListener('wheel', onTocWheel, { passive: false })
-})
-onUnmounted(() => {
-  if (tocEl.value) tocEl.value.removeEventListener('wheel', onTocWheel)
-})
-</script>
-
 <template>
   <!-- 资讯页主容器：左侧固定目录 + 右侧资讯列表（移动端改为顶部横向目录） -->
   <section class="page-section">
@@ -83,6 +48,41 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
+import { newsGroups } from '../data/news.js'
+import AppIcon from '../components/AppIcon.vue'
+import NewsPanel from '../components/NewsPanel.vue'
+
+// 点击目录项，平滑滚动到对应日期分组
+function scrollToDate(date) {
+  const el = document.getElementById('news-' + date)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+// 目录元素引用
+const tocEl = ref(null)
+
+// 桌面端左侧目录是否展开（横向展开/收起状态）
+const tocOpen = ref(true)
+
+// 目录上滚动：始终阻止默认行为（避免穿透滚动资讯/页面），手动滚动目录本身
+function onTocWheel(e) {
+  const el = tocEl.value
+  if (!el) return
+  // 手动累加滚动距离；内容不足时 scrollTop 会自动钳制在 0 ~ 最大值之间
+  el.scrollTop += e.deltaY
+  e.preventDefault()
+}
+
+onMounted(() => {
+  if (tocEl.value) tocEl.value.addEventListener('wheel', onTocWheel, { passive: false })
+})
+onUnmounted(() => {
+  if (tocEl.value) tocEl.value.removeEventListener('wheel', onTocWheel)
+})
+</script>
 
 <style scoped>
 /* ===== 左右布局：左侧固定目录 + 右侧资讯主内容 ===== */

@@ -1,18 +1,3 @@
-<script setup>
-import { ref } from 'vue'
-
-const props = defineProps({
-  group: { type: Object, required: true }
-})
-
-// 最新日期默认展开，历史日期默认折叠（来自数据里的 expanded 字段）
-const open = ref(props.group.expanded)
-
-function toggle() {
-  open.value = !open.value
-}
-</script>
-
 <template>
   <div class="news-group" :class="{ open }">
     <button class="news-date" @click="toggle" :aria-expanded="open">
@@ -30,6 +15,21 @@ function toggle() {
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+
+const props = defineProps({
+  group: { type: Object, required: true }
+})
+
+// 最新日期默认展开，历史日期默认折叠（来自数据里的 expanded 字段）
+const open = ref(props.group.expanded)
+
+function toggle() {
+  open.value = !open.value
+}
+</script>
 
 <style scoped>
 /* ===== 资讯折叠（News 页面） ===== */

@@ -1,9 +1,3 @@
-<script setup>
-defineProps({
-  tool: { type: Object, required: true }
-})
-</script>
-
 <template>
   <div class="card tool-card">
     <h3>{{ tool.name }}</h3>
@@ -40,6 +34,12 @@ defineProps({
     </a>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  tool: { type: Object, required: true }
+})
+</script>
 
 <style scoped>
 /* ===== 工具卡 ===== */

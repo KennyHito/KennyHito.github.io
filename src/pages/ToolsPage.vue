@@ -1,15 +1,3 @@
-<script setup>
-import { ref } from 'vue'
-import { tools } from '../data/tools.js'
-import ToolCard from '../components/ToolCard.vue'
-import { useMasonry } from '../composables/useMasonry.js'
-
-const gridRef = ref(null)
-// 使用瀑布流 composable：自动按内容高度紧密排列卡片
-useMasonry(gridRef, { gap: 20, maxCols: 2 })
-
-</script>
-
 <template>
   <section class="page-section">
     <div class="container">
@@ -19,6 +7,17 @@ useMasonry(gridRef, { gap: 20, maxCols: 2 })
     </div>
   </section>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import { tools } from '../data/tools.js'
+import ToolCard from '../components/ToolCard.vue'
+import { useMasonry } from '../composables/useMasonry.js'
+
+const gridRef = ref(null)
+// 使用瀑布流 composable：自动按内容高度紧密排列卡片
+useMasonry(gridRef, { gap: 20, maxCols: 2 })
+</script>
 
 <style scoped>
 /* 工具瀑布流容器：useMasonry 会按内容高度绝对定位排列卡片。

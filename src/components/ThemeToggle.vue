@@ -1,10 +1,3 @@
-<script setup>
-import { useTheme } from '../composables/useTheme.js'
-import AppIcon from './AppIcon.vue'
-
-const { theme, toggle } = useTheme()
-</script>
-
 <template>
   <button
     class="theme-toggle"
@@ -21,6 +14,13 @@ const { theme, toggle } = useTheme()
     </span>
   </button>
 </template>
+
+<script setup>
+import { useTheme } from '../composables/useTheme.js'
+import AppIcon from './AppIcon.vue'
+
+const { theme, toggle } = useTheme()
+</script>
 
 <style scoped>
 /* 主题切换开关（日/夜）：滑动开关样式 */
