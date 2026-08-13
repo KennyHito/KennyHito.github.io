@@ -47,6 +47,13 @@
   --toc-bottom-offset: 40px;
   /* 资讯页水印密度：控制水印行间距倍率，可手动调整。数值 < 1（如 0.8）→ 水印更密更多；数值 > 1（如 1.2）→ 更疏更少 */
   --watermark-scale: 2;
+  /* 统一圆角：sm 小控件 / md 分组 / lg 卡片 / pill 胶囊按钮 */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 18px;
+  --radius-pill: 980px;
+  /* 强调色半透明底（徽章底色等），暗色主题下自动切换 */
+  --accent-soft: rgba(0, 113, 227, 0.1);
 }
 
 /* 暗色主题：仅覆盖颜色相关变量，结构样式无需改动 */
@@ -62,6 +69,8 @@
   --accent-active: #0077ed;
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.55);
+  /* 暗色下的强调色半透明底 */
+  --accent-soft: rgba(41, 151, 255, 0.16);
 }
 
 /* ===== 基础重置 ===== */
@@ -87,6 +96,8 @@ body {
   line-height: 1.6;
   /* 字体抗锯齿，提升可读性 */
   -webkit-font-smoothing: antialiased;
+  /* 仅允许平移滚动：禁用双击与双指缩放，消除移动端点按延迟 */
+  touch-action: pan-x pan-y;
   /* 主题切换时背景/文字平滑过渡 */
   transition: background var(--transition), color var(--transition);
 }
@@ -148,7 +159,7 @@ main {
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   padding: 28px;
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
@@ -165,7 +176,7 @@ main {
   font: 400 16px/1 var(--font-sans);
   padding: 12px 22px;
   /* 胶囊按钮 */
-  border-radius: 980px;
+  border-radius: var(--radius-pill);
   border: 1px solid transparent;
   cursor: pointer;
   display: inline-block;
@@ -207,13 +218,9 @@ main {
   display: inline-block;
   font: 500 13px/1 var(--font-sans);
   color: var(--accent);
-  background: rgba(0, 113, 227, 0.1);
-  border-radius: 980px;
+  background: var(--accent-soft);
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
-}
-
-[data-theme="dark"] .badge {
-  background: rgba(41, 151, 255, 0.16);
 }
 
 /* 移动端菜单展开时锁定 body 滚动，防止拖动下方页面 */

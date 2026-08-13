@@ -1,6 +1,6 @@
 <script setup>
 import { useTheme } from '../composables/useTheme.js'
-import { iconSun, iconMoon } from '../data/path.js'
+import AppIcon from './AppIcon.vue'
 
 const { theme, toggle } = useTheme()
 </script>
@@ -15,13 +15,8 @@ const { theme, toggle } = useTheme()
   >
     <span class="theme-toggle-track">
       <span class="theme-toggle-thumb">
-        <svg v-if="theme === 'light'" class="theme-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4" />
-          <path :d="iconSun" />
-        </svg>
-        <svg v-else class="theme-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path :d="iconMoon" />
-        </svg>
+        <AppIcon v-if="theme === 'light'" name="sun" :size="11" :stroke-width="2" />
+        <AppIcon v-else name="moon" :size="11" :stroke-width="2" />
       </span>
     </span>
   </button>
@@ -76,10 +71,5 @@ const { theme, toggle } = useTheme()
   color: #ffffff;
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18), 0 1px 3px rgba(0, 0, 0, 0.6);
   transform: translateX(20px);
-}
-
-.theme-toggle-icon {
-  width: 11px;
-  height: 11px;
 }
 </style>

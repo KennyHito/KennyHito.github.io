@@ -1,7 +1,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import ThemeToggle from './ThemeToggle.vue'
-import { iconGithub } from '../data/path.js'
+import AppIcon from './AppIcon.vue'
+import { site } from '../data/site.js'
 
 defineProps({
   tabs: { type: Array, required: true },
@@ -11,6 +12,14 @@ const emit = defineEmits(['switch'])
 
 // 移动端汉堡菜单展开/收起
 const mobileMenuOpen = ref(false)
+
+// 移动端菜单图标映射
+const mobileIconMap = {
+  home: 'home',
+  tools: 'tools',
+  news: 'news',
+  about: 'about'
+}
 
 function switchTab(key) {
   mobileMenuOpen.value = false
@@ -61,41 +70,45 @@ if (typeof window !== 'undefined') {
         <a v-for="t in tabs" :key="t.key" class="tab" :class="{ active: t.key === current }"
           @click.prevent="switchTab(t.key)">{{ t.label }}</a>
       </nav>
-      <span class="nav-divider" aria-hidden="true"></span>
       <ThemeToggle />
-      <a class="nav-github" href="https://github.com/KennyHito" target="_blank" rel="noopener"
-        aria-label="前往 GitHub">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path :d="iconGithub" />
-        </svg>
+      <a class="nav-github" :href="site.github" target="_blank" rel="noopener" aria-label="前往 GitHub">
+        <AppIcon name="github" :size="22" />
       </a>
 
       <!-- 移动端：汉堡菜单按钮（展开/收起） -->
       <button class="nav-menu-btn" @click="mobileMenuOpen = !mobileMenuOpen"
         :aria-label="mobileMenuOpen ? '关闭导航菜单' : '打开导航菜单'" :aria-expanded="mobileMenuOpen"
         aria-controls="nav-mobile-menu">
-        <svg v-if="!mobileMenuOpen" class="nav-menu-icon" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="7" x2="20" y2="7" />
-          <line x1="4" y1="12" x2="20" y2="12" />
-          <line x1="4" y1="17" x2="20" y2="17" />
-        </svg>
-        <svg v-else class="nav-menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="6" y1="6" x2="18" y2="18" />
-          <line x1="6" y1="18" x2="18" y2="6" />
-        </svg>
+        <AppIcon v-if="!mobileMenuOpen" name="menu" :size="16" />
+        <AppIcon v-else name="close" :size="16" />
       </button>
     </div>
   </nav>
 
-  <!-- 移动端下拉菜单：仅包含 Tab 列表，主题开关和 GitHub 保留在导航栏内 -->
+  <!-- 移动端下拉菜单：Tab 列表 + 底部站点信息，减少空白 -->
   <div id="nav-mobile-menu" class="nav-mobile-menu" :class="{ 'is-open': mobileMenuOpen }"
     aria-hidden="!mobileMenuOpen">
-    <nav class="nav-mobile-menu-tabs" aria-label="移动导航">
-      <a v-for="t in tabs" :key="t.key" class="mobile-tab" :class="{ active: t.key === current }"
-        @click.prevent="switchTab(t.key)">{{ t.label }}</a>
-    </nav>
+    <div class="nav-mobile-menu-body">
+      <nav class="nav-mobile-menu-tabs" aria-label="移动导航">
+        <a v-for="t in tabs" :key="t.key" class="mobile-tab" :class="{ active: t.key === current }"
+          @click.prevent="switchTab(t.key)">
+          <AppIcon :name="mobileIconMap[t.key]" :size="20" class="mobile-tab-icon" />
+          <span>{{ t.label }}</span>
+        </a>
+      </nav>
+      <div class="nav-mobile-menu-footer">
+        <p class="menu-site-name">{{ site.name }}</p>
+        <p class="menu-site-desc">{{ site.slogan }}</p>
+        <div class="menu-social">
+          <a class="menu-social-link" :href="site.github" target="_blank" rel="noopener" aria-label="GitHub">
+            <AppIcon name="github" :size="22" />
+          </a>
+          <a class="menu-social-link" :href="`mailto:${site.email}`" aria-label="发送邮件">
+            <AppIcon name="mail" :size="22" />
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -107,7 +120,7 @@ if (typeof window !== 'undefined') {
   top: 0;
   /* 层级高于内容，避免被遮挡 */
   z-index: 100;
-  /* Flex：Logo 固定靠左，其余内容（Tab → 竖线 → 开关 → GitHub）靠右 */
+  /* Flex：Logo 固定靠左，其余内容（Tab → 开关 → GitHub）靠右 */
   display: flex;
   align-items: center;
   gap: 14px;
@@ -145,7 +158,7 @@ if (typeof window !== 'undefined') {
   padding: 0;
   border: none;
   background: transparent;
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background var(--transition), transform 0.1s ease;
 }
@@ -160,39 +173,35 @@ if (typeof window !== 'undefined') {
   transform: scale(0.94);
 }
 
-/* 导航右侧操作区（Tab → 竖线 → 主题开关 → GitHub → 汉堡按钮） */
+/* 导航右侧操作区（Tab → 主题开关 → GitHub → 汉堡按钮） */
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Tab 列表容器：居中排列 */
+/* Tab 列表容器：绝对定位在导航栏水平正中间（脱离文档流，不影响左右布局） */
 .nav-tabs {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   gap: 4px;
   align-items: center;
 }
 
-/* Tab 与主题开关之间的竖线分隔符 */
-.nav-divider {
-  flex-shrink: 0;
-  width: 1px;
-  height: 18px;
-  background: var(--border);
-  margin: 0 4px;
-}
-
 /* 单个 Tab 文字 */
 .tab {
-  font-size: 15px;
+  font-size: 17px;
+  /* 加粗显示 */
+  font-weight: 600;
   /* 未激活时略淡 */
   opacity: 0.85;
   /* 紧凑间距 */
   padding: 7px 10px;
   letter-spacing: -0.2px;
   /* 胶囊形状 */
-  border-radius: 980px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   /* 不换行 */
   white-space: nowrap;
@@ -229,11 +238,6 @@ if (typeof window !== 'undefined') {
   background: var(--bg-secondary);
 }
 
-.nav-github svg {
-  width: 22px;
-  height: 22px;
-}
-
 /* 桌面端：隐藏移动端汉堡菜单按钮和下拉菜单 */
 .nav-menu-btn,
 .nav-mobile-menu {
@@ -246,9 +250,9 @@ if (typeof window !== 'undefined') {
     padding: 0 14px;
   }
 
-  /* 移动端：隐藏 Tab 列表和分隔线（主题开关、GitHub 保留在导航栏内） */
+  /* 移动端：隐藏 Tab 列表和 GitHub 入口（GitHub 已放进展开菜单底部） */
   .nav-tabs,
-  .nav-divider {
+  .nav-github {
     display: none;
   }
 
@@ -256,29 +260,34 @@ if (typeof window !== 'undefined') {
   .nav-menu-btn {
     display: grid;
     place-items: center;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border);
-    background: var(--surface, transparent);
+    background: transparent;
     color: var(--title);
     cursor: pointer;
-    transition: background var(--transition), color var(--transition);
+    transition: color var(--transition);
+    /* 禁用触屏高亮/选中背景 */
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
   }
 
-  .nav-menu-btn:hover {
-    background: var(--bg-secondary);
-  }
-
-  .nav-menu-icon {
-    width: 22px;
-    height: 22px;
+  /* 触屏下点击/长按/聚焦均不显示背景色 */
+  .nav-menu-btn:hover,
+  .nav-menu-btn:active,
+  .nav-menu-btn:focus,
+  .nav-menu-btn:focus-visible {
+    background: transparent;
+    outline: none;
   }
 
   /* 移动端下拉菜单：默认隐藏，展开后从导航栏下方滑下 */
+  /* 用 fixed 固定在视口：导航栏是 sticky 吸顶的，若用 absolute 定位在文档流，
+     页面滚动时菜单会跟随文档滚走，与吸顶的导航栏分离而不可见 */
   .nav-mobile-menu {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 52px;
     left: 0;
     right: 0;
@@ -319,10 +328,15 @@ if (typeof window !== 'undefined') {
   }
 
   .mobile-tab {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     padding: 12px 14px;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: var(--radius-sm);
+    /* 与桌面端 Tab 字号一致 */
+    font-size: 17px;
+    /* 与桌面端 Tab 加粗一致 */
+    font-weight: 600;
     color: var(--text);
     opacity: 0.9;
     transition: opacity var(--transition), color var(--transition), background var(--transition);
@@ -336,6 +350,69 @@ if (typeof window !== 'undefined') {
   .mobile-tab:hover {
     opacity: 1;
     background: var(--bg-secondary);
+  }
+
+  .mobile-tab-icon {
+    color: var(--title);
+    opacity: 0.7;
+  }
+
+  .mobile-tab.active .mobile-tab-icon {
+    color: #ff6b35;
+    opacity: 1;
+  }
+
+  /* 移动端菜单内容容器：Tab 列表与底部信息分区 */
+  .nav-mobile-menu-body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  /* 移动端菜单底部：站点信息 + 社交链接 */
+  .nav-mobile-menu-footer {
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .menu-site-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--title);
+    margin-bottom: 4px;
+  }
+
+  .menu-site-desc {
+    font-size: 13px;
+    color: var(--text);
+    opacity: 0.7;
+    margin-bottom: 14px;
+  }
+
+  .menu-social {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .menu-social-link {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: var(--title);
+    background: var(--bg-secondary);
+    transition: transform 0.1s ease, background var(--transition), color var(--transition);
+  }
+
+  .menu-social-link:hover {
+    background: var(--border);
+  }
+
+  .menu-social-link:active {
+    transform: scale(0.94);
   }
 }
 </style>

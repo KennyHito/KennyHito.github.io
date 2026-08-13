@@ -35,7 +35,7 @@ function toggle() {
 /* ===== 资讯折叠（News 页面） ===== */
 .news-group {
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-md);
   background: var(--surface);
   margin-bottom: 16px;
   /* 圆角裁剪内部内容 */
@@ -107,12 +107,8 @@ function toggle() {
 .news-tags span {
   font-size: 12px;
   color: var(--accent);
-  background: rgba(0, 113, 227, 0.1);
-  border-radius: 980px;
+  background: var(--accent-soft);
+  border-radius: var(--radius-pill);
   padding: 4px 10px;
-}
-
-[data-theme="dark"] .news-tags span {
-  background: rgba(41, 151, 255, 0.16);
 }
 </style>

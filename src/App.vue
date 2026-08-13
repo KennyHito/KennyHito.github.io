@@ -1,28 +1,14 @@
 <script setup>
 // 从 Vue 中导入响应式状态、计算属性、依赖注入及生命周期钩子
 import { ref, computed, provide, onMounted, onUnmounted } from 'vue'
-// 导入首页页面组件
-import HomePage from './pages/HomePage.vue'
-// 导入工具页面组件
-import ToolsPage from './pages/ToolsPage.vue'
-// 导入资讯页面组件
-import NewsPage from './pages/NewsPage.vue'
-// 导入关于页面组件
-import AboutPage from './pages/AboutPage.vue'
 // 导入顶部导航栏组件
 import AppNav from './components/AppNav.vue'
 // 导入底部页脚组件
 import AppFooter from './components/AppFooter.vue'
-// 导入 SVG 图标 path 的 d 值
-import { iconArrowUp } from './data/path.js'
-
-// 定义全部标签页配置：key 标识、label 显示文案、comp 对应页面组件
-const tabs = [
-  { key: 'home', label: '首页', comp: HomePage },
-  { key: 'tools', label: '工具', comp: ToolsPage },
-  { key: 'news', label: '资讯', comp: NewsPage },
-  { key: 'about', label: '关于', comp: AboutPage }
-]
+// 导入图标组件（统一渲染各 SVG 图标）
+import AppIcon from './components/AppIcon.vue'
+// 导入页面导航配置（key / label / comp）
+import { tabs } from './data/tabs.js'
 
 // 从 URL hash 解析当前页（支持刷新保持 / 直接访问 #/tools）
 function keyFromHash() {
@@ -141,10 +127,7 @@ provide('navigate', navigate)
           :stroke-dashoffset="119.38 - (119.38 * scrollPercent) / 100" />
       </svg>
       <!-- 上箭头 -->
-      <svg class="back-to-top-icon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none">
-        <path :d="iconArrowUp" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
-          stroke-linejoin="round" />
-      </svg>
+      <AppIcon name="arrow-up" :size="18" class="back-to-top-icon" />
       <!-- 悬浮提示 -->
       <span class="back-to-top-tooltip">回到顶部</span>
     </button>
@@ -202,11 +185,9 @@ provide('navigate', navigate)
      它们由模板中绑定的属性驱动（CSS 会覆盖 SVG 属性导致进度不更新） */
 }
 
-/* 上箭头图标 */
+/* 上箭头图标（尺寸由 AppIcon 的 size 控制） */
 .back-to-top-icon {
   position: relative;
-  width: 18px;
-  height: 18px;
   display: block;
   transition: color var(--transition);
 }
@@ -278,11 +259,6 @@ provide('navigate', navigate)
     bottom: 100px;
     width: 40px;
     height: 40px;
-  }
-
-  .back-to-top-icon {
-    width: 18px;
-    height: 18px;
   }
 
   .back-to-top-tooltip {

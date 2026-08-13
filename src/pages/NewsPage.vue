@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { newsGroups } from '../data/news.js'
-import { iconChevronLeft } from '../data/path.js'
+import AppIcon from '../components/AppIcon.vue'
 import NewsPanel from '../components/NewsPanel.vue'
 
 // 点击目录项，平滑滚动到对应日期分组
@@ -50,11 +50,8 @@ onUnmounted(() => {
       <!-- 目录展开/收起切换按钮（桌面端）：展开时贴在目录右侧，收起时回到屏幕左边缘 -->
       <button class="news-toc-toggle" :class="{ 'news-toc-toggle-closed': !tocOpen }" @click="tocOpen = !tocOpen"
         aria-label="展开或收起目录" :aria-expanded="tocOpen">
-        <svg class="news-toc-toggle-icon" :class="{ 'news-toc-toggle-icon-closed': !tocOpen }" viewBox="0 0 24 24"
-          fill="none">
-          <path :d="iconChevronLeft" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
-            stroke-linejoin="round" />
-        </svg>
+        <AppIcon name="chevron-left" :size="14" class="news-toc-toggle-icon"
+          :class="{ 'news-toc-toggle-icon-closed': !tocOpen }" />
       </button>
 
       <!-- 主内容区：资讯列表 -->
@@ -166,8 +163,6 @@ onUnmounted(() => {
 }
 
 .news-toc-toggle-icon {
-  width: 14px;
-  height: 14px;
   transition: transform 0.3s ease;
 }
 

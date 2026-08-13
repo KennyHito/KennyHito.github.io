@@ -62,7 +62,7 @@ const navigate = inject('navigate')
 .intro-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   padding: 28px;
   box-shadow: var(--shadow-sm);
 }

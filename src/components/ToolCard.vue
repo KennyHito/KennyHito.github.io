@@ -113,7 +113,7 @@ defineProps({
 .chip {
   font-size: 14px;
   padding: 8px 14px;
-  border-radius: 980px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border);
 }
 </style>
