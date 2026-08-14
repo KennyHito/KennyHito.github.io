@@ -443,8 +443,12 @@ if (props.depth === 0) {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  height: 100dvh; /* 移动端地址栏收起时也占满可视区，避免出现整页滚动 */
-  overflow: hidden; /* 页面整体固定，只允许面板内部滚动 */
+  height: 100dvh;
+  /* 移动端地址栏收起时也占满可视区，避免出现整页滚动 */
+  overflow: hidden;
+  /* 页面整体固定，只允许面板内部滚动 */
+  /* 阻止滚动链与橡皮筋：面板内部滚动到底/顶时不再带动外层页面 */
+  overscroll-behavior: none;
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
@@ -610,6 +614,8 @@ textarea {
   line-height: 1.6;
   color: var(--text);
   background: var(--panel);
+  /* 内部滚动到底/顶时不带动外层页面 */
+  overscroll-behavior: contain;
 }
 
 .preview-scroll {
@@ -617,6 +623,7 @@ textarea {
   overflow: auto;
   padding: 12px 16px;
   background: var(--panel);
+  overscroll-behavior: contain;
 }
 
 .status-bar {
@@ -752,6 +759,15 @@ textarea {
 }
 
 @media (max-width: 760px) {
+  .json-viewer {
+    /* 固定定位替代 100vh：企微等内置浏览器地址栏收起/展开时高度不再抖动，
+       也不会因 vh 计算误差出现整页滚动 */
+    position: fixed;
+    inset: 0;
+    height: auto;
+    overscroll-behavior: none;
+  }
+
   main {
     flex-direction: column;
   }

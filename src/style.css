@@ -262,3 +262,12 @@ body.tool-standalone .footer,
 body.tool-standalone .back-to-top {
   display: none !important;
 }
+
+/* 独立工具模式下禁止整页滚动，防止企微等内置浏览器出现上下滑动/抖动 */
+body.tool-standalone {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+}
