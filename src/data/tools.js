@@ -55,6 +55,17 @@ export const tools = [
     linkText: '打开工具'
   },
   {
+    key: 'url-codec',
+    name: 'URL 在线转码/解码',
+    desc: '在线 URL 编码/解码工具：输入 URL 或普通文本，一键进行 encodeURIComponent 转码或 decodeURIComponent 解码，结果支持一键复制，并内置示例快速体验。适合接口调试、URL 参数处理、中文链接编码等场景。',
+    features: ['URL 转码', 'URL 解码', '一键复制结果', '载入示例'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    page: 'urlcodec',
+    linkText: '打开工具'
+  },
+  {
     key: 'openclaw',
     name: 'OpenClaw智能体',
     desc: 'OpenClaw（龙虾智能体）是一款轻量化、低代码 AI 多智能体框架，主打高效自动化工作流搭建，支持插件拓展、知识库对接、多渠道部署，无需深厚编程基础，即可搭建专属办公自动化、数据处理、智能问答 AI 应用。',

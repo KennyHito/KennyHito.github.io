@@ -10,7 +10,7 @@ export const site = {
   // 反馈邮箱
   email: 'KennyHito@gmail.com',
   // 个人网站（关于页展示）
-  devnote: 'https://devnote.site/',
+  devnote: 'https://devnote.site',
   // 自用网络链接（关于页展示）
   vpn: 'https://go.huajic.com/?path=auth/register&code=d39H'
 }
