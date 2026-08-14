@@ -82,7 +82,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, provide, inject, onMounted, onUnmounted, defineProps, defineOptions } from 'vue'
+import { ref, reactive, computed, provide, inject, defineProps, defineOptions } from 'vue'
+import { copyText } from '../composables/useClipboard'
+import { useToolStandalone } from '../composables/useToolStandalone'
+import { useSplitPane } from '../composables/useSplitPane'
 
 // 显式声明组件名（递归自引用 <JsonViewer> 时依赖该名称）
 defineOptions({ name: 'JsonViewer' })
@@ -186,53 +189,7 @@ const search = ref('')
 const searchCount = ref('')
 
 /* ---------- 拖拽分割（桌面左右 / 移动上下） ---------- */
-const mainRef = ref(null)
-const leftWidth = ref(50)   // 桌面端：左侧输入面板宽度百分比
-const topHeight = ref(50)   // 移动端：上方输入区高度百分比（默认 50%，保持与预览区默认等高）
-const resizing = ref(false)
-
-// 输入面板内联尺寸：同时输出 width/height，桌面用 width、移动用 height，另一项由 CSS 忽略
-// 高度 -7px：为中间拖拽条让位，保证默认时输入区/预览区严格各占一半
-const paneStyle = computed(() => ({
-  width: leftWidth.value + '%',
-  height: 'calc(' + topHeight.value + '% - 7px)'
-}))
-
-// 当前拖拽方向：'x' 桌面左右、'y' 移动上下，按触发时窗口宽度实时决定
-let resizeDir = 'x'
-
-// 拖拽中：按 resizeDir 更新宽度或高度，均限制在 20% ~ 80%
-// 使用 Pointer Events 统一处理鼠标与触摸（PointerEvent 同样含 clientX/clientY）
-function onResize(e) {
-  if (!resizing.value || !mainRef.value) return
-  const rect = mainRef.value.getBoundingClientRect()
-  if (resizeDir === 'y') {
-    let pct = ((e.clientY - rect.top) / rect.height) * 100
-    topHeight.value = Math.min(80, Math.max(20, pct))
-  } else {
-    let pct = ((e.clientX - rect.left) / rect.width) * 100
-    leftWidth.value = Math.min(80, Math.max(20, pct))
-  }
-}
-// 开始拖拽：锁定全局选中（防拖拽时选中文本），注册全局指针监听
-// 配合 CSS touch-action:none，手机端拖拽不会被浏览器滚动抢走
-function startResize(e) {
-  resizing.value = true
-  resizeDir = window.innerWidth <= 760 ? 'y' : 'x'
-  document.body.style.userSelect = 'none'
-  document.addEventListener('pointermove', onResize)
-  document.addEventListener('pointerup', stopResize)
-  document.addEventListener('pointercancel', stopResize)
-  e.preventDefault()
-}
-// 结束拖拽：恢复选中，移除全局监听
-function stopResize() {
-  resizing.value = false
-  document.body.style.userSelect = ''
-  document.removeEventListener('pointermove', onResize)
-  document.removeEventListener('pointerup', stopResize)
-  document.removeEventListener('pointercancel', stopResize)
-}
+const { mainRef, paneStyle, resizing, startResize } = useSplitPane()
 
 // 统计节点总数与根类型，展示在预览面板标题栏（如「对象 · 节点 12」）
 function countStats(data) {
@@ -361,37 +318,10 @@ function doSearch() {
 function expandAll() { store.force = 'expand'; search.value = ''; store.search = ''; searchCount.value = '' }
 function collapseAll() { store.force = 'collapse' }
 
-// 复制：将格式化后的 JSON 写入剪贴板，成功/失败均更新状态栏
-// 优先使用 Clipboard API，不支持的旧浏览器/非 HTTPS 环境降级到 execCommand
-function fallbackCopy(text) {
-  const ta = document.createElement('textarea')
-  ta.value = text
-  ta.setAttribute('readonly', '')
-  ta.style.position = 'fixed'
-  ta.style.top = '-9999px'
-  ta.style.opacity = '0'
-  document.body.appendChild(ta)
-  ta.select()
-  ta.setSelectionRange(0, text.length)
-  const ok = document.execCommand('copy')
-  document.body.removeChild(ta)
-  return ok
-}
-
+// 复制：将格式化后的 JSON 写入剪贴板（useClipboard 内部处理 Clipboard API 与 execCommand 降级）
 async function copyJson() {
   if (parsed.value === null) { status.value = '没有可复制的内容'; return }
-  const text = JSON.stringify(parsed.value, null, 2)
-  let ok = false
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(text)
-      ok = true
-    } else {
-      ok = fallbackCopy(text)
-    }
-  } catch (e) {
-    ok = fallbackCopy(text)
-  }
+  const ok = await copyText(JSON.stringify(parsed.value, null, 2))
   status.value = ok ? '复制成功 ✓ ' + new Date().toLocaleTimeString() : '复制失败，请手动选择'
 }
 
@@ -436,8 +366,7 @@ function onFile(e) {
 if (props.depth === 0) {
   format()
   // 独立工具模式：隐藏站点全局导航栏 / 页脚 / 返回顶部按钮，聚焦工具本身
-  onMounted(() => document.body.classList.add('tool-standalone'))
-  onUnmounted(() => document.body.classList.remove('tool-standalone'))
+  useToolStandalone()
 }
 </script>
 
@@ -463,6 +392,7 @@ if (props.depth === 0) {
 </style>
 
 <style scoped>
+/* ---------- 根布局：纵向 flex，占满视口且禁止整页滚动 ---------- */
 .json-viewer {
   display: flex;
   flex-direction: column;
@@ -478,6 +408,7 @@ if (props.depth === 0) {
   color: var(--text);
 }
 
+/* ---------- 顶栏 ---------- */
 header {
   padding: 14px 20px;
   background: var(--panel);
@@ -509,6 +440,7 @@ header h1 {
   margin-left: auto;
 }
 
+/* ---------- 通用按钮 / 文件选择按钮 ---------- */
 button,
 .filebtn {
   font: inherit;
@@ -541,6 +473,7 @@ button.primary:hover {
   background: #2459c9;
 }
 
+/* ---------- 工具栏搜索框 ---------- */
 .search {
   display: flex;
   align-items: center;
@@ -568,6 +501,7 @@ button.primary:hover {
   text-align: right;
 }
 
+/* ---------- 主区域：桌面横向 flex（输入 | 拖拽条 | 预览） ---------- */
 main {
   flex: 1;
   display: flex;
@@ -576,6 +510,7 @@ main {
   min-height: 0;
 }
 
+/* ---------- 输入/预览面板 ---------- */
 .editor,
 .preview {
   min-width: 0;
@@ -601,6 +536,7 @@ main {
   flex: 1 1 0;
 }
 
+/* ---------- 拖拽分割条 ---------- */
 .resizer {
   width: 5px;
   flex: 0 0 5px;
@@ -616,6 +552,7 @@ main {
   background: var(--accent);
 }
 
+/* ---------- 面板标题条 ---------- */
 .pane-title {
   font-size: 12px;
   color: var(--muted);
@@ -627,6 +564,7 @@ main {
   align-items: center;
 }
 
+/* ---------- 输入框 ---------- */
 textarea {
   flex: 1;
   border: none;
@@ -642,6 +580,7 @@ textarea {
   overscroll-behavior: contain;
 }
 
+/* ---------- 预览滚动区 ---------- */
 .preview-scroll {
   flex: 1;
   overflow: auto;
@@ -650,6 +589,7 @@ textarea {
   overscroll-behavior: contain;
 }
 
+/* ---------- 底部状态栏 ---------- */
 .status-bar {
   padding: 6px 16px;
   font-size: 12px;
@@ -782,6 +722,7 @@ textarea {
   text-decoration: underline;
 }
 
+/* ---------- 移动端：上下布局（输入 | 拖拽条 | 预览） ---------- */
 @media (max-width: 760px) {
   .json-viewer {
     /* 固定定位替代 100vh：企微等内置浏览器地址栏收起/展开时高度不再抖动，

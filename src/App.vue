@@ -45,7 +45,7 @@ import Base64Codec from './pages/Base64Codec.vue'
 // 工具页支持的站内子页面映射：hash 子路径 -> 组件
 const toolSubPages = {
   jsonviewer: JsonViewer,
-  passwordgenerator: PwdGenerator,
+  pwdgenerator: PwdGenerator,
   base64codec: Base64Codec
 }
 

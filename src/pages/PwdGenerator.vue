@@ -1,5 +1,7 @@
 <template>
+  <!-- 根容器：顶栏 + 主区域（配置/结果双面板 + 拖拽条）+ 底部状态栏 -->
   <div class="password-generator">
+    <!-- 顶栏：标题 + 操作按钮 -->
     <header>
       <h1><span class="logo">🔐</span> 随机密码生成器</h1>
       <div class="toolbar">
@@ -8,10 +10,13 @@
       </div>
     </header>
 
+    <!-- 主区域：桌面左右布局（配置 | 拖拽条 | 结果），移动端上下布局 -->
     <main ref="mainRef">
+      <!-- 配置面板：字符集、密码长度，宽/高由 paneStyle 内联控制 -->
       <section class="controls" :style="paneStyle">
         <div class="pane-title"><span>配置区</span></div>
         <div class="config">
+          <!-- 字符集选择：勾选的类型决定生成密码可用的字符范围 -->
           <div class="opt">
             <label class="check">
               <input type="checkbox" v-model="useUpper" />
@@ -31,18 +36,22 @@
             </label>
           </div>
 
+          <!-- 密码长度：数字输入框与滑块双向联动（1~128） -->
           <div class="row">
             <span class="label">密码长度</span>
             <input class="length-input" type="number" min="1" max="128" v-model.number="length" @change="clampLength" />
           </div>
           <input class="range" type="range" min="1" max="128" v-model.number="length" />
 
+          <!-- 错误提示：如未勾选任何字符类型 -->
           <div v-if="error" class="error-msg">{{ error }}</div>
         </div>
       </section>
 
+      <!-- 拖拽分割条：桌面端竖条拖宽度、移动端横条拖高度 -->
       <div class="resizer" :class="{ dragging: resizing }" @pointerdown="startResize"></div>
 
+      <!-- 结果面板：展示生成的密码，可只读展示与一键复制 -->
       <section class="result">
         <div class="pane-title"><span>结果区</span></div>
         <div class="preview-scroll">
@@ -52,28 +61,32 @@
       </section>
     </main>
 
+    <!-- 底部状态栏：操作结果 / 错误提示 -->
     <div class="status-bar" :class="{ error: !!error }">{{ status }}</div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
+import { copyText } from '../composables/useClipboard'
+import { useToolStandalone } from '../composables/useToolStandalone'
+import { useSplitPane } from '../composables/useSplitPane'
 
 /* ---------- 配置状态 ---------- */
-const useUpper = ref(true)
-const useLower = ref(true)
-const useNumber = ref(true)
-const useSpecial = ref(false)
-const length = ref(12)
-const result = ref('')
-const error = ref('')
-const status = ref('就绪')
+const useUpper = ref(true)   // 是否包含大写字母
+const useLower = ref(true)   // 是否包含小写字母
+const useNumber = ref(true)  // 是否包含数字
+const useSpecial = ref(false)// 是否包含特殊字符
+const length = ref(12)       // 密码长度（1~128）
+const result = ref('')       // 生成的密码结果
+const error = ref('')        // 错误提示信息
+const status = ref('就绪')   // 底部状态栏文案
 
 /* ---------- 隐藏站点全局导航栏（tool-standalone 模式） ---------- */
-onMounted(() => document.body.classList.add('tool-standalone'))
-onUnmounted(() => document.body.classList.remove('tool-standalone'))
+useToolStandalone()
 
 /* ---------- 长度约束 ---------- */
+// 数字输入框失焦/回车时把长度限制在 1~128
 function clampLength() {
   if (!length.value || length.value < 1) length.value = 1
   if (length.value > 128) length.value = 128
@@ -82,12 +95,14 @@ function clampLength() {
 /* ---------- 生成密码 ---------- */
 function generate() {
   error.value = ''
+  // 按勾选的字符类型拼接字符集
   let charset = ''
   if (useUpper.value) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   if (useLower.value) charset += 'abcdefghijklmnopqrstuvwxyz'
   if (useNumber.value) charset += '0123456789'
   if (useSpecial.value) charset += '!@#$%^&*()-_=+[]{};:,.<>?/~'
 
+  // 字符集为空则提示并终止
   if (!charset) {
     error.value = '请至少选择一种字符类型'
     status.value = error.value
@@ -97,7 +112,9 @@ function generate() {
   clampLength()
   const len = length.value
 
-  // 使用加密级随机数，排除偏置（random() % len 重试法）
+  // 使用加密级随机数（crypto.getRandomValues）
+  // 取模偏置修正：random() % charset.length 在小字符集下有轻微偏置，
+  // 通过「大于最大合法值就重试」的方式保证均匀分布
   const buf = new Uint32Array(len)
   crypto.getRandomValues(buf)
   let pwd = ''
@@ -115,100 +132,33 @@ function generate() {
 }
 
 /* ---------- 复制结果 ---------- */
-// 优先使用 Clipboard API，不支持的旧浏览器/非 HTTPS 环境降级到 execCommand
-function fallbackCopy(text) {
-  const ta = document.createElement('textarea')
-  ta.value = text
-  ta.setAttribute('readonly', '')
-  ta.style.position = 'fixed'
-  ta.style.top = '-9999px'
-  ta.style.opacity = '0'
-  document.body.appendChild(ta)
-  ta.select()
-  ta.setSelectionRange(0, text.length)
-  const ok = document.execCommand('copy')
-  document.body.removeChild(ta)
-  return ok
-}
-
+// 复制主逻辑封装在 useClipboard：优先 Clipboard API，失败/不可用降级到 execCommand
 async function copyResult() {
   if (!result.value) return
-  let ok = false
-  try {
-    if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(result.value)
-      ok = true
-    } else {
-      ok = fallbackCopy(result.value)
-    }
-  } catch (e) {
-    ok = fallbackCopy(result.value)
-  }
-  if (ok) {
-    status.value = '复制成功 ✓ ' + new Date().toLocaleTimeString()
-  } else {
-    status.value = '复制失败，请手动选择复制'
-  }
+  const ok = await copyText(result.value)
+  // 复制结果反馈到底部状态栏
+  status.value = ok ? '复制成功 ✓ ' + new Date().toLocaleTimeString() : '复制失败，请手动选择复制'
 }
 
 /* ---------- 拖拽分割（桌面左右 / 移动上下） ---------- */
-const mainRef = ref(null)
-const leftWidth = ref(50)   // 桌面端：配置面板宽度百分比
-const topHeight = ref(50)   // 移动端：配置区高度百分比（默认 50%，与结果区等高）
-const resizing = ref(false)
-
-const paneStyle = computed(() => ({
-  width: leftWidth.value + '%',
-  height: 'calc(' + topHeight.value + '% - 7px)'
-}))
-
-let resizeDir = 'x'
-
-function onResize(e) {
-  if (!resizing.value || !mainRef.value) return
-  const rect = mainRef.value.getBoundingClientRect()
-  if (resizeDir === 'y') {
-    let pct = ((e.clientY - rect.top) / rect.height) * 100
-    topHeight.value = Math.min(80, Math.max(20, pct))
-  } else {
-    let pct = ((e.clientX - rect.left) / rect.width) * 100
-    leftWidth.value = Math.min(80, Math.max(20, pct))
-  }
-}
-
-function startResize(e) {
-  resizing.value = true
-  resizeDir = window.innerWidth <= 760 ? 'y' : 'x'
-  try { e.target.setPointerCapture(e.pointerId) } catch (_) { }
-  document.body.style.userSelect = 'none'
-  document.addEventListener('pointermove', onResize)
-  document.addEventListener('pointerup', stopResize)
-  document.addEventListener('pointercancel', stopResize)
-  e.preventDefault()
-}
-
-function stopResize() {
-  resizing.value = false
-  document.body.style.userSelect = ''
-  document.removeEventListener('pointermove', onResize)
-  document.removeEventListener('pointerup', stopResize)
-  document.removeEventListener('pointercancel', stopResize)
-}
+const { mainRef, paneStyle, resizing, startResize } = useSplitPane()
 </script>
 
 <style scoped>
+/* ---------- 根布局：纵向 flex，占满视口且禁止整页滚动 ---------- */
 .password-generator {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  overscroll-behavior: none;
+  height: 100dvh; /* 移动端地址栏收起时仍占满可视区 */
+  overflow: hidden; /* 页面固定，只允许面板内部滚动 */
+  overscroll-behavior: none; /* 阻止滚动链与橡皮筋 */
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
 }
 
+/* ---------- 顶栏 ---------- */
 header {
   padding: 14px 20px;
   background: var(--panel);
@@ -237,9 +187,10 @@ header h1 {
   gap: 8px;
   align-items: center;
   flex-wrap: wrap;
-  margin-left: auto;
+  margin-left: auto; /* 按钮组靠右 */
 }
 
+/* ---------- 通用按钮 ---------- */
 button {
   font: inherit;
   font-size: 13px;
@@ -275,11 +226,12 @@ button.primary:hover {
   background: #2459c9;
 }
 
+/* ---------- 主区域：桌面横向 flex（配置 | 拖拽条 | 结果） ---------- */
 main {
   flex: 1;
   display: flex;
   overflow: hidden;
-  min-height: 0;
+  min-height: 0; /* 允许收缩，防止面板内容把整页撑出滚动 */
 }
 
 .controls,
@@ -292,9 +244,10 @@ main {
 
 .controls {
   flex: none;
-  width: 50%;
+  width: 50%; /* 桌面默认宽度，拖拽后由内联 style 覆盖 */
 }
 
+/* 桌面端忽略内联 height（paneStyle 同时输出 width/height，桌面只用 width） */
 @media (min-width: 761px) {
   .controls {
     height: auto !important;
@@ -302,16 +255,17 @@ main {
 }
 
 .result {
-  flex: 1 1 0;
+  flex: 1 1 0; /* 占据拖拽条右侧的剩余宽度 */
 }
 
+/* ---------- 拖拽分割条 ---------- */
 .resizer {
   width: 5px;
   flex: 0 0 5px;
   cursor: col-resize;
   background: var(--border);
   transition: background .15s;
-  touch-action: none;
+  touch-action: none; /* 禁止浏览器接管该元素手势（滚动/缩放），保证指针拖动持续触发 */
 }
 
 .resizer:hover,
@@ -319,6 +273,7 @@ main {
   background: var(--accent);
 }
 
+/* ---------- 面板标题条 ---------- */
 .pane-title {
   font-size: 12px;
   color: var(--muted);
@@ -327,6 +282,7 @@ main {
   border-bottom: 1px solid var(--border);
 }
 
+/* ---------- 配置面板内容 ---------- */
 .config {
   flex: 1;
   display: flex;
@@ -389,10 +345,7 @@ main {
   margin-bottom: 16px;
 }
 
-.gen-btn {
-  align-self: flex-start;
-}
-
+/* ---------- 错误提示 ---------- */
 .error-msg {
   margin-top: 12px;
   padding: 10px 12px;
@@ -402,6 +355,7 @@ main {
   font-size: 13px;
 }
 
+/* ---------- 结果面板 ---------- */
 .preview-scroll {
   flex: 1;
   display: flex;
@@ -425,7 +379,7 @@ main {
   background: var(--bg);
   overscroll-behavior: contain;
   min-height: 0;
-  word-break: break-all;
+  word-break: break-all; /* 长密码换行显示 */
 }
 
 .empty-hint {
@@ -435,6 +389,7 @@ main {
   font-size: 14px;
 }
 
+/* ---------- 底部状态栏 ---------- */
 .status-bar {
   padding: 6px 16px;
   font-size: 12px;
@@ -447,8 +402,10 @@ main {
   color: var(--error);
 }
 
+/* ---------- 移动端：上下布局（配置 | 拖拽条 | 结果） ---------- */
 @media (max-width: 760px) {
   .password-generator {
+    /* 固定定位替代 100vh：企微等内置浏览器地址栏收起/展开时高度不抖动 */
     position: fixed;
     inset: 0;
     height: auto;
@@ -461,17 +418,18 @@ main {
 
   .controls {
     border-bottom: 1px solid var(--border);
-    width: 100% !important;
+    width: 100% !important; /* 覆盖内联 width 的优先级，配置区占满屏幕宽度 */
     flex: none;
-    min-height: 0;
+    min-height: 0; /* 高度由内联 style 控制（topHeight%） */
   }
 
   .result {
-    flex: 1 1 0;
+    flex: 1 1 0; /* 占据拖拽条下方的剩余高度 */
     min-height: 0;
   }
 
   .resizer {
+    /* 移动端改为横向拖拽条：上下拖动调整配置区/结果区高度 */
     display: block;
     width: 100%;
     height: 14px;

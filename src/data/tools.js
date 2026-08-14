@@ -29,7 +29,7 @@ export const tools = [
     steps: [],
     example: '',
     exampleDesc: '',
-    page: 'passwordgenerator',
+    page: 'pwdgenerator',
     linkText: '打开工具'
   },
   {
