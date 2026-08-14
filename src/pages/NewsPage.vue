@@ -67,12 +67,15 @@ const tocEl = ref(null)
 // 桌面端左侧目录是否展开（横向展开/收起状态）
 const tocOpen = ref(true)
 
-// 目录上滚动：始终阻止默认行为（避免穿透滚动资讯/页面），手动滚动目录本身
+// 目录上滚动：始终阻止默认行为（避免穿透滚动资讯/页面），手动滚动年月日列表本身
 function onTocWheel(e) {
   const el = tocEl.value
   if (!el) return
+  // 列表是唯一可滚动区域，标题固定不动
+  const list = el.querySelector('.news-toc-list')
+  if (!list) return
   // 手动累加滚动距离；内容不足时 scrollTop 会自动钳制在 0 ~ 最大值之间
-  el.scrollTop += e.deltaY
+  list.scrollTop += e.deltaY
   e.preventDefault()
 }
 
@@ -104,7 +107,7 @@ onUnmounted(() => {
 }
 
 /* ===== 桌面端左侧目录：fixed 固定在屏幕左侧（距左 20px、距顶 60px），
-       透明背景可透出水印，内容超出时可滚动但隐藏滚动条 ===== */
+       透明背景可透出水印；标题固定不动，仅年月日列表可滚动（隐藏滚动条） ===== */
 .news-toc {
   position: fixed;
   left: 20px;
@@ -115,9 +118,9 @@ onUnmounted(() => {
   width: 130px;
   /* 最大高度 = 视口高度 - 顶部偏移 - 底部留白（--toc-bottom-offset 可调） */
   max-height: calc(100vh - 118px - var(--toc-bottom-offset));
-  /* 内容超出时可滚动，但不显示滚动条（Firefox） */
-  overflow-y: auto;
-  scrollbar-width: none;
+  /* 纵向布局：标题固定，列表占剩余空间并可滚动 */
+  display: flex;
+  flex-direction: column;
   /* 透明背景，可透出下层资讯水印 */
   background: transparent;
   border: none;
@@ -171,12 +174,9 @@ onUnmounted(() => {
   transform: rotate(180deg);
 }
 
-/* Webkit 内核隐藏滚动条（Chrome / Safari） */
-.news-toc::-webkit-scrollbar {
-  display: none;
-}
-
 .news-toc-title {
+  /* 标题固定，不随列表滚动 */
+  flex-shrink: 0;
   font-size: 14px;
   font-weight: 600;
   color: var(--title);
@@ -188,6 +188,15 @@ onUnmounted(() => {
   list-style: none;
   margin: 0;
   padding: 0;
+  /* 仅年月日列表可滚动，标题保持固定 */
+  overflow-y: auto;
+  min-height: 0;
+  /* 不显示滚动条（Firefox） */
+  scrollbar-width: none;
+}
+
+.news-toc-list::-webkit-scrollbar {
+  display: none;
 }
 
 .news-toc-link {
