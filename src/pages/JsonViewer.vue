@@ -22,7 +22,7 @@
     </header>
 
     <main ref="mainRef">
-      <section class="editor" :style="{ width: leftWidth + '%' }">
+      <section class="editor" :style="paneStyle">
         <div class="pane-title">
           <span>输入 JSON</span>
           <span>
@@ -35,7 +35,7 @@
           @keydown.ctrl.enter="format" @keydown.meta.enter="format"></textarea>
       </section>
 
-      <div class="resizer" :class="{ dragging: resizing }" @mousedown="startResize"></div>
+      <div class="resizer" :class="{ dragging: resizing }" @pointerdown="startResize"></div>
 
       <section class="preview">
         <div class="pane-title"><span>格式化视图</span><span class="meta">{{ statInfo }}</span></div>
@@ -185,33 +185,53 @@ const statInfo = ref('')
 const search = ref('')
 const searchCount = ref('')
 
-/* ---------- 左右拖拽分割 ---------- */
+/* ---------- 拖拽分割（桌面左右 / 移动上下） ---------- */
 const mainRef = ref(null)
-const leftWidth = ref(50)
+const leftWidth = ref(50)   // 桌面端：左侧输入面板宽度百分比
+const topHeight = ref(50)   // 移动端：上方输入区高度百分比（默认 50%，保持与预览区默认等高）
 const resizing = ref(false)
 
-// 拖拽中：按鼠标 X 坐标换算左侧面板宽度百分比，并限制在 20% ~ 80%
+// 输入面板内联尺寸：同时输出 width/height，桌面用 width、移动用 height，另一项由 CSS 忽略
+// 高度 -7px：为中间拖拽条让位，保证默认时输入区/预览区严格各占一半
+const paneStyle = computed(() => ({
+  width: leftWidth.value + '%',
+  height: 'calc(' + topHeight.value + '% - 7px)'
+}))
+
+// 当前拖拽方向：'x' 桌面左右、'y' 移动上下，按触发时窗口宽度实时决定
+let resizeDir = 'x'
+
+// 拖拽中：按 resizeDir 更新宽度或高度，均限制在 20% ~ 80%
+// 使用 Pointer Events 统一处理鼠标与触摸（PointerEvent 同样含 clientX/clientY）
 function onResize(e) {
   if (!resizing.value || !mainRef.value) return
   const rect = mainRef.value.getBoundingClientRect()
-  let pct = ((e.clientX - rect.left) / rect.width) * 100
-  pct = Math.min(80, Math.max(20, pct))
-  leftWidth.value = pct
+  if (resizeDir === 'y') {
+    let pct = ((e.clientY - rect.top) / rect.height) * 100
+    topHeight.value = Math.min(80, Math.max(20, pct))
+  } else {
+    let pct = ((e.clientX - rect.left) / rect.width) * 100
+    leftWidth.value = Math.min(80, Math.max(20, pct))
+  }
 }
-// 开始拖拽：锁定全局选中（防拖拽时选中文本），监听 mousemove / mouseup
+// 开始拖拽：锁定全局选中（防拖拽时选中文本），注册全局指针监听
+// 配合 CSS touch-action:none，手机端拖拽不会被浏览器滚动抢走
 function startResize(e) {
   resizing.value = true
+  resizeDir = window.innerWidth <= 760 ? 'y' : 'x'
   document.body.style.userSelect = 'none'
-  document.addEventListener('mousemove', onResize)
-  document.addEventListener('mouseup', stopResize)
+  document.addEventListener('pointermove', onResize)
+  document.addEventListener('pointerup', stopResize)
+  document.addEventListener('pointercancel', stopResize)
   e.preventDefault()
 }
 // 结束拖拽：恢复选中，移除全局监听
 function stopResize() {
   resizing.value = false
   document.body.style.userSelect = ''
-  document.removeEventListener('mousemove', onResize)
-  document.removeEventListener('mouseup', stopResize)
+  document.removeEventListener('pointermove', onResize)
+  document.removeEventListener('pointerup', stopResize)
+  document.removeEventListener('pointercancel', stopResize)
 }
 
 // 统计节点总数与根类型，展示在预览面板标题栏（如「对象 · 节点 12」）
@@ -538,6 +558,13 @@ main {
   border-right: none;
 }
 
+/* 桌面端忽略内联 height（paneStyle 同时输出 width/height，桌面只用 width） */
+@media (min-width: 761px) {
+  .editor {
+    height: auto !important;
+  }
+}
+
 .preview {
   flex: 1 1 0;
 }
@@ -548,6 +575,8 @@ main {
   cursor: col-resize;
   background: var(--border);
   transition: background .15s;
+  /* 禁止浏览器接管该元素手势（滚动/缩放），保证指针拖动持续触发 */
+  touch-action: none;
 }
 
 .resizer:hover,
@@ -726,16 +755,27 @@ textarea {
   .editor {
     border-right: none;
     border-bottom: 1px solid var(--border);
-    width: auto;
-    flex: 1;
+    /* 覆盖内联 width（leftWidth%）的优先级，移动端输入区占满屏幕宽度 */
+    width: 100% !important;
+    /* 高度由内联 style 控制（topHeight%），不参与 flex 伸缩 */
+    flex: none;
+    min-height: 0;
   }
 
   .preview {
-    flex: 1;
+    /* 占据拖拽条以下的剩余高度 */
+    flex: 1 1 0;
+    min-height: 0;
   }
 
   .resizer {
-    display: none;
+    /* 移动端水平拖拽条：上下拖动调整输入区/预览区高度 */
+    display: block;
+    width: 100%;
+    height: 14px;
+    flex: 0 0 14px;
+    cursor: row-resize;
+    touch-action: none;
   }
 }
 </style>
