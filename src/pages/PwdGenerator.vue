@@ -33,18 +33,9 @@
 
           <div class="row">
             <span class="label">密码长度</span>
-            <input
-              class="length-input"
-              type="number"
-              min="1"
-              max="128"
-              v-model.number="length"
-              @change="clampLength"
-            />
+            <input class="length-input" type="number" min="1" max="128" v-model.number="length" @change="clampLength" />
           </div>
           <input class="range" type="range" min="1" max="128" v-model.number="length" />
-
-          <button class="secondary gen-btn" @click="generate">🎲 生成</button>
 
           <div v-if="error" class="error-msg">{{ error }}</div>
         </div>
@@ -55,13 +46,7 @@
       <section class="result">
         <div class="pane-title"><span>结果区</span></div>
         <div class="preview-scroll">
-          <textarea
-            v-if="result"
-            v-model="result"
-            readonly
-            spellcheck="false"
-            class="output-area"
-          ></textarea>
+          <textarea v-if="result" v-model="result" readonly spellcheck="false" class="output-area"></textarea>
           <div v-else class="empty-hint">配置后点击「生成随机密码」即可生成</div>
         </div>
       </section>
@@ -194,7 +179,7 @@ function onResize(e) {
 function startResize(e) {
   resizing.value = true
   resizeDir = window.innerWidth <= 760 ? 'y' : 'x'
-  try { e.target.setPointerCapture(e.pointerId) } catch (_) {}
+  try { e.target.setPointerCapture(e.pointerId) } catch (_) { }
   document.body.style.userSelect = 'none'
   document.addEventListener('pointermove', onResize)
   document.addEventListener('pointerup', stopResize)
