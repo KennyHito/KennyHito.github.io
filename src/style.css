@@ -141,16 +141,17 @@ main {
   animation: pageIn 0.25s ease both;
 }
 
-/* 进入动画：从下方 8px、透明 渐显到原位 */
+/* 进入动画：纯透明度渐显。
+   注意：全程不使用 transform。只要 .page 的 transform 非 none（即便只是
+   translateY(0)），它就会成为后代 position: fixed 元素（如工具页/资讯页
+   左侧目录、返回顶部按钮）的定位包含块，导致目录/按钮滚动时跟着页面移动 */
 @keyframes pageIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
   }
 
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 

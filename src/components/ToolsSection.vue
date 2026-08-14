@@ -1,11 +1,14 @@
 <template>
-  <div class="tools-section">
+  <div class="tools-section" :id="'tools-section-' + category.key">
     <div class="section-head">
       <h2 :style="{ '--section-accent': category.color }">{{ category.title }}</h2>
       <p v-if="category.desc">{{ category.desc }}</p>
     </div>
     <div ref="gridRef" class="tools-grid">
-      <ToolCard v-for="t in category.tools" :key="t.key" :tool="t" />
+      <!-- 每个工具一个锚点容器，供左侧目录点击平滑定位 -->
+      <div v-for="t in category.tools" :key="t.key" :id="'tool-' + t.key" class="tool-anchor">
+        <ToolCard :tool="t" />
+      </div>
     </div>
   </div>
 </template>
@@ -25,13 +28,19 @@ useMasonry(gridRef, { gap: 20, maxCols: 2 })
 </script>
 
 <style scoped>
-/* 分类分区：上下留白，最后一个分区不再追加间距 */
+/* 分类分区：上下留白，最后一个分区不再追加间距；顶部预留导航高度供锚点定位 */
 .tools-section {
   margin-bottom: 48px;
+  scroll-margin-top: 72px;
 }
 
 .tools-section:last-child {
   margin-bottom: 0;
+}
+
+/* 工具锚点容器：高度跟随内部卡片；顶部预留导航高度供目录点击定位 */
+.tool-anchor {
+  scroll-margin-top: 72px;
 }
 
 /* 分区标题（左对齐） */
