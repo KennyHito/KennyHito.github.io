@@ -44,6 +44,17 @@ export const tools = [
     linkText: '打开工具'
   },
   {
+    key: 'md5-hash',
+    name: 'MD5 加密',
+    desc: '在线 MD5 加密工具：输入任意文本即可计算 32 位小写 MD5 哈希值，结果支持一键复制。适合接口签名生成、数据校验、密码摘要等场景。',
+    features: ['在线 MD5 加密', '32 位小写结果', '一键复制结果', '本地计算不上传'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    page: 'md5hash',
+    linkText: '打开工具'
+  },
+  {
     key: 'openclaw',
     name: 'OpenClaw智能体',
     desc: 'OpenClaw（龙虾智能体）是一款轻量化、低代码 AI 多智能体框架，主打高效自动化工作流搭建，支持插件拓展、知识库对接、多渠道部署，无需深厚编程基础，即可搭建专属办公自动化、数据处理、智能问答 AI 应用。',
