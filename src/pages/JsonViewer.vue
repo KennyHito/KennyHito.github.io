@@ -389,6 +389,25 @@ if (props.depth === 0) {
   --hover: #f0f4ff;
   --error: #dc2626;
 }
+
+/* 暗色主题：跟随全局 useTheme 切换（data-theme="dark"）覆盖 JsonViewer 自有变量 */
+[data-theme="dark"] .json-viewer-root {
+  --bg: #121212;
+  --panel: #1e1e1e;
+  --border: #2c2c2e;
+  --text: #e5e5e5;
+  --muted: #9aa4b2;
+  --accent: #2997ff;
+  --accent-soft: rgba(41, 151, 255, 0.16);
+  --key: #6cb6ff;
+  --string: #7ee787;
+  --number: #ffab70;
+  --boolean: #d2a8ff;
+  --null: #ff7b72;
+  --bracket: #8b949e;
+  --hover: #1f2937;
+  --error: #ff7b72;
+}
 </style>
 
 <style scoped>
@@ -710,6 +729,15 @@ textarea {
 
 .node-row.match:hover {
   background: #ffe066;
+}
+
+/* 暗色主题：搜索命中高亮适配深色背景 */
+[data-theme="dark"] .node-row.match {
+  background: #4d4d1f;
+}
+
+[data-theme="dark"] .node-row.match:hover {
+  background: #66662a;
 }
 
 .link {
