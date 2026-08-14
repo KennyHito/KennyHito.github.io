@@ -29,11 +29,12 @@
       </div>
     </template>
 
-    <!-- 内部页面工具：新窗口打开站内子页面；外部工具：新窗口打开 -->
-    <a v-if="tool.page" class="btn btn-primary" :href="'#/tools/' + tool.page" target="_blank"
+    <!-- 内部页面工具：描边按钮（区别于外部链接的实心按钮）新窗口打开站内子页面 -->
+    <a v-if="tool.page" class="btn btn-secondary" :href="'#/tools/' + tool.page" target="_blank"
       rel="noopener noreferrer">
       {{ tool.linkText }} ↗
     </a>
+    <!-- 外部链接工具：实心强调色按钮，新窗口打开 -->
     <a v-else class="btn btn-primary" :href="tool.link" target="_blank" rel="noopener noreferrer">
       {{ tool.linkText }} ↗
     </a>

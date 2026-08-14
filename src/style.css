@@ -53,6 +53,8 @@
   --radius-pill: 980px;
   /* 强调色半透明底（徽章底色等），暗色主题下自动切换 */
   --accent-soft: rgba(0, 113, 227, 0.1);
+  /* 暖色强调色（活跃 tab、进度环、站内跳转按钮等） */
+  --accent-warm: #ff6b35;
 }
 
 /* 暗色主题：仅覆盖颜色相关变量，结构样式无需改动 */
@@ -70,6 +72,8 @@
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.55);
   /* 暗色下的强调色半透明底 */
   --accent-soft: rgba(41, 151, 255, 0.16);
+  /* 暗色下的暖色强调色 */
+  --accent-warm: #ff7a45;
 }
 
 /* ===== 基础重置 ===== */
@@ -184,34 +188,34 @@ main {
   transition: background var(--transition), color var(--transition), transform 0.1s ease;
 }
 
-/* 主按钮：实心强调色 */
+/* 主按钮（外部链接）：无背景，仅蓝色文字 + 蓝色边框 */
 .btn-primary {
-  background: var(--accent);
-  color: #fff;
-}
-
-.btn-primary:hover {
-  background: var(--accent-hover);
-}
-
-.btn-primary:active {
-  background: var(--accent-active);
-  transform: scale(0.98);
-}
-
-/* 次按钮：描边样式 */
-.btn-secondary {
   background: transparent;
   color: var(--accent);
   border-color: var(--accent);
 }
 
+.btn-primary:hover {
+  background: var(--accent-soft);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* 次按钮（站内跳转）：无背景，仅橙色文字 + 橙色边框，与外部链接区分 */
+.btn-secondary {
+  background: transparent;
+  color: var(--accent-warm);
+  border-color: var(--accent-warm);
+}
+
 .btn-secondary:hover {
-  background: rgba(0, 113, 227, 0.08);
+  background: rgba(255, 107, 53, 0.1);
 }
 
 [data-theme="dark"] .btn-secondary:hover {
-  background: rgba(41, 151, 255, 0.12);
+  background: rgba(255, 122, 69, 0.14);
 }
 
 /* ===== 通用组件：标签 / 徽章 ===== */
