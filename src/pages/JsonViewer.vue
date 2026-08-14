@@ -443,6 +443,8 @@ if (props.depth === 0) {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  height: 100dvh; /* 移动端地址栏收起时也占满可视区，避免出现整页滚动 */
+  overflow: hidden; /* 页面整体固定，只允许面板内部滚动 */
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
@@ -542,6 +544,8 @@ main {
   flex: 1;
   display: flex;
   overflow: hidden;
+  /* 允许收缩，防止面板内容超高把整页撑出滚动 */
+  min-height: 0;
 }
 
 .editor,
