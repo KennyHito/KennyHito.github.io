@@ -38,13 +38,13 @@ import AppIcon from './components/AppIcon.vue'
 // 导入页面导航配置（key / label / comp）
 import { tabs } from './data/tabs.js'
 // 导入工具子页面（如 JSON 格式化查看器、随机密码生成器），通过 #/tools/<sub> 访问
-import JsonViewer from './pages/JsonViewer.vue'
-import PwdGenerator from './pages/PwdGenerator.vue'
-import Base64Codec from './pages/Base64Codec.vue'
-import Md5Hash from './pages/Md5Hash.vue'
-import UrlCodec from './pages/UrlCodec.vue'
-import ImageBase64 from './pages/ImageBase64.vue'
-import ColorConverter from './pages/ColorConverter.vue'
+import JsonViewer from './pages/tools/JsonViewer.vue'
+import PwdGenerator from './pages/tools/PwdGenerator.vue'
+import Base64Codec from './pages/tools/Base64Codec.vue'
+import Md5Hash from './pages/tools/Md5Hash.vue'
+import UrlCodec from './pages/tools/UrlCodec.vue'
+import ImageBase64 from './pages/tools/ImageBase64.vue'
+import ColorConverter from './pages/tools/ColorConverter.vue'
 
 // 工具页支持的站内子页面映射：hash 子路径 -> 组件
 const toolSubPages = {

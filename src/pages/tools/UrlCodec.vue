@@ -52,10 +52,10 @@
 
 <script setup>
 import { ref } from 'vue'
-import { copyText } from '../composables/useClipboard'
-import { useToolStandalone } from '../composables/useToolStandalone'
-import { useSplitPane } from '../composables/useSplitPane'
-import { site } from '../data/site'
+import { copyText } from '../../composables/useClipboard'
+import { useToolStandalone } from '../../composables/useToolStandalone'
+import { useSplitPane } from '../../composables/useSplitPane'
+import { site } from '../../data/site'
 
 /* ---------- 输入/输出状态 ---------- */
 const input = ref('')        // 输入文本

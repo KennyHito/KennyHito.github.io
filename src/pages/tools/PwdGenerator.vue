@@ -68,9 +68,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import { copyText } from '../composables/useClipboard'
-import { useToolStandalone } from '../composables/useToolStandalone'
-import { useSplitPane } from '../composables/useSplitPane'
+import { copyText } from '../../composables/useClipboard'
+import { useToolStandalone } from '../../composables/useToolStandalone'
+import { useSplitPane } from '../../composables/useSplitPane'
 
 /* ---------- 配置状态 ---------- */
 const useUpper = ref(true)   // 是否包含大写字母

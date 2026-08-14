@@ -67,9 +67,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { copyText } from '../composables/useClipboard'
-import { useToolStandalone } from '../composables/useToolStandalone'
-import { useSplitPane } from '../composables/useSplitPane'
+import { copyText } from '../../composables/useClipboard'
+import { useToolStandalone } from '../../composables/useToolStandalone'
+import { useSplitPane } from '../../composables/useSplitPane'
 
 /* ---------- 状态 ---------- */
 const inputBase64 = ref('')   // 当前 Base64 数据

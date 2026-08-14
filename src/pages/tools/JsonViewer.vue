@@ -83,9 +83,9 @@
 
 <script setup>
 import { ref, reactive, computed, provide, inject, defineProps, defineOptions } from 'vue'
-import { copyText } from '../composables/useClipboard'
-import { useToolStandalone } from '../composables/useToolStandalone'
-import { useSplitPane } from '../composables/useSplitPane'
+import { copyText } from '../../composables/useClipboard'
+import { useToolStandalone } from '../../composables/useToolStandalone'
+import { useSplitPane } from '../../composables/useSplitPane'
 
 // 显式声明组件名（递归自引用 <JsonViewer> 时依赖该名称）
 defineOptions({ name: 'JsonViewer' })

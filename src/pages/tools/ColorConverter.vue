@@ -75,9 +75,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { copyText } from '../composables/useClipboard'
-import { useToolStandalone } from '../composables/useToolStandalone'
-import { useSplitPane } from '../composables/useSplitPane'
+import { copyText } from '../../composables/useClipboard'
+import { useToolStandalone } from '../../composables/useToolStandalone'
+import { useSplitPane } from '../../composables/useSplitPane'
 
 /* ---------- 状态 ---------- */
 const mode = ref('rgb2hex') // 'rgb2hex' | 'hex2rgb'
