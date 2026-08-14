@@ -77,6 +77,17 @@ export const tools = [
     linkText: '打开工具'
   },
   {
+    key: 'color-converter',
+    name: 'RGB/Hex 颜色转换工具',
+    desc: 'RGB 与 Hex 颜色值互转工具：支持 RGB 三个通道输入自动转换为十六进制颜色码，也支持十六进制颜色码一键解析为 RGB；实时预览色块、一键复制结果、输入输出互换。适合前端开发、设计稿取色等场景。',
+    features: ['RGB 转 Hex', 'Hex 转 RGB', '实时预览', '输入输出互换', '一键复制结果'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    page: 'colorconverter',
+    linkText: '打开工具'
+  },
+  {
     key: 'openclaw',
     name: 'OpenClaw智能体',
     desc: 'OpenClaw（龙虾智能体）是一款轻量化、低代码 AI 多智能体框架，主打高效自动化工作流搭建，支持插件拓展、知识库对接、多渠道部署，无需深厚编程基础，即可搭建专属办公自动化、数据处理、智能问答 AI 应用。',
