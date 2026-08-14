@@ -280,14 +280,14 @@ onUnmounted(() => {
   /* 行间距：由全局 --watermark-scale 控制（默认 1），数值越大越疏、越小越密 */
   gap: calc(24px * var(--watermark-scale, 1));
   /* 水印文字颜色（半透明），暗色主题通过下方覆盖切换 */
-  color: rgba(0, 0, 0, 0.2);
+  color: rgba(0, 0, 0, 0.1);
   /* 水印字体：读取全局 --font-sans（楷体） */
   font-family: var(--font-sans);
 }
 
 /* 暗色主题下切换为浅色半透明水印，保持可见性 */
 [data-theme="dark"] .news-watermark {
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.1);
 }
 
 /* 每一行：3 格水平均匀分布，中间格完整显示，两侧格允许被视口边缘截断。

@@ -35,8 +35,7 @@
   /* 中投影（卡片悬停） */
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
   /* 全局字体栈 */
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-    "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-sans: "SF Mono", "Fira Code", Consolas, monospace;
   /* 统一的过渡动画时长 */
   --transition: 0.22s ease;
   /* 备选背景色别名（兼容旧引用） */

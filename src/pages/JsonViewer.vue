@@ -1,8 +1,9 @@
 <template>
-  <!-- 根：工具栏 + 输入 + 预览 -->
+  <!-- 根：工具栏 + 输入 + 预览（depth === 0 表示根节点，渲染完整页面布局） -->
   <div v-if="depth === 0" class="json-viewer json-viewer-root">
     <header>
       <h1><span class="logo">🧪</span> JSON 格式化查看器</h1>
+      <!-- 顶部工具栏：文件 / 转换 / 格式化 / 展开收起 / 复制下载 / 搜索 -->
       <div class="toolbar">
         <label class="filebtn">📂 打开文件
           <input type="file" accept=".json,.txt,application/json" hidden @change="onFile" />
@@ -83,8 +84,14 @@
 <script setup>
 import { ref, reactive, computed, provide, inject, onMounted, onUnmounted, defineProps, defineOptions } from 'vue'
 
+// 显式声明组件名（递归自引用 <JsonViewer> 时依赖该名称）
 defineOptions({ name: 'JsonViewer' })
 
+// 递归组件 props：
+// - data   ：当前节点的数据值（对象/数组/原始值）
+// - name   ：对象节点时显示的 key 名（数组节点为 undefined，仅显示索引）
+// - isLast ：是否为父级最后一个子节点（决定末尾是否显示逗号）
+// - depth  ：节点深度，0 表示根节点（渲染完整页面），>0 渲染树节点
 const props = defineProps({
   data: { default: undefined },
   name: { type: [String, Number], default: undefined },
@@ -92,6 +99,7 @@ const props = defineProps({
   depth: { type: Number, default: 0 }
 })
 
+// 示例数据：初始载入及「载入示例」按钮使用
 const SAMPLE = {
   "name": "测试示例",
   "id": 1001,
@@ -118,6 +126,7 @@ const isObject = computed(() => props.data !== null && typeof props.data === 'ob
 const isArray = computed(() => Array.isArray(props.data))
 const closeBracket = computed(() => (isArray.value ? ']' : '}'))
 
+// 子节点列表：对象取 [key, value] 对，数组按索引展开（key 传 undefined 表示只显示索引）
 const entries = computed(() => {
   if (!isObject.value) return []
   const src = isArray.value ? props.data : Object.entries(props.data)
@@ -128,12 +137,14 @@ const entries = computed(() => {
 })
 const childCount = computed(() => entries.value.length)
 
+// 原始值的展示文本：字符串补引号，其余直接转字符串
 const displayValue = computed(() => {
   const v = props.data
   if (v === null) return 'null'
   if (typeof v === 'string') return '"' + v + '"'
   return String(v)
 })
+// 原始值的语法高亮类名（键名/字符串/数字/布尔/null 分别着色）
 const valueClass = computed(() => {
   const v = props.data
   if (v === null) return 'val-null'
@@ -143,12 +154,14 @@ const valueClass = computed(() => {
   return ''
 })
 
+// 折叠状态：局部状态 localCollapsed 与全局指令 store.force（展开全部/收起全部/搜索）叠加
 const localCollapsed = ref(false)
 const isCollapsed = computed(() => {
   if (store.force === 'expand') return false
   if (store.force === 'collapse') return isObject.value
   return localCollapsed.value
 })
+// 手动点击节点切换折叠：先清除全局展开/收起指令，再翻转局部状态
 function toggleSelf() {
   store.force = 'none'
   localCollapsed.value = !localCollapsed.value
@@ -177,6 +190,7 @@ const mainRef = ref(null)
 const leftWidth = ref(50)
 const resizing = ref(false)
 
+// 拖拽中：按鼠标 X 坐标换算左侧面板宽度百分比，并限制在 20% ~ 80%
 function onResize(e) {
   if (!resizing.value || !mainRef.value) return
   const rect = mainRef.value.getBoundingClientRect()
@@ -184,6 +198,7 @@ function onResize(e) {
   pct = Math.min(80, Math.max(20, pct))
   leftWidth.value = pct
 }
+// 开始拖拽：锁定全局选中（防拖拽时选中文本），监听 mousemove / mouseup
 function startResize(e) {
   resizing.value = true
   document.body.style.userSelect = 'none'
@@ -191,6 +206,7 @@ function startResize(e) {
   document.addEventListener('mouseup', stopResize)
   e.preventDefault()
 }
+// 结束拖拽：恢复选中，移除全局监听
 function stopResize() {
   resizing.value = false
   document.body.style.userSelect = ''
@@ -198,6 +214,7 @@ function stopResize() {
   document.removeEventListener('mouseup', stopResize)
 }
 
+// 统计节点总数与根类型，展示在预览面板标题栏（如「对象 · 节点 12」）
 function countStats(data) {
   let nodes = 0
   const walk = (v) => {
@@ -234,61 +251,58 @@ function normalizeJson(text) {
   return s
 }
 
+// 解析输入文本：优先严格 JSON.parse，失败则走宽松标准化（补 key 引号/去尾逗号）再解析
+// 返回解析结果；解析失败时返回 null 并设置 error/status
+function parseInput(t) {
+  try {
+    return { ok: true, data: JSON.parse(t) }
+  } catch (e1) {
+    try {
+      return { ok: true, data: JSON.parse(normalizeJson(t)), loose: true }
+    } catch (e2) {
+      error.value = e2.message
+      status.value = 'JSON 解析失败：' + e2.message
+      return { ok: false }
+    }
+  }
+}
+
+// 格式化：解析后按 2 空格缩进美化，更新视图并统计
 function format() {
   const t = raw.value.trim()
   if (!t) { error.value = '请输入 JSON 内容'; parsed.value = null; return }
-  let p
-  try {
-    p = JSON.parse(t)
-  } catch (e1) {
-    // 严格解析失败 → 尝试宽松标准化后再解析
-    try {
-      p = JSON.parse(normalizeJson(t))
-      status.value = '已按宽松格式（无引号 key）解析 ✓ ' + new Date().toLocaleTimeString()
-    } catch (e2) {
-      error.value = e2.message
-      status.value = 'JSON 解析失败：' + e2.message
-      return
-    }
-  }
-  parsed.value = p
-  raw.value = JSON.stringify(p, null, 2)
+  const r = parseInput(t)
+  if (!r.ok) return
+  parsed.value = r.data
+  raw.value = JSON.stringify(r.data, null, 2)
   error.value = ''
-  if (!status.value.startsWith('已按宽松')) status.value = '格式化成功 ✓ ' + new Date().toLocaleTimeString()
-  countStats(p)
-  search.value = ''
-  searchCount.value = ''
-  store.search = ''
-  store.force = 'none'
+  status.value = (r.loose ? '已按宽松格式（无引号 key）解析 ✓ ' : '格式化成功 ✓ ') + new Date().toLocaleTimeString()
+  applyResult(r.data)
 }
 
+// 转成 JSON 字符串：解析后压缩为单行（不带缩进）
 function toJsonString() {
   const t = raw.value.trim()
   if (!t) { error.value = '请输入 JSON 内容'; parsed.value = null; return }
-  let p
-  try {
-    p = JSON.parse(t)
-  } catch (e1) {
-    try {
-      p = JSON.parse(normalizeJson(t))
-      status.value = '已按宽松格式解析并转为字符串 ✓ ' + new Date().toLocaleTimeString()
-    } catch (e2) {
-      error.value = e2.message
-      status.value = 'JSON 解析失败：' + e2.message
-      return
-    }
-  }
-  parsed.value = p
-  raw.value = JSON.stringify(p) // 压缩成单行字符串
+  const r = parseInput(t)
+  if (!r.ok) return
+  parsed.value = r.data
+  raw.value = JSON.stringify(r.data)
   error.value = ''
-  if (!status.value.startsWith('已按宽松')) status.value = '已转为 JSON 字符串 ✓ ' + new Date().toLocaleTimeString()
-  countStats(p)
+  status.value = (r.loose ? '已按宽松格式解析并转为字符串 ✓ ' : '已转为 JSON 字符串 ✓ ') + new Date().toLocaleTimeString()
+  applyResult(r.data)
+}
+
+// 解析成功后的公共收尾：统计节点、清空搜索状态
+function applyResult(data) {
+  countStats(data)
   search.value = ''
   searchCount.value = ''
   store.search = ''
   store.force = 'none'
 }
 
+// 深度遍历统计匹配次数：key 命中或叶子节点的值命中均计数
 function countMatches(data, q) {
   let n = 0
   const walk = (key, v) => {
@@ -307,23 +321,27 @@ function countMatches(data, q) {
   return n
 }
 
+// 搜索输入：空关键词恢复原状；有关键词则全局展开并统计命中数
 function doSearch() {
   if (!parsed.value) return
   const q = search.value.trim().toLowerCase()
   store.search = search.value
   if (q) {
     store.force = 'expand' // 展开以便看到匹配
-    searchCount.value = countMatches(parsed.value, q) + ' 命中'
-    status.value = '找到 ' + countMatches(parsed.value, q) + ' 处匹配'
+    const hits = countMatches(parsed.value, q)
+    searchCount.value = hits + ' 命中'
+    status.value = '找到 ' + hits + ' 处匹配'
   } else {
     store.force = 'none'
     searchCount.value = ''
   }
 }
 
+// 展开全部 / 收起全部：通过 store.force 全局指令驱动所有节点
 function expandAll() { store.force = 'expand'; search.value = ''; store.search = ''; searchCount.value = '' }
 function collapseAll() { store.force = 'collapse' }
 
+// 复制：将格式化后的 JSON 写入剪贴板，成功/失败均更新状态栏
 function copyJson() {
   if (parsed.value === null) { status.value = '没有可复制的内容'; return }
   const text = JSON.stringify(parsed.value, null, 2)
@@ -333,6 +351,7 @@ function copyJson() {
   )
 }
 
+// 下载：把格式化结果生成 Blob 并触发 <a> 下载 data.json
 function downloadJson() {
   if (parsed.value === null) { status.value = '没有可下载的内容'; return }
   const text = JSON.stringify(parsed.value, null, 2)
@@ -342,11 +361,14 @@ function downloadJson() {
   a.href = url
   a.download = 'data.json'
   a.click()
-  URL.revokeObjectURL(url)
+  URL.revokeObjectURL(url) // 释放 Blob URL，避免内存泄漏
   status.value = '已下载 data.json ✓'
 }
 
+// 载入示例：填入示例数据后直接格式化
 function loadSample() { raw.value = JSON.stringify(SAMPLE, null, 2); format() }
+
+// 清空：重置输入、解析结果与所有状态
 function clearAll() {
   raw.value = ''
   parsed.value = null
@@ -357,6 +379,7 @@ function clearAll() {
   status.value = '已清空'
 }
 
+// 打开本地 JSON 文件：FileReader 读取文本后直接格式化
 function onFile(e) {
   const f = e.target.files[0]
   if (!f) return
@@ -400,7 +423,7 @@ if (props.depth === 0) {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
 }
@@ -549,7 +572,7 @@ textarea {
   outline: none;
   resize: none;
   padding: 16px;
-  font-family: "SF Mono", "Fira Code", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 13px;
   line-height: 1.6;
   color: var(--text);
@@ -577,7 +600,7 @@ textarea {
 
 /* 树形 */
 .json-tree {
-  font-family: "SF Mono", "Fira Code", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 13px;
 }
 
@@ -592,7 +615,7 @@ textarea {
   padding: 2px 6px;
   border-radius: 5px;
   line-height: 1.7;
-  font-family: "SF Mono", "Fira Code", Consolas, monospace;
+  font-family: var(--font-sans);
   font-size: 13px;
 }
 
