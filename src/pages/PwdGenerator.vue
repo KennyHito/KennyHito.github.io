@@ -1,5 +1,5 @@
 <template>
-  <div class="pwd-gen">
+  <div class="password-generator">
     <header>
       <h1><span class="logo">🔐</span> 随机密码生成器</h1>
       <div class="toolbar">
@@ -9,33 +9,42 @@
     </header>
 
     <main ref="mainRef">
-      <section class="editor" :style="paneStyle">
-        <div class="pane-title"><span>密码规则</span></div>
+      <section class="controls" :style="paneStyle">
+        <div class="pane-title"><span>配置区</span></div>
         <div class="config">
-          <div class="rule-row">
-            <label class="checkbox">
-              <input type="checkbox" v-model="includeUpper" />
-              <span>大写字母（A-Z）</span>
+          <div class="opt">
+            <label class="check">
+              <input type="checkbox" v-model="useUpper" />
+              <span>大写字母 (A-Z)</span>
             </label>
-            <label class="checkbox">
-              <input type="checkbox" v-model="includeLower" />
-              <span>小写字母（a-z）</span>
+            <label class="check">
+              <input type="checkbox" v-model="useLower" />
+              <span>小写字母 (a-z)</span>
             </label>
-            <label class="checkbox">
-              <input type="checkbox" v-model="includeNumber" />
-              <span>数字（0-9）</span>
+            <label class="check">
+              <input type="checkbox" v-model="useNumber" />
+              <span>数字 (0-9)</span>
             </label>
-            <label class="checkbox">
-              <input type="checkbox" v-model="includeSpecial" />
-              <span>特殊字符（!@#$%…）</span>
+            <label class="check">
+              <input type="checkbox" v-model="useSpecial" />
+              <span>特殊字符 (!@#$...)</span>
             </label>
           </div>
 
-          <div class="length-row">
-            <span class="label">密码长度：</span>
-            <input type="number" class="length-input" v-model.number="length" min="1" max="128" />
-            <input type="range" class="length-range" v-model.number="length" min="1" max="128" />
+          <div class="row">
+            <span class="label">密码长度</span>
+            <input
+              class="length-input"
+              type="number"
+              min="1"
+              max="128"
+              v-model.number="length"
+              @change="clampLength"
+            />
           </div>
+          <input class="range" type="range" min="1" max="128" v-model.number="length" />
+
+          <button class="secondary gen-btn" @click="generate">🎲 生成</button>
 
           <div v-if="error" class="error-msg">{{ error }}</div>
         </div>
@@ -43,11 +52,17 @@
 
       <div class="resizer" :class="{ dragging: resizing }" @pointerdown="startResize"></div>
 
-      <section class="preview">
-        <div class="pane-title"><span>生成结果</span></div>
+      <section class="result">
+        <div class="pane-title"><span>结果区</span></div>
         <div class="preview-scroll">
-          <textarea v-if="result" v-model="result" readonly spellcheck="false" class="result-text"></textarea>
-          <div v-else class="empty-hint">设置规则后点击「生成随机密码」即可获得结果</div>
+          <textarea
+            v-if="result"
+            v-model="result"
+            readonly
+            spellcheck="false"
+            class="output-area"
+          ></textarea>
+          <div v-else class="empty-hint">配置后点击「生成随机密码」即可生成</div>
         </div>
       </section>
     </main>
@@ -59,20 +74,12 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 
-/* ---------- 字符池 ---------- */
-const CHARS = {
-  upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
-  lower: 'abcdefghijklmnopqrstuvwxyz',
-  number: '0123456789',
-  special: '!@#$%^&*()_+-=[]{}|;:,.<>?'
-}
-
 /* ---------- 配置状态 ---------- */
-const includeUpper = ref(true)
-const includeLower = ref(false)
-const includeNumber = ref(true)
-const includeSpecial = ref(false)
-const length = ref(16)
+const useUpper = ref(true)
+const useLower = ref(true)
+const useNumber = ref(true)
+const useSpecial = ref(false)
+const length = ref(12)
 const result = ref('')
 const error = ref('')
 const status = ref('就绪')
@@ -81,38 +88,45 @@ const status = ref('就绪')
 onMounted(() => document.body.classList.add('tool-standalone'))
 onUnmounted(() => document.body.classList.remove('tool-standalone'))
 
+/* ---------- 长度约束 ---------- */
+function clampLength() {
+  if (!length.value || length.value < 1) length.value = 1
+  if (length.value > 128) length.value = 128
+}
+
 /* ---------- 生成密码 ---------- */
 function generate() {
   error.value = ''
-  status.value = '就绪'
+  let charset = ''
+  if (useUpper.value) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  if (useLower.value) charset += 'abcdefghijklmnopqrstuvwxyz'
+  if (useNumber.value) charset += '0123456789'
+  if (useSpecial.value) charset += '!@#$%^&*()-_=+[]{};:,.<>?/~'
 
-  if (length.value < 1 || length.value > 128) {
-    error.value = '密码长度应在 1 ~ 128 之间'
-    status.value = error.value
-    return
-  }
-
-  let pool = ''
-  if (includeUpper.value) pool += CHARS.upper
-  if (includeLower.value) pool += CHARS.lower
-  if (includeNumber.value) pool += CHARS.number
-  if (includeSpecial.value) pool += CHARS.special
-
-  if (!pool) {
+  if (!charset) {
     error.value = '请至少选择一种字符类型'
     status.value = error.value
     return
   }
 
+  clampLength()
+  const len = length.value
+
+  // 使用加密级随机数，排除偏置（random() % len 重试法）
+  const buf = new Uint32Array(len)
+  crypto.getRandomValues(buf)
   let pwd = ''
-  const randomValues = new Uint32Array(length.value)
-  window.crypto.getRandomValues(randomValues)
-  for (let i = 0; i < length.value; i++) {
-    pwd += pool[randomValues[i] % pool.length]
+  for (let i = 0; i < len; i++) {
+    const maxValid = 4294967295 - ((4294967295 % charset.length) + 1) % charset.length
+    let rand = buf[i]
+    while (rand > maxValid) {
+      rand = crypto.getRandomValues(new Uint32Array(1))[0]
+    }
+    pwd += charset[rand % charset.length]
   }
 
   result.value = pwd
-  status.value = '生成成功 ✓ ' + new Date().toLocaleTimeString()
+  status.value = '已生成 ' + len + ' 位密码，点击「复制结果」使用'
 }
 
 /* ---------- 复制结果 ---------- */
@@ -154,21 +168,17 @@ async function copyResult() {
 
 /* ---------- 拖拽分割（桌面左右 / 移动上下） ---------- */
 const mainRef = ref(null)
-const leftWidth = ref(50)   // 桌面端：左侧配置面板宽度百分比
-const topHeight = ref(50)   // 移动端：上方配置区高度百分比（默认 50%，与结果区等高）
+const leftWidth = ref(50)   // 桌面端：配置面板宽度百分比
+const topHeight = ref(50)   // 移动端：配置区高度百分比（默认 50%，与结果区等高）
 const resizing = ref(false)
 
-// 面板内联尺寸：同时输出 width/height，桌面用 width、移动用 height，另一项由 CSS 忽略
-// 高度 -7px：为中间拖拽条让位，保证默认时配置区/结果区严格各占一半
 const paneStyle = computed(() => ({
   width: leftWidth.value + '%',
   height: 'calc(' + topHeight.value + '% - 7px)'
 }))
 
-// 当前拖拽方向：'x' 桌面左右、'y' 移动上下，按触发时窗口宽度实时决定
 let resizeDir = 'x'
 
-// 拖拽中：按 resizeDir 更新宽度或高度，均限制在 20% ~ 80%
 function onResize(e) {
   if (!resizing.value || !mainRef.value) return
   const rect = mainRef.value.getBoundingClientRect()
@@ -181,10 +191,10 @@ function onResize(e) {
   }
 }
 
-// 开始拖拽：锁定全局选中，注册全局指针监听
 function startResize(e) {
   resizing.value = true
   resizeDir = window.innerWidth <= 760 ? 'y' : 'x'
+  try { e.target.setPointerCapture(e.pointerId) } catch (_) {}
   document.body.style.userSelect = 'none'
   document.addEventListener('pointermove', onResize)
   document.addEventListener('pointerup', stopResize)
@@ -192,7 +202,6 @@ function startResize(e) {
   e.preventDefault()
 }
 
-// 结束拖拽：恢复选中，移除全局监听
 function stopResize() {
   resizing.value = false
   document.body.style.userSelect = ''
@@ -203,7 +212,7 @@ function stopResize() {
 </script>
 
 <style scoped>
-.pwd-gen {
+.password-generator {
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -246,8 +255,7 @@ header h1 {
   margin-left: auto;
 }
 
-button,
-.filebtn {
+button {
   font: inherit;
   font-size: 13px;
   padding: 7px 13px;
@@ -262,8 +270,7 @@ button,
   gap: 5px;
 }
 
-button:hover,
-.filebtn:hover {
+button:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
 }
@@ -290,28 +297,26 @@ main {
   min-height: 0;
 }
 
-.editor,
-.preview {
+.controls,
+.result {
   min-width: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
-.editor {
+.controls {
   flex: none;
   width: 50%;
-  border-right: none;
 }
 
-/* 桌面端忽略内联 height */
 @media (min-width: 761px) {
-  .editor {
+  .controls {
     height: auto !important;
   }
 }
 
-.preview {
+.result {
   flex: 1 1 0;
 }
 
@@ -335,27 +340,25 @@ main {
   padding: 8px 16px;
   background: var(--panel);
   border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .config {
   flex: 1;
-  overflow: auto;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 16px 20px;
   background: var(--panel);
-  overscroll-behavior: contain;
 }
 
-.rule-row {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
+.opt {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
 }
 
-.checkbox {
+.check {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -364,45 +367,49 @@ main {
   user-select: none;
 }
 
-.checkbox input[type="checkbox"] {
+.check input[type="checkbox"] {
   width: 16px;
   height: 16px;
   accent-color: var(--accent);
   cursor: pointer;
 }
 
-.length-row {
+.row {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-.length-row .label {
+.label {
   font-size: 14px;
   color: var(--text);
 }
 
 .length-input {
-  width: 70px;
-  padding: 7px 10px;
+  width: 72px;
+  padding: 6px 10px;
   border: 1px solid var(--border);
   border-radius: 7px;
   font: inherit;
   font-size: 14px;
   background: var(--bg);
   color: var(--text);
+  text-align: center;
 }
 
-.length-range {
-  flex: 1;
-  min-width: 120px;
+.range {
+  width: 100%;
   accent-color: var(--accent);
+  margin-bottom: 16px;
+}
+
+.gen-btn {
+  align-self: flex-start;
 }
 
 .error-msg {
-  margin-top: 14px;
+  margin-top: 12px;
   padding: 10px 12px;
   border-radius: 7px;
   background: var(--error-bg, rgba(244, 67, 54, .1));
@@ -414,27 +421,26 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow: hidden;
   padding: 16px;
   background: var(--panel);
-  overscroll-behavior: contain;
 }
 
-.result-text {
+.output-area {
   flex: 1;
   border: 1px solid var(--border);
   border-radius: 8px;
   outline: none;
   resize: none;
   padding: 16px;
-  font-family: var(--font-sans);
+  font-family: var(--font-mono, ui-monospace, Menlo, Consolas, monospace);
   font-size: 20px;
-  line-height: 1.6;
+  line-height: 1.8;
   color: var(--success, #0f6b38);
   background: var(--bg);
-  text-align: center;
-  word-break: break-all;
   overscroll-behavior: contain;
+  min-height: 0;
+  word-break: break-all;
 }
 
 .empty-hint {
@@ -457,7 +463,7 @@ main {
 }
 
 @media (max-width: 760px) {
-  .pwd-gen {
+  .password-generator {
     position: fixed;
     inset: 0;
     height: auto;
@@ -468,15 +474,14 @@ main {
     flex-direction: column;
   }
 
-  .editor {
-    border-right: none;
+  .controls {
     border-bottom: 1px solid var(--border);
     width: 100% !important;
     flex: none;
     min-height: 0;
   }
 
-  .preview {
+  .result {
     flex: 1 1 0;
     min-height: 0;
   }
@@ -490,17 +495,8 @@ main {
     touch-action: none;
   }
 
-  .rule-row {
-    grid-template-columns: 1fr;
-  }
-
-  .length-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .length-range {
-    width: 100%;
+  .output-area {
+    font-size: 16px;
   }
 }
 </style>
