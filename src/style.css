@@ -252,3 +252,10 @@ main {
     transition: none;
   }
 }
+
+/* ===== 独立工具模式：JSON 查看器等工具页隐藏站点全局导航栏 / 页脚 / 返回顶部按钮 ===== */
+body.tool-standalone .nav,
+body.tool-standalone .footer,
+body.tool-standalone .back-to-top {
+  display: none !important;
+}

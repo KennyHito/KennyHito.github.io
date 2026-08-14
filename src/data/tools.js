@@ -119,5 +119,16 @@ export const tools = [
     exampleDesc: '',
     link: 'https://dog.ceo/api/breeds/image/random',
     linkText: '查看接口'
+  },
+  {
+    key: 'json-viewer',
+    name: 'JSON 格式化查看器',
+    desc: '在线 JSON 格式化与查看工具：粘贴 JSON 文本，一键美化缩进、压缩体积，语法高亮清晰展示键、字符串、数字与布尔值，支持一键复制结果。适合调试接口返回、整理配置文件、快速阅读 JSON 数据。',
+    features: ['一键格式化', '压缩去空格', '语法高亮', '一键复制'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    page: 'jsonviewer',
+    linkText: '打开工具'
   }
 ]

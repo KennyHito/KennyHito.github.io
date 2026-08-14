@@ -37,19 +37,39 @@ import AppFooter from './components/AppFooter.vue'
 import AppIcon from './components/AppIcon.vue'
 // 导入页面导航配置（key / label / comp）
 import { tabs } from './data/tabs.js'
+// 导入工具子页面（如 JSON 格式化查看器），通过 #/tools/<sub> 访问
+import JsonViewer from './pages/JsonViewer.vue'
 
-// 从 URL hash 解析当前页（支持刷新保持 / 直接访问 #/tools）
-function keyFromHash() {
-  // 去除 hash 中的 # 与可选斜杠，得到纯 key
-  const h = (window.location.hash || '').replace(/^#\/?/, '')
-  // 若 key 合法则返回，否则回退到首页
-  return tabs.some((t) => t.key === h) ? h : 'home'
+// 工具页支持的站内子页面映射：hash 子路径 -> 组件
+const toolSubPages = {
+  jsonviewer: JsonViewer
 }
 
-// 当前激活的 tab key（初始化时根据 URL hash 解析）
-const current = ref(keyFromHash())
-// 根据当前 key 计算出需要渲染的页面组件
-const currentComp = computed(() => tabs.find((t) => t.key === current.value).comp)
+// 从 URL hash 解析当前页与子页面（支持刷新保持 / 直接访问 #/tools/jsonviewer）
+function parseHash() {
+  // 去除 hash 中的 # 与可选斜杠，得到形如 "tools/jsonviewer" 的路径
+  const h = (window.location.hash || '').replace(/^#\/?/, '')
+  // 拆出主 key 与可选子路径
+  const [key, sub] = h.split('/')
+  // 主 key 合法则使用，否则回退到首页
+  const validKey = tabs.some((t) => t.key === key) ? key : 'home'
+  // 子路径必须对应工具页支持的子页面，否则视为无子页面
+  const validSub = validKey === 'tools' && toolSubPages[sub] ? sub : ''
+  return { key: validKey, sub: validSub }
+}
+
+// 当前激活的 tab key 与子页面（初始化时根据 URL hash 解析）
+const { key: initialKey, sub: initialSub } = parseHash()
+const current = ref(initialKey)
+const currentSub = ref(initialSub)
+
+// 根据当前 key 计算出需要渲染的页面组件（优先渲染工具子页面）
+const currentComp = computed(() => {
+  if (current.value === 'tools' && currentSub.value) {
+    return toolSubPages[currentSub.value]
+  }
+  return tabs.find((t) => t.key === current.value).comp
+})
 
 // tab 切换 = 改变 URL hash；真正的内容切换由 hashchange 驱动
 function navigate(key) {
@@ -63,6 +83,9 @@ function navigate(key) {
       } catch (e) {
         /* 某些内嵌环境无 scrollTo，忽略 */
       }
+    } else if (currentSub.value) {
+      // 已处于工具子页面时再次点击「工具」：回到工具列表页
+      window.location.hash = '#/tools'
     }
     return
   }
@@ -70,10 +93,12 @@ function navigate(key) {
   window.location.hash = '#/' + key
 }
 
-// 监听 URL hash 变化，同步更新当前 tab 并滚动到顶部
+// 监听 URL hash 变化，同步更新当前 tab / 子页面并滚动到顶部
 function onHashChange() {
-  // 根据新的 hash 更新当前激活 tab
-  current.value = keyFromHash()
+  // 根据新的 hash 更新当前激活 tab 与子页面
+  const { key, sub } = parseHash()
+  current.value = key
+  currentSub.value = sub
   try {
     // 切换后滚动到页面顶部
     window.scrollTo({ top: 0 })
