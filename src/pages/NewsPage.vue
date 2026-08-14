@@ -65,7 +65,7 @@ function scrollToDate(date) {
 const tocEl = ref(null)
 
 // 桌面端左侧目录是否展开（横向展开/收起状态）
-const tocOpen = ref(true)
+const tocOpen = ref(false)
 
 // 目录上滚动：始终阻止默认行为（避免穿透滚动资讯/页面），手动滚动年月日列表本身
 function onTocWheel(e) {

@@ -33,6 +33,17 @@ export const tools = [
     linkText: '打开工具'
   },
   {
+    key: 'base64-codec',
+    name: 'BASE64 加密/解密',
+    desc: '支持 UTF-8 与 GBK 字符编码的 Base64 加密、解密工具，输入文本或 Base64 字符串后一键提交，结果可复制，支持输入输出互换。适合接口调试、编码转换、中文 GBK 编解码等场景。',
+    features: ['加密 / 解密切换', 'UTF-8 与 GBK 编码', '输入输出互换', '一键复制结果'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    page: 'base64codec',
+    linkText: '打开工具'
+  },
+  {
     key: 'openclaw',
     name: 'OpenClaw智能体',
     desc: 'OpenClaw（龙虾智能体）是一款轻量化、低代码 AI 多智能体框架，主打高效自动化工作流搭建，支持插件拓展、知识库对接、多渠道部署，无需深厚编程基础，即可搭建专属办公自动化、数据处理、智能问答 AI 应用。',

@@ -40,11 +40,13 @@ import { tabs } from './data/tabs.js'
 // 导入工具子页面（如 JSON 格式化查看器、随机密码生成器），通过 #/tools/<sub> 访问
 import JsonViewer from './pages/JsonViewer.vue'
 import PasswordGenerator from './pages/PasswordGenerator.vue'
+import Base64Codec from './pages/Base64Codec.vue'
 
 // 工具页支持的站内子页面映射：hash 子路径 -> 组件
 const toolSubPages = {
   jsonviewer: JsonViewer,
-  passwordgenerator: PasswordGenerator
+  passwordgenerator: PasswordGenerator,
+  base64codec: Base64Codec
 }
 
 // 从 URL hash 解析当前页与子页面（支持刷新保持 / 直接访问 #/tools/jsonviewer）
