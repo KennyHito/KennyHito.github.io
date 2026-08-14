@@ -66,6 +66,17 @@ export const tools = [
     linkText: '打开工具'
   },
   {
+    key: 'image-base64',
+    name: '图片转 Base64 编码',
+    desc: '本地图片转 Base64 编码工具：支持点击上传或拖拽上传图片，上传后自动转换为 data URI 格式的 Base64 字符串，一键复制结果；支持输入输出互换，将 Base64 还原为图片预览。所有转换均在浏览器本地完成，不上传服务器。',
+    features: ['图片转 Base64', '拖拽上传', '自动转换', '输入输出互换', '一键复制结果'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    page: 'imagebase64',
+    linkText: '打开工具'
+  },
+  {
     key: 'openclaw',
     name: 'OpenClaw智能体',
     desc: 'OpenClaw（龙虾智能体）是一款轻量化、低代码 AI 多智能体框架，主打高效自动化工作流搭建，支持插件拓展、知识库对接、多渠道部署，无需深厚编程基础，即可搭建专属办公自动化、数据处理、智能问答 AI 应用。',
