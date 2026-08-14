@@ -362,13 +362,37 @@ function expandAll() { store.force = 'expand'; search.value = ''; store.search =
 function collapseAll() { store.force = 'collapse' }
 
 // 复制：将格式化后的 JSON 写入剪贴板，成功/失败均更新状态栏
-function copyJson() {
+// 优先使用 Clipboard API，不支持的旧浏览器/非 HTTPS 环境降级到 execCommand
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea')
+  ta.value = text
+  ta.setAttribute('readonly', '')
+  ta.style.position = 'fixed'
+  ta.style.top = '-9999px'
+  ta.style.opacity = '0'
+  document.body.appendChild(ta)
+  ta.select()
+  ta.setSelectionRange(0, text.length)
+  const ok = document.execCommand('copy')
+  document.body.removeChild(ta)
+  return ok
+}
+
+async function copyJson() {
   if (parsed.value === null) { status.value = '没有可复制的内容'; return }
   const text = JSON.stringify(parsed.value, null, 2)
-  navigator.clipboard.writeText(text).then(
-    () => (status.value = '已复制到剪贴板 ✓'),
-    () => (status.value = '复制失败，请手动选择')
-  )
+  let ok = false
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text)
+      ok = true
+    } else {
+      ok = fallbackCopy(text)
+    }
+  } catch (e) {
+    ok = fallbackCopy(text)
+  }
+  status.value = ok ? '复制成功 ✓ ' + new Date().toLocaleTimeString() : '复制失败，请手动选择'
 }
 
 // 下载：把格式化结果生成 Blob 并触发 <a> 下载 data.json

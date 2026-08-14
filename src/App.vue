@@ -37,12 +37,14 @@ import AppFooter from './components/AppFooter.vue'
 import AppIcon from './components/AppIcon.vue'
 // 导入页面导航配置（key / label / comp）
 import { tabs } from './data/tabs.js'
-// 导入工具子页面（如 JSON 格式化查看器），通过 #/tools/<sub> 访问
+// 导入工具子页面（如 JSON 格式化查看器、随机密码生成器），通过 #/tools/<sub> 访问
 import JsonViewer from './pages/JsonViewer.vue'
+import PasswordGenerator from './pages/PasswordGenerator.vue'
 
 // 工具页支持的站内子页面映射：hash 子路径 -> 组件
 const toolSubPages = {
-  jsonviewer: JsonViewer
+  jsonviewer: JsonViewer,
+  passwordgenerator: PasswordGenerator
 }
 
 // 从 URL hash 解析当前页与子页面（支持刷新保持 / 直接访问 #/tools/jsonviewer）

@@ -22,6 +22,17 @@ export const tools = [
     linkText: '打开工具'
   },
   {
+    key: 'password-generator',
+    name: '随机密码生成器',
+    desc: '安全随机密码生成工具：自由组合大写字母、小写字母、数字与特殊字符，自定义密码长度，使用浏览器原生加密随机数生成高强度密码，一键复制使用。适合账号注册、密钥创建、安全凭证生成等场景。',
+    features: ['自定义字符集', '自定义长度', '加密随机数', '一键复制'],
+    steps: [],
+    example: '',
+    exampleDesc: '',
+    page: 'passwordgenerator',
+    linkText: '打开工具'
+  },
+  {
     key: 'openclaw',
     name: 'OpenClaw智能体',
     desc: 'OpenClaw（龙虾智能体）是一款轻量化、低代码 AI 多智能体框架，主打高效自动化工作流搭建，支持插件拓展、知识库对接、多渠道部署，无需深厚编程基础，即可搭建专属办公自动化、数据处理、智能问答 AI 应用。',
