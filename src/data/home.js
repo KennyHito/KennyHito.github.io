@@ -1,26 +1,26 @@
 export const features = [
   {
     icon: '🧰',
-    title: '工具实操',
-    desc: '整理好用的网络工具、智能体搭建教程与主流平台实操指南，附带官方直达链接，零基础也能直接上手。',
+    title: '开发工具箱',
+    desc: '内置 JSON 格式化、文件对比、URL 编解码、图片转 Base64、颜色转换等 8 款纯浏览器本地小工具，数据不上传；汇集 AI 智能体搭建（Coze、Ollama、WorkBuddy）与免费 API 接口资源，附官方直达链接，即取即用。',
     target: 'tools'
   },
   {
     icon: '📰',
     title: '前沿资讯',
-    desc: '一手获取最新AI与科技方向前沿资讯，查看每日更新，持续稳定输出。',
+    desc: '每日更新 AI 与科技前沿资讯：模型发布、行业动态、论文研究与实用技巧，一手信息持续稳定输出。',
     target: 'news'
   },
   {
     icon: '👤',
     title: '关于本站',
-    desc: '介绍关于我，联系请前往GitHub留言。',
+    desc: '关于我：前端 / iOS 开发者，GitHub 主页 KennyHito，开源 iOS、Web 与 Vue 系列学习笔记仓库，欢迎前往 GitHub 留言交流。',
     target: 'about'
   },
   {
     icon: '💡',
     title: '网站说明',
-    desc: '沉淀个人学习成果、整理可落地的实操经验，无广告无营销，纯公益干货分享。',
+    desc: '沉淀个人学习成果，整理 iOS 开发、Web 基础与 Vue 系列等可落地的实操经验，无广告无营销，纯公益干货分享。',
     target: 'about'
   }
 ]
