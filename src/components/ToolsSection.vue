@@ -1,3 +1,4 @@
+<!-- ===== 工具分类分区 ToolsSection：渲染一类工具（标题 + 瀑布流卡片） ===== -->
 <template>
   <div class="tools-section" :id="'tools-section-' + category.key">
     <div class="section-head">
@@ -18,6 +19,7 @@ import { ref } from 'vue'
 import ToolCard from './ToolCard.vue'
 import { useMasonry } from '../composables/useMasonry.js'
 
+// 接收单个工具分类（标题、描述、color 与 tools 列表）
 defineProps({
   category: { type: Object, required: true }
 })

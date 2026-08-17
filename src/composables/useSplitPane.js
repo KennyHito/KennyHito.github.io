@@ -1,3 +1,4 @@
+// ===== 组合式函数：拖拽分割面板（桌面左右 / 移动端上下）=====
 // 拖拽分割面板 composable
 // 桌面端左右拖拽调整两侧面板宽度，移动端上下拖拽调整上下面板高度。
 // 使用 Pointer Events 统一处理鼠标与触摸（PointerEvent 同样含 clientX/clientY），

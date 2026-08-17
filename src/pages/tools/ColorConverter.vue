@@ -1,3 +1,4 @@
+<!-- ===== 工具页：RGB/Hex 颜色转换 ===== -->
 <template>
   <div class="color-converter">
     <header>
@@ -9,6 +10,7 @@
       </div>
     </header>
 
+    <!-- 主区域：桌面左右布局（输入 | 拖拽条 | 结果），移动端上下布局 -->
     <main ref="mainRef">
       <section class="editor" :style="paneStyle">
         <div class="pane-title">
@@ -517,7 +519,7 @@ input:focus {
 }
 
 /* ---------- 移动端 ---------- */
-@media (max-width: 760px) {
+@media (max-width: 734px) {
   .color-converter {
     position: fixed;
     inset: 0;

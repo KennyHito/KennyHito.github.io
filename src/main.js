@@ -1,3 +1,4 @@
+// ===== 应用入口：创建并挂载 Vue 应用 =====
 // 从 Vue 框架中导入 createApp 方法，用于创建应用实例
 import { createApp } from 'vue'
 // 导入根组件 App

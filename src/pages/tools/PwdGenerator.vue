@@ -1,3 +1,4 @@
+<!-- ===== 工具页：随机密码生成器 ===== -->
 <template>
   <!-- 根容器：顶栏 + 主区域（配置/结果双面板 + 拖拽条）+ 底部状态栏 -->
   <div class="password-generator">
@@ -403,7 +404,7 @@ main {
 }
 
 /* ---------- 移动端：上下布局（配置 | 拖拽条 | 结果） ---------- */
-@media (max-width: 760px) {
+@media (max-width: 734px) {
   .password-generator {
     /* 固定定位替代 100vh：企微等内置浏览器地址栏收起/展开时高度不抖动 */
     position: fixed;

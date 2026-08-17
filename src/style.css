@@ -12,68 +12,80 @@
 
 /* ===== 主题变量 ===== */
 :root {
-  /* 页面整体背景色（亮色） */
-  --bg: #ffffff;
+  /* 页面整体背景色（亮色，Apple 风浅灰白） */
+  --bg: #fbfbfd;
   /* 次级背景色（如 hover、分区底色） */
-  --bg-secondary: #f5f5f7;
+  --bg-secondary: #f2f2f7;
   /* 卡片 / 浮层表面背景色 */
   --surface: #ffffff;
-  /* 正文文字颜色 */
-  --text: #333333;
+  /* 正文文字颜色（近黑，更易读） */
+  --text: #1d1d1f;
   /* 标题文字颜色 */
-  --title: #111111;
+  --title: #1d1d1f;
   /* 边框 / 分割线颜色 */
-  --border: #e2e2e7;
+  --border: #e3e3e8;
   /* 主题强调色（链接、按钮、激活态） */
   --accent: #0071e3;
   /* 强调色 - 鼠标悬停 */
   --accent-hover: #0077ed;
   /* 强调色 - 按下激活 */
   --accent-active: #006edb;
-  /* 轻投影（卡片默认） */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  /* 轻投影（卡片默认）：双层柔和阴影 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 6px 16px rgba(0, 0, 0, 0.05);
   /* 中投影（卡片悬停） */
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
-  /* 全局字体栈 */
-  --font-sans: "SF Mono", "Fira Code", Consolas, monospace;
-  /* 统一的过渡动画时长 */
-  --transition: 0.22s ease;
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 14px 34px rgba(0, 0, 0, 0.09);
+  /* 重投影（hero / 浮层） */
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+  /* 全局字体栈：系统无衬线（Apple 风），中文回退 PingFang / 微软雅黑 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  /* 等宽字体栈：代码 / 工具页专用 */
+  --font-mono: "SF Mono", "Fira Code", ui-monospace, Consolas, monospace;
+  /* 统一的过渡动画时长（更顺滑的缓动） */
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   /* 备选背景色别名（兼容旧引用） */
   --bg-alt: var(--bg-secondary);
   /* About 页面文字行间距，可手动调整该数值（建议范围 1.4 ~ 2.0） */
-  --about-line-height: 1.5;
+  --about-line-height: 1.6;
   /* 资讯页左侧目录距页面底部的留白距离，可手动调整 */
   --toc-bottom-offset: 0px;
   /* 资讯页水印密度：控制水印行间距倍率，可手动调整。数值 < 1（如 0.8）→ 水印更密更多；数值 > 1（如 1.2）→ 更疏更少 */
   --watermark-scale: 2;
   /* 统一圆角：sm 小控件 / md 分组 / lg 卡片 / pill 胶囊按钮 */
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 18px;
-  --radius-pill: 980px;
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 22px;
+  --radius-pill: 999px;
   /* 强调色半透明底（徽章底色等），暗色主题下自动切换 */
   --accent-soft: rgba(0, 113, 227, 0.1);
   /* 暖色强调色（活跃 tab、进度环、站内跳转按钮等） */
   --accent-warm: #ff6b35;
+  /* 渐变：主强调色（图标块 / 按钮） */
+  --grad-primary: linear-gradient(135deg, #0071e3 0%, #4aa3ff 100%);
+  /* 渐变：暖色 */
+  --grad-warm: linear-gradient(135deg, #ff9a3d 0%, #ff6b35 100%);
+  /* 渐变：hero 标题（蓝→橙），明暗主题共用一套观感 */
+  --grad-hero: linear-gradient(120deg, #0071e3 0%, #5e9bff 45%, #ff8a3d 100%);
 }
 
 /* 暗色主题：仅覆盖颜色相关变量，结构样式无需改动 */
 [data-theme="dark"] {
-  --bg: #121212;
-  --bg-secondary: #1a1a1a;
-  --surface: #1e1e1e;
-  --text: #e5e5e5;
-  --title: #ffffff;
-  --border: #2c2c2e;
+  --bg: #0a0a0f;
+  --bg-secondary: #16161d;
+  --surface: #1c1c24;
+  --text: #e5e5ea;
+  --title: #f5f5f7;
+  --border: #2c2c36;
   --accent: #2997ff;
   --accent-hover: #47a6ff;
   --accent-active: #0077ed;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.55);
-  /* 暗色下的强调色半透明底 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5), 0 14px 34px rgba(0, 0, 0, 0.55);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
   --accent-soft: rgba(41, 151, 255, 0.16);
-  /* 暗色下的暖色强调色 */
   --accent-warm: #ff7a45;
+  --grad-primary: linear-gradient(135deg, #2997ff 0%, #5eb0ff 100%);
+  --grad-warm: linear-gradient(135deg, #ff9a3d 0%, #ff7a45 100%);
+  --grad-hero: linear-gradient(120deg, #2997ff 0%, #5e9bff 45%, #ff8a3d 100%);
 }
 
 /* ===== 基础重置 ===== */
@@ -126,9 +138,9 @@ a {
 
 /* 通用居中容器：限制最大宽度并水平居中，左右留白 */
 .container {
-  max-width: 980px;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 /* 主内容区：保证至少占满视口大部分高度，避免页脚上贴 */
@@ -159,6 +171,13 @@ main {
 .page-section {
   /* 上下区块间距 */
   padding: 20px 0;
+}
+
+/* 页面根区块（每个页面最外层 <section class="page-section page-root">）：
+   顶部预留悬浮导航栏高度，避免内容被固定导航栏遮挡；
+   移动端（≤734px）导航栏略矮，顶部留白收窄（见下方媒体查询） */
+.page-root {
+  padding-top: 120px;
 }
 
 /* ===== 通用组件：卡片 ===== */
@@ -236,11 +255,177 @@ main {
   touch-action: none;
 }
 
+/* ===== 共享：左侧固定目录（工具页 / 资讯页共用，类名统一为 toc-*） =====
+   桌面端 fixed 固定在屏幕左侧（距左 20px、距顶 60px），标题固定、仅列表可滚动；
+   资讯页通过 --toc-bottom-offset 控制底部留白（默认 0，工具页不受影响） */
+.toc {
+  position: fixed;
+  left: 20px;
+  top: 60px;
+  z-index: 2;
+  flex-shrink: 0;
+  width: 130px;
+  /* 最大高度 = 视口高度 - 顶部偏移 - 底部留白 */
+  max-height: calc(100vh - 118px - var(--toc-bottom-offset, 0px));
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  border: none;
+  padding: 16px 14px;
+  transition: transform 0.3s ease;
+}
+
+/* 收起状态：整体向左滑出屏幕（宽度 130px + 距左 20px） */
+.toc-closed {
+  transform: translateX(calc(-100% - 20px));
+}
+
+/* 目录拖拽条：fixed 固定在目录右侧垂直居中位置；水平位置（left）由 JS 内联控制 */
+.toc-handle {
+  position: fixed;
+  z-index: 3;
+  top: calc(60px + (100vh - 118px - var(--toc-bottom-offset, 0px)) / 2);
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 10px;
+  height: 64px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  /* 蓝橙渐变，呼应全站主视觉 */
+  background: var(--grad-hero);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  cursor: ew-resize;
+  /* 允许水平拖拽不被页面滚动抢占 */
+  touch-action: none;
+  user-select: none;
+  opacity: 0.9;
+  padding: 0;
+  transition: left 0.3s ease, filter var(--transition), opacity var(--transition);
+}
+
+.toc-handle:hover,
+.toc-handle:active {
+  opacity: 1;
+  /* 悬停/拖拽时略微提亮渐变，增强可交互反馈 */
+  filter: brightness(1.08);
+}
+
+.toc-handle-icon {
+  transition: transform 0.3s ease;
+}
+
+/* 收起时箭头旋转 180° 指向右侧（提示可展开） */
+.toc-handle-icon-closed {
+  transform: rotate(180deg);
+}
+
+.toc-title {
+  /* 标题固定，不随列表滚动 */
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--title);
+  margin-bottom: 10px;
+  padding: 0 6px;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* 仅列表可滚动，标题保持固定 */
+  overflow-y: auto;
+  min-height: 0;
+  /* 不显示滚动条（Firefox） */
+  scrollbar-width: none;
+}
+
+.toc-list::-webkit-scrollbar {
+  display: none;
+}
+
+.toc-link {
+  display: block;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background var(--transition), color var(--transition), opacity var(--transition);
+}
+
+.toc-link:hover {
+  opacity: 1;
+  background: var(--bg-secondary);
+}
+
+/* 移动端顶部横向目录（默认隐藏，仅窄屏显示） */
+.toc-mobile {
+  display: none;
+}
+
+@media (max-width: 734px) {
+  .toc {
+    display: none;
+  }
+
+  .toc-handle {
+    display: none;
+  }
+
+  .toc-mobile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding-bottom: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .toc-mobile::-webkit-scrollbar {
+    display: none;
+  }
+
+  .toc-mobile-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 13px;
+    opacity: 0.85;
+    white-space: nowrap;
+    transition: background var(--transition), color var(--transition), opacity var(--transition);
+  }
+
+  .toc-mobile-item:hover {
+    opacity: 1;
+    background: var(--bg-secondary);
+  }
+}
+
 /* ===== 响应式（全局部分） ===== */
 @media (max-width: 734px) {
   .page-section {
     /* 移动端压缩区块上下间距 */
     padding: 10px 0;
+  }
+
+  .page-root {
+    /* 移动端导航栏略矮，顶部留白收窄 */
+    padding-top: 90px;
   }
 }
 

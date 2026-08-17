@@ -1,3 +1,4 @@
+// ===== 组合式函数：主题切换（亮 / 暗，持久化 + 跨页同步）=====
 import { ref, watch } from 'vue'
 
 const STORAGE_KEY = 'explorenet-theme'
@@ -34,6 +35,7 @@ window.addEventListener('storage', (e) => {
   }
 })
 
+// 导出组合式函数：返回 theme（当前主题 ref）与 toggle（切换亮/暗主题）
 export function useTheme() {
   function toggle() {
     theme.value = theme.value === 'light' ? 'dark' : 'light'

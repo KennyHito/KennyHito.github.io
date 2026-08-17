@@ -1,3 +1,4 @@
+// ===== 组合式函数：轻量 JS 瀑布流（Masonry）布局 =====
 import { onMounted, onUnmounted } from 'vue'
 
 /**
@@ -18,8 +19,9 @@ export function useMasonry(containerRef, options = {}) {
   const bp2 = options.breakpoint2 ?? 980
   const bp1 = options.breakpoint1 ?? 734
 
-  let ro = null
+  let ro = null  // ResizeObserver 实例，容器尺寸变化时触发重排
 
+  // 根据窗口宽度与断点计算当前应使用的列数（1 / 2 / maxCols）
   function getCols() {
     const w = window.innerWidth
     if (w <= bp1) return 1

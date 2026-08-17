@@ -1,121 +1,195 @@
+<!-- ===== 首页 HomePage：顶部 Hero 渐变标题区 + 编辑式三栏内容主线（工具 / 资讯 / 笔记跳转） ===== -->
 <template>
-  <section class="page-section">
-    <div class="container">
-      <div class="section-head">
-        <h2>知识分享站</h2>
-        <p>沉淀实用干货的开放知识分享平台</p>
-      </div>
-      <div class="intro-card">
-        <p class="intro-text" v-for="(p, i) in intro" :key="i">{{ p }}</p>
-      </div>
+  <!-- Hero：渐变标题区 -->
+  <section class="page-section hero page-root">
+    <div class="container hero-inner">
+      <h1 class="hero-title">把技术<span class="grad-text">拆开</span>，让学习<span class="grad-text">落地</span></h1>
+      <p class="hero-sub">实用开发工具，前沿科技资讯。</p>
     </div>
   </section>
 
-  <section class="page-section bg-alt">
+  <!-- 内容主线：编辑式三栏，无卡片边框/底色 -->
+  <section class="page-section pillars">
     <div class="container">
-      <div class="section-head">
-        <h2>网站直达</h2>
-        <p>从工具到资讯，一站式满足你的学习路径</p>
-      </div>
-      <div class="feature-grid">
-        <div class="card" v-for="f in features" :key="f.title" @click="navigate(f.target)" style="cursor:pointer">
-          <div class="ico">{{ f.icon }}</div>
-          <h3>{{ f.title }}</h3>
-          <p>{{ f.desc }}</p>
-        </div>
+      <div class="pillar-row">
+        <a class="pillar" v-for="p in pillars" :key="p.index" @click="navigate(p.target)" style="cursor:pointer">
+          <span class="pillar-index">{{ p.index }}</span>
+          <span class="pillar-ico">{{ p.icon }}</span>
+          <h3>{{ p.title }}</h3>
+          <p>{{ p.desc }}</p>
+          <span class="pillar-go">{{ p.go }} <span class="arrow">→</span></span>
+        </a>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
+// 引入 Vue 依赖注入 API，用于获取全局路由跳转方法
 import { inject } from 'vue'
-import { features, intro } from '../data/home.js'
+// 引入首页三栏内容数据（栏目文案、图标、跳转目标）
+import { pillars } from '../data/home.js'
 
+// 从根组件注入的 navigate 方法：点击栏目时跳转到对应页面
 const navigate = inject('navigate')
 </script>
 
 <style scoped>
-/* 区块标题区（居中） */
-.section-head {
+/* ===== Hero：渐变标题区 ===== */
+.hero {
+  position: relative;
+  /* 顶部留出悬浮导航栏高度（桌面 ~70px + 余量），内容不遮挡 */
+  padding: 120px 0 64px;
   text-align: center;
-  margin-bottom: 20px;
+  overflow: hidden;
+  /* 顶部极淡渐变，替代原圆形光晕：干净又有层次 */
+  background: linear-gradient(180deg, var(--accent-soft), transparent 72%);
 }
 
-.section-head h2 {
-  font-size: 32px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+.hero-inner {
+  position: relative;
+  z-index: 1;
 }
 
-.section-head p {
-  color: var(--text);
-  opacity: 0.8;
-  font-size: 17px;
-  margin-top: 12px;
-}
-
-.bg-alt {
-  background: var(--bg-secondary);
-}
-
-.intro-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 28px;
-  box-shadow: var(--shadow-sm);
-}
-
-.intro-text {
-  font-size: 16px;
-  line-height: 1.95;
-  color: var(--text);
-  opacity: 0.82;
+.hero-title {
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
   margin: 0 0 18px;
 }
 
-.intro-text:last-child {
-  margin-bottom: 0;
+/* 渐变文字（蓝→橙） */
+.grad-text {
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
-/* ===== 网站直达：特性双列网格 ===== */
-.feature-grid {
+.hero-sub {
+  font-size: 19px;
+  opacity: 0.82;
+  max-width: 620px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+/* ===== 内容主线：编辑式三栏 ===== */
+.pillar-row {
   display: grid;
-  /* 两列等宽 */
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
 }
 
-.feature-grid .card .ico {
+.pillar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  padding: 8px 32px;
+  /* 栏目之间用细分隔线，而非卡片边框 */
+  border-left: 1px solid var(--border);
+  transition: transform var(--transition);
+}
+
+.pillar:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.pillar:last-child {
+  padding-right: 0;
+}
+
+.pillar-index {
   font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 14px;
+  background: var(--grad-hero);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.pillar-ico {
+  font-size: 26px;
   margin-bottom: 14px;
 }
 
-.feature-grid .card h3 {
+.pillar h3 {
   font-size: 21px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin: 0 0 12px;
 }
 
-.feature-grid .card p {
-  font-size: 15px;
-  opacity: 0.82;
-  margin-bottom: 16px;
+.pillar p {
+  font-size: 14.5px;
+  opacity: 0.8;
+  line-height: 1.75;
+  margin: 0 0 20px;
+}
+
+/* 跳转提示：刻意弱化，避免抢过栏目正文 */
+.pillar-go {
+  margin-top: auto;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--accent-warm);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pillar-go .arrow {
+  transition: transform var(--transition);
+}
+
+.pillar:hover {
+  transform: translateY(-3px);
+}
+
+.pillar:hover .arrow {
+  transform: translateX(5px);
 }
 
 @media (max-width: 734px) {
-  /* 网格在窄屏下改为单列 */
-  .feature-grid {
-    grid-template-columns: 1fr;
-  }
-  .intro-card {
-    padding: 22px;
+  .hero {
+    padding: 120px 0 36px;
   }
 
-  .intro-text {
-    font-size: 15px;
-    line-height: 1.85;
+  .hero-title {
+    font-size: 34px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+  }
+
+  /* 三栏在窄屏下改为单列，分隔线改为顶部细线 */
+  .pillar-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .pillar {
+    border-left: none;
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+  }
+
+  .pillar:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+
+  .pillar:last-child {
+    padding-bottom: 0;
   }
 }
 </style>

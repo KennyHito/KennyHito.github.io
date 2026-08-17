@@ -1,31 +1,33 @@
+<!-- ===== 资讯页 NewsPage：左侧目录 + 右侧资讯内容（含水印） ===== -->
+
 <template>
   <!-- 资讯页主容器：左侧固定目录 + 右侧资讯列表（移动端改为顶部横向目录） -->
-  <section class="page-section">
+  <section class="page-section page-root">
     <div class="container news-layout">
       <!-- 桌面端（>860px）：固定在屏幕左侧的年月日目录，点击平滑定位到对应日期分组；支持横向展开/收起 -->
-      <aside ref="tocEl" class="news-toc" :class="{ 'news-toc-closed': !tocOpen }" :style="tocStyle"
+      <aside ref="tocEl" class="toc" :class="{ 'toc-closed': !tocOpen }" :style="tocStyle"
         aria-label="资讯日期目录">
-        <h4 class="news-toc-title">目录</h4>
-        <ul class="news-toc-list">
+        <h4 class="toc-title">目录</h4>
+        <ul class="toc-list">
           <li v-for="g in newsGroups" :key="g.date">
-            <a class="news-toc-link" href="#" @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
+            <a class="toc-link" href="#" @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
           </li>
         </ul>
       </aside>
 
       <!-- 目录拖拽条（桌面端）：位于目录右侧垂直居中，点击切换开合，长按水平拖拽可伸缩目录（松手吸附） -->
-      <div class="news-toc-handle" :style="handleStyle" role="button" tabindex="0"
-        :aria-expanded="tocOpen" aria-label="展开或收起目录" @pointerdown="onHandlePointerDown"
-        @keydown.enter.prevent="tocOpen = !tocOpen" @keydown.space.prevent="tocOpen = !tocOpen">
-        <AppIcon name="chevron-left" :size="10" class="news-toc-handle-icon"
-          :class="{ 'news-toc-handle-icon-closed': !tocOpen }" />
+      <div class="toc-handle" :style="handleStyle" role="button" tabindex="0" :aria-expanded="tocOpen"
+        aria-label="展开或收起目录" @pointerdown="onHandlePointerDown" @keydown.enter.prevent="tocOpen = !tocOpen"
+        @keydown.space.prevent="tocOpen = !tocOpen">
+        <AppIcon name="chevron-left" :size="10" class="toc-handle-icon"
+          :class="{ 'toc-handle-icon-closed': !tocOpen }" />
       </div>
 
       <!-- 主内容区：资讯列表 -->
       <div class="news-main">
         <!-- 移动端（≤860px）：顶部横向滚动的日期胶囊，点击同样平滑定位 -->
-        <nav class="news-toc-mobile" aria-label="资讯日期目录">
-          <a v-for="g in newsGroups" :key="'m' + g.date" class="news-toc-mobile-item" href="#"
+        <nav class="toc-mobile" aria-label="资讯日期目录">
+          <a v-for="g in newsGroups" :key="'m' + g.date" class="toc-mobile-item" href="#"
             @click.prevent="scrollToDate(g.date)">{{ g.date }}</a>
         </nav>
 
@@ -58,6 +60,7 @@ import AppIcon from '../components/AppIcon.vue'
 import NewsPanel from '../components/NewsPanel.vue'
 import { useTocDrag } from '../composables/useTocDrag.js'
 
+// 引入 Vue API、资讯数据源、目录拖拽组合式函数与页面组件
 // 点击目录项，平滑滚动到对应日期分组
 function scrollToDate(date) {
   const el = document.getElementById('news-' + date)
@@ -75,7 +78,7 @@ function onTocWheel(e) {
   const el = tocEl.value
   if (!el) return
   // 列表是唯一可滚动区域，标题固定不动
-  const list = el.querySelector('.news-toc-list')
+  const list = el.querySelector('.toc-list')
   if (!list) return
   // 手动累加滚动距离；内容不足时 scrollTop 会自动钳制在 0 ~ 最大值之间
   list.scrollTop += e.deltaY
@@ -91,6 +94,8 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+/* 顶部导航栏占位由全局 .page-root 统一提供，此处无需重复 */
+
 /* ===== 左右布局：左侧固定目录 + 右侧资讯主内容 ===== */
 .news-layout {
   display: flex;
@@ -109,167 +114,8 @@ onUnmounted(() => {
   scroll-margin-top: 72px;
 }
 
-/* ===== 桌面端左侧目录：fixed 固定在屏幕左侧（距左 20px、距顶 60px），
-       透明背景可透出水印；标题固定不动，仅年月日列表可滚动（隐藏滚动条） ===== */
-.news-toc {
-  position: fixed;
-  left: 20px;
-  top: 60px;
-  /* 高于资讯水印，保持可点击 */
-  z-index: 2;
-  flex-shrink: 0;
-  width: 130px;
-  /* 最大高度 = 视口高度 - 顶部偏移 - 底部留白（--toc-bottom-offset 可调） */
-  max-height: calc(100vh - 118px - var(--toc-bottom-offset));
-  /* 纵向布局：标题固定，列表占剩余空间并可滚动 */
-  display: flex;
-  flex-direction: column;
-  /* 透明背景，可透出下层资讯水印 */
-  background: transparent;
-  border: none;
-  padding: 16px 14px;
-  /* 横向展开/收起时平滑滑动 */
-  transition: transform 0.3s ease;
-}
-
-/* 收起状态：整体向左滑出屏幕（宽度 130px + 距左 20px） */
-.news-toc-closed {
-  transform: translateX(calc(-100% - 20px));
-}
-
-/* 目录拖拽条：fixed 固定在目录右侧垂直居中位置，展开时贴目录右边缘，收起时位于屏幕左边缘。
-   水平位置（left）由 JS 内联控制，拖拽时关闭过渡跟手，非拖拽时平滑过渡。
-   垂直居中基于目录区域（top 60px、最大高度 calc(100vh - 118px - var(--toc-bottom-offset))） */
-.news-toc-handle {
-  position: fixed;
-  z-index: 3;
-  top: calc(60px + (100vh - 118px - var(--toc-bottom-offset)) / 2);
-  transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 10px;
-  height: 64px;
-  border-radius: 5px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: var(--shadow-sm);
-  cursor: ew-resize;
-  /* 允许水平拖拽不被页面滚动抢占 */
-  touch-action: none;
-  user-select: none;
-  opacity: 0.85;
-  padding: 0;
-  transition: left 0.3s ease, background var(--transition), color var(--transition), opacity var(--transition);
-}
-
-.news-toc-handle:hover {
-  opacity: 1;
-  background: var(--bg-secondary);
-}
-
-.news-toc-handle:active {
-  opacity: 1;
-  background: var(--bg-secondary);
-}
-
-.news-toc-handle-icon {
-  transition: transform 0.3s ease;
-}
-
-/* 收起时箭头旋转 180° 指向右侧（提示可展开） */
-.news-toc-handle-icon-closed {
-  transform: rotate(180deg);
-}
-
-.news-toc-title {
-  /* 标题固定，不随列表滚动 */
-  flex-shrink: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--title);
-  margin-bottom: 10px;
-  padding: 0 6px;
-}
-
-.news-toc-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  /* 仅年月日列表可滚动，标题保持固定 */
-  overflow-y: auto;
-  min-height: 0;
-  /* 不显示滚动条（Firefox） */
-  scrollbar-width: none;
-}
-
-.news-toc-list::-webkit-scrollbar {
-  display: none;
-}
-
-.news-toc-link {
-  display: block;
-  padding: 7px 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--text);
-  opacity: 0.82;
-  transition: background var(--transition), color var(--transition), opacity var(--transition);
-}
-
-.news-toc-link:hover {
-  opacity: 1;
-  background: var(--bg-secondary);
-}
-
-/* ===== 移动端顶部横向目录（默认隐藏，仅窄屏显示） ===== */
-.news-toc-mobile {
-  display: none;
-}
-
-/* 窄屏：隐藏左侧固定目录及其展开按钮，改为顶部横向滚动目录 */
-@media (max-width: 860px) {
-  .news-toc {
-    display: none;
-  }
-
-  .news-toc-handle {
-    display: none;
-  }
-
-  .news-toc-mobile {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 18px;
-    padding-bottom: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .news-toc-mobile::-webkit-scrollbar {
-    display: none;
-  }
-
-  .news-toc-mobile-item {
-    flex-shrink: 0;
-    padding: 6px 12px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    font-size: 13px;
-    opacity: 0.85;
-    white-space: nowrap;
-    transition: background var(--transition), color var(--transition), opacity var(--transition);
-  }
-
-  .news-toc-mobile-item:hover {
-    opacity: 1;
-    background: var(--bg-secondary);
-  }
-}
+/* ===== 资讯页专属：日期分组锚点（避开吸顶导航）与资讯水印样式 =====
+   目录容器、拖拽条、列表、链接、移动端胶囊等共享样式已统一移至 style.css（.toc*） */
 
 /* 资讯水印：固定全屏、DOM 文本平铺、整体旋转 -15° 并放大覆盖。
    文字字体继承全局 --font-sans（改 style.css 一处即可统一水印字体），

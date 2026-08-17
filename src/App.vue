@@ -1,8 +1,9 @@
+<!-- ===== 根组件 App：路由切换 + 全局布局（导航/页脚/主题/回到顶部） ===== -->
 <template>
   <!-- 顶部导航栏：传入标签页配置与当前激活项，监听切换事件 -->
   <AppNav :tabs="tabs" :current="current" @switch="navigate" />
   <!-- 主内容区：根据当前组件动态渲染对应页面 -->
-  <main>
+  <main class="app-main">
     <!-- 使用动态组件渲染当前页面，key 用于强制重新创建组件实例 -->
     <component :is="currentComp" :key="current" class="page" />
   </main>
@@ -177,6 +178,9 @@ provide('navigate', navigate)
 </script>
 
 <style scoped>
+/* 主内容区：不设 padding-top，由各页面根区块自行处理顶部留白，
+   确保页面背景从浏览器最顶部开始渲染，无上方空白条 */
+
 /* 回到顶部按钮：固定右下角，悬浮于内容之上 */
 .back-to-top {
   position: fixed;
@@ -221,7 +225,7 @@ provide('navigate', navigate)
 }
 
 .back-to-top-ring-progress {
-  stroke: #ff6b35;
+  stroke: var(--accent-warm);
   stroke-linecap: round;
   /* 注意：不要在此处写 stroke-dasharray / stroke-dashoffset，
      它们由模板中绑定的属性驱动（CSS 会覆盖 SVG 属性导致进度不更新） */
@@ -269,7 +273,7 @@ provide('navigate', navigate)
 /* 悬停与按下反馈 */
 .back-to-top:hover {
   background: var(--bg-secondary);
-  color: #ff6b35;
+  color: var(--accent-warm);
 }
 
 .back-to-top:hover .back-to-top-tooltip {

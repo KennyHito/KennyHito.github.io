@@ -1,3 +1,4 @@
+// ===== 组合式函数：剪贴板复制（带降级方案）=====
 // 统一剪贴板复制逻辑
 // 优先使用 Clipboard API（仅在安全上下文可用），
 // 失败或不可用时降级为隐藏 textarea + document.execCommand('copy')，

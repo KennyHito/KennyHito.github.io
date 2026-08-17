@@ -1,3 +1,4 @@
+<!-- ===== 工具页：图片与 Base64 互转 ===== -->
 <template>
   <div class="image-base64">
     <header>
@@ -8,6 +9,7 @@
       </div>
     </header>
 
+    <!-- 主区域：桌面左右布局（输入 | 拖拽条 | 结果），移动端上下布局 -->
     <main ref="mainRef">
       <section class="editor" :style="paneStyle">
         <div class="pane-title">
@@ -494,7 +496,7 @@ main {
 }
 
 /* ---------- 移动端 ---------- */
-@media (max-width: 760px) {
+@media (max-width: 734px) {
   .image-base64 {
     position: fixed;
     inset: 0;

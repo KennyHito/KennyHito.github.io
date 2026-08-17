@@ -1,3 +1,4 @@
+<!-- ===== 工具页：JSON 格式化查看器（递归组件） ===== -->
 <template>
   <!-- 根：工具栏 + 输入 + 预览（depth === 0 表示根节点，渲染完整页面布局） -->
   <div v-if="depth === 0" class="json-viewer json-viewer-root">
@@ -751,7 +752,7 @@ textarea {
 }
 
 /* ---------- 移动端：上下布局（输入 | 拖拽条 | 预览） ---------- */
-@media (max-width: 760px) {
+@media (max-width: 734px) {
   .json-viewer {
     /* 固定定位替代 100vh：企微等内置浏览器地址栏收起/展开时高度不再抖动，
        也不会因 vh 计算误差出现整页滚动 */

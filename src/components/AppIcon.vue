@@ -1,3 +1,4 @@
+<!-- ===== 图标组件 AppIcon：根据 name 统一渲染各 SVG 矢量图标 ===== -->
 <template>
   <svg
     class="app-icon"
@@ -63,6 +64,7 @@ import {
   iconHome, iconHomeDoor, iconTools, iconNews, iconAbout, iconMail, iconMailFlap
 } from '../data/path.js'
 
+// 组件属性：name 指定图标名称，size 控制边长，strokeWidth 控制描边宽度
 const props = defineProps({
   // 图标名称：sun / moon / menu / close / chevron-left / arrow-up / github / home / tools / news / about / mail
   name: { type: String, required: true },

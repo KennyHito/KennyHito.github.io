@@ -1,3 +1,4 @@
+// ===== 数据：工具箱分类与工具数据 =====
 // 工具数据：按分类分组展示（网络 / 工具 / AI / API）
 // 每个分类独立使用 useMasonry 瀑布流布局
 export const toolCategories = [
@@ -90,7 +91,7 @@ export const toolCategories = [
       {
         key: 'base64-codec',
         name: 'BASE64 加密/解密',
-        shortName: 'BASE64加解密',
+        shortName: 'Base64',
         desc: '支持 UTF-8 与 GBK 字符编码的 Base64 加密、解密工具，输入文本或 Base64 字符串后一键提交，结果可复制，支持输入输出互换。适合接口调试、编码转换、中文 GBK 编解码等场景。',
         features: ['加密 / 解密切换', 'UTF-8 与 GBK 编码', '输入输出互换', '一键复制结果'],
         steps: [],

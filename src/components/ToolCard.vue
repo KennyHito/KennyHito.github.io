@@ -1,3 +1,4 @@
+<!-- ===== 工具卡片 ToolCard：展示单个工具的说明、教程与入口 ===== -->
 <template>
   <div class="card tool-card">
     <h3>{{ tool.name }}</h3>
@@ -42,6 +43,7 @@
 </template>
 
 <script setup>
+// 接收单个工具对象 tool 作为展示数据
 defineProps({
   tool: { type: Object, required: true }
 })
@@ -49,6 +51,16 @@ defineProps({
 
 <style scoped>
 /* ===== 工具卡 ===== */
+.tool-card {
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.tool-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
 .tool-card h3 {
   font-size: 21px;
   font-weight: 600;
@@ -117,9 +129,12 @@ defineProps({
 }
 
 .chip {
-  font-size: 14px;
-  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 7px 14px;
   border-radius: var(--radius-pill);
-  border: 1px solid var(--border);
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: none;
 }
 </style>

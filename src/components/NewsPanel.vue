@@ -1,3 +1,4 @@
+<!-- ===== 资讯分组面板 NewsPanel：按日期折叠 / 展开资讯列表 ===== -->
 <template>
   <div class="news-group" :class="{ open }">
     <button class="news-date" @click="toggle" :aria-expanded="open">
@@ -19,6 +20,7 @@
 <script setup>
 import { ref } from 'vue'
 
+// 接收单个日期分组的资讯数据（含 expanded 控制默认展开状态）
 const props = defineProps({
   group: { type: Object, required: true }
 })
@@ -26,6 +28,7 @@ const props = defineProps({
 // 最新日期默认展开，历史日期默认折叠（来自数据里的 expanded 字段）
 const open = ref(props.group.expanded)
 
+// 切换该分组的展开 / 收起状态
 function toggle() {
   open.value = !open.value
 }

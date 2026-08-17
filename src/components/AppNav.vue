@@ -1,24 +1,18 @@
+<!-- ===== 顶部导航组件 AppNav：桌面 Tab + 移动端汉堡菜单 + 主题开关 ===== -->
 <template>
   <nav class="nav">
     <div class="nav-left">
       <button class="nav-logo" @click="switchTab('home')" aria-label="返回首页" title="返回首页">
-        <img src="/main_icon.png" alt="知识分享站" width="32" height="32" />
+        <img src="../img/main_icon.png" alt="知识分享站" width="32" height="32" />
       </button>
     </div>
+    <!-- 桌面端：Tab 列表绝对定位在导航栏水平正中 -->
+    <nav class="nav-tabs" aria-label="主导航">
+      <a v-for="t in tabs" :key="t.key" class="tab" :class="{ active: t.key === current }"
+        @click.prevent="switchTab(t.key)">{{ t.label }}</a>
+    </nav>
     <div class="nav-actions">
-      <!-- 桌面端：直接显示 Tab 列表、分隔线、主题开关、GitHub -->
-      <nav class="nav-tabs" aria-label="主导航">
-        <a v-for="t in tabs" :key="t.key" class="tab" :class="{ active: t.key === current }"
-          @click.prevent="switchTab(t.key)">{{ t.label }}</a>
-      </nav>
       <ThemeToggle />
-      <a class="nav-github" :href="site.github" target="_blank" rel="noopener" aria-label="前往 GitHub">
-        <AppIcon name="github" :size="22" />
-      </a>
-      <a class="nav-mail" :href="`mailto:${site.email}`" aria-label="发送邮件">
-        <AppIcon name="mail" :size="18" />
-      </a>
-
       <!-- 移动端：汉堡菜单按钮（展开/收起） -->
       <button class="nav-menu-btn" @click="mobileMenuOpen = !mobileMenuOpen"
         :aria-label="mobileMenuOpen ? '关闭导航菜单' : '打开导航菜单'" :aria-expanded="mobileMenuOpen"
@@ -47,14 +41,6 @@
       <div class="nav-mobile-menu-footer">
         <p class="menu-site-name">{{ site.name }}</p>
         <p class="menu-site-desc">{{ site.slogan }}</p>
-        <div class="menu-social">
-          <a class="menu-social-link" :href="site.github" target="_blank" rel="noopener" aria-label="GitHub">
-            <AppIcon name="github" :size="22" />
-          </a>
-          <a class="menu-social-link" :href="`mailto:${site.email}`" aria-label="发送邮件">
-            <AppIcon name="mail" :size="22" />
-          </a>
-        </div>
       </div>
     </div>
   </div>
@@ -66,6 +52,7 @@ import ThemeToggle from './ThemeToggle.vue'
 import AppIcon from './AppIcon.vue'
 import { site } from '../data/site.js'
 
+// 接收父级传入的 tabs 与 current；向父级派发 switch 事件以切换 tab
 defineProps({
   tabs: { type: Array, required: true },
   current: { type: String, required: true }
@@ -120,40 +107,44 @@ if (typeof window !== 'undefined') {
 </script>
 
 <style scoped>
-/* ===== 导航 ===== */
+/* ===== 导航：顶部悬浮胶囊 ===== */
 .nav {
-  /* 吸顶：滚动时固定在顶部 */
-  position: sticky;
-  top: 0;
-  /* 层级高于内容，避免被遮挡 */
-  z-index: 100;
-  /* Flex：Logo 固定靠左，其余内容（Tab → 开关 → GitHub）靠右 */
+  /* 悬浮：脱离文档流，固定在视口顶部并水平居中 */
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* 居中胶囊宽度：桌面最大 960，移动端与屏幕留边 */
+  width: min(960px, calc(100% - 28px));
+  /* 层级高于内容与回到顶部按钮 */
+  z-index: 1000;
   display: flex;
   align-items: center;
   gap: 14px;
-  height: 52px;
-  padding: 0 22px;
-  /* 半透明背景，配合毛玻璃 */
-  background: rgba(255, 255, 255, 0.72);
-  /* 背景模糊（标准） */
+  height: 56px;
+  padding: 0 14px 0 16px;
+  /* 纯白背景 */
+  background: #ffffff;
+  /* 背景模糊（标准 + Safari 前缀） */
   backdrop-filter: saturate(180%) blur(20px);
-  /* 背景模糊（Safari 前缀） */
   -webkit-backdrop-filter: saturate(180%) blur(20px);
-  /* 底部细分割线 */
-  border-bottom: 1px solid var(--border);
-  transition: background var(--transition), border-color var(--transition);
+  /* 胶囊外形：边框 + 圆角 + 阴影 */
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+  transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 
-/* 暗色下导航栏半透明背景 */
+/* 深色模式：导航栏改用深色表面，保持白色/深色协调 */
 [data-theme="dark"] .nav {
-  background: rgba(18, 18, 18, 0.72);
+  background: var(--bg-secondary);
 }
 
-/* 导航左侧分组：Logo，auto 外边距将后续内容推向右侧 */
+/* 导航左侧分组：Logo */
 .nav-left {
   display: flex;
   align-items: center;
-  margin-right: auto;
+  flex-shrink: 0;
 }
 
 /* 站点 Logo 按钮 */
@@ -180,25 +171,28 @@ if (typeof window !== 'undefined') {
   transform: scale(0.94);
 }
 
-/* 导航右侧操作区（Tab → 主题开关 → GitHub → 汉堡按钮） */
+/* 导航右侧操作区（主题开关 → 汉堡按钮），推到最右侧 */
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-left: auto;
 }
 
-/* Tab 列表容器：绝对定位在导航栏水平正中间（脱离文档流，不影响左右布局） */
+/* Tab 列表容器：绝对定位在导航栏水平正中（不受左右元素宽度影响） */
 .nav-tabs {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
+  justify-content: center;
   gap: 8px;
   align-items: center;
 }
 
 /* 单个 Tab 文字 */
 .tab {
+  position: relative;
   font-size: 17px;
   /* 加粗显示 */
   font-weight: 600;
@@ -207,60 +201,48 @@ if (typeof window !== 'undefined') {
   /* 紧凑间距 */
   padding: 7px 10px;
   letter-spacing: -0.2px;
-  /* 胶囊形状 */
-  border-radius: var(--radius-pill);
   cursor: pointer;
   /* 不换行 */
   white-space: nowrap;
   color: var(--text);
-  transition: opacity var(--transition), color var(--transition), background var(--transition);
+  transition: opacity var(--transition), color var(--transition);
 }
 
-/* Tab 悬停：仅变清晰，不加背景色 */
+/* Tab 底部渐变下划线（默认隐藏，悬停 / 激活时滑出） */
+.tab::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 1px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--grad-hero);
+  transform: scaleX(0);
+  transform-origin: center;
+  opacity: 0;
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+/* Tab 悬停：仅变清晰，下划线半显 */
 .tab:hover {
   opacity: 1;
 }
 
-/* Tab 激活态：去掉背景色，文字改为与滚动进度环一致的橙色 */
+.tab:hover::after {
+  transform: scaleX(0.5);
+  opacity: 0.5;
+}
+
+/* Tab 激活态：暖色文字 + 渐变下划线（滑动展开） */
 .tab.active {
   opacity: 1;
-  color: #ff6b35;
+  color: var(--accent-warm);
 }
 
-/* 导航右侧 GitHub 图标 */
-.nav-github {
-  flex-shrink: 0;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--title);
-  opacity: 0.85;
-  transition: opacity var(--transition), background var(--transition);
-}
-
-.nav-github:hover {
+.tab.active::after {
+  transform: scaleX(1);
   opacity: 1;
-  background: var(--bg-secondary);
-}
-
-/* 导航右侧邮箱图标：点击区域与 GitHub 一致，图标略小 */
-.nav-mail {
-  flex-shrink: 0;
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--title);
-  opacity: 0.85;
-  transition: opacity var(--transition), background var(--transition);
-}
-
-.nav-mail:hover {
-  opacity: 1;
-  background: var(--bg-secondary);
 }
 
 /* 桌面端：隐藏移动端汉堡菜单按钮、下拉菜单和遮罩层 */
@@ -273,13 +255,14 @@ if (typeof window !== 'undefined') {
 /* ===== 移动端（≤734px） ===== */
 @media (max-width: 734px) {
   .nav {
-    padding: 0 14px;
+    /* 移动端胶囊更贴边，保持悬浮间距 */
+    top: 12px;
+    width: calc(100% - 22px);
+    padding: 0 12px;
   }
 
-  /* 移动端：隐藏 Tab 列表、GitHub 和邮箱入口（均已放进展开菜单底部） */
-  .nav-tabs,
-  .nav-github,
-  .nav-mail {
+  /* 移动端：隐藏 Tab 列表（已收进汉堡展开菜单） */
+  .nav-tabs {
     display: none;
   }
 
@@ -315,7 +298,7 @@ if (typeof window !== 'undefined') {
   .nav-mobile-menu {
     display: none;
     position: fixed;
-    top: 52px;
+    top: 74px;
     left: 0;
     right: 0;
     /* 高度自适应内容，默认全部显示无需滚动 */
@@ -344,7 +327,7 @@ if (typeof window !== 'undefined') {
   .nav-overlay {
     display: none;
     position: fixed;
-    top: 52px;
+    top: 74px;
     left: 0;
     right: 0;
     bottom: 0;
@@ -402,7 +385,7 @@ if (typeof window !== 'undefined') {
 
   .mobile-tab.active {
     opacity: 1;
-    color: #ff6b35;
+    color: var(--accent-warm);
   }
 
   .mobile-tab:hover {
@@ -416,7 +399,7 @@ if (typeof window !== 'undefined') {
   }
 
   .mobile-tab.active .mobile-tab-icon {
-    color: #ff6b35;
+    color: var(--accent-warm);
     opacity: 1;
   }
 
@@ -445,32 +428,7 @@ if (typeof window !== 'undefined') {
     font-size: 13px;
     color: var(--text);
     opacity: 0.7;
-    margin-bottom: 14px;
-  }
-
-  .menu-social {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-  }
-
-  .menu-social-link {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    color: var(--title);
-    background: var(--bg-secondary);
-    transition: transform 0.1s ease, background var(--transition), color var(--transition);
-  }
-
-  .menu-social-link:hover {
-    background: var(--border);
-  }
-
-  .menu-social-link:active {
-    transform: scale(0.94);
+    margin-bottom: 0;
   }
 }
 </style>

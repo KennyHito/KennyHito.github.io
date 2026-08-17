@@ -1,3 +1,4 @@
+<!-- ===== 页脚组件 AppFooter：展示版权年份与站点说明 ===== -->
 <template>
   <footer class="footer">
     <div class="container">
@@ -7,6 +8,7 @@
 </template>
 
 <script setup>
+// 当前年份，用于页脚版权显示
 const currentYear = new Date().getFullYear()
 </script>
 

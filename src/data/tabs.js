@@ -1,3 +1,4 @@
+// ===== 数据：页面导航（tab）配置 =====
 // 页面导航配置：key 标识、label 显示文案、comp 对应页面组件
 // 新增 / 调整导航页时只改这里
 import HomePage from '../pages/HomePage.vue'

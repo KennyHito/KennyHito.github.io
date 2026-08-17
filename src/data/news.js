@@ -1,3 +1,7 @@
+// ===== 数据：资讯聚合（按日期分组的新闻流）=====
+// newsGroups：资讯数据，按发布日期分组。
+// 每组字段：date 日期字符串、expanded 是否默认展开、items 当日资讯条目数组。
+// 每个 item 字段：title 标题、summary 摘要、tags 标签数组（如 ["#模型发布", "#xAI"]）。
 export const newsGroups = [
   {
     "date": "2026-08-16",

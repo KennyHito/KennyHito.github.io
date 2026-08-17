@@ -1,3 +1,4 @@
+<!-- ===== 工具页：文件对比（Diff） ===== -->
 <template>
   <div class="file-diff">
     <!-- 顶栏：标题 + 操作按钮（统计信息在底部状态栏） -->
@@ -881,7 +882,7 @@ onUnmounted(() => {
 }
 
 /* ===== 移动端：整页固定 + 上下分屏拖拽 ===== */
-@media (max-width: 760px) {
+@media (max-width: 734px) {
   .file-diff {
     position: fixed;
     inset: 0;
