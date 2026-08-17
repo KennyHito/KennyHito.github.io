@@ -3,7 +3,8 @@
   <section class="page-section">
     <div class="container tools-layout">
       <!-- 桌面端（>860px）：固定在屏幕左侧的分类目录，大类下展示子类（工具项），点击平滑定位 -->
-      <aside ref="tocEl" class="tools-toc" :class="{ 'tools-toc-closed': !tocOpen }" aria-label="工具分类目录">
+      <aside ref="tocEl" class="tools-toc" :class="{ 'tools-toc-closed': !tocOpen }" :style="tocStyle"
+        aria-label="工具分类目录">
         <h4 class="tools-toc-title">目录</h4>
         <ul class="tools-toc-list">
           <li v-for="c in toolCategories" :key="c.key">
@@ -21,12 +22,13 @@
         </ul>
       </aside>
 
-      <!-- 目录展开/收起切换按钮（桌面端）：展开时贴在目录右侧，收起时回到屏幕左边缘 -->
-      <button class="tools-toc-toggle" :class="{ 'tools-toc-toggle-closed': !tocOpen }" @click="tocOpen = !tocOpen"
-        aria-label="展开或收起目录" :aria-expanded="tocOpen">
-        <AppIcon name="chevron-left" :size="14" class="tools-toc-toggle-icon"
-          :class="{ 'tools-toc-toggle-icon-closed': !tocOpen }" />
-      </button>
+      <!-- 目录拖拽条（桌面端）：位于目录右侧垂直居中，点击切换开合，长按水平拖拽可伸缩目录（松手吸附） -->
+      <div class="tools-toc-handle" :style="handleStyle" role="button" tabindex="0"
+        :aria-expanded="tocOpen" aria-label="展开或收起目录" @pointerdown="onHandlePointerDown"
+        @keydown.enter.prevent="tocOpen = !tocOpen" @keydown.space.prevent="tocOpen = !tocOpen">
+        <AppIcon name="chevron-left" :size="10" class="tools-toc-handle-icon"
+          :class="{ 'tools-toc-handle-icon-closed': !tocOpen }" />
+      </div>
 
       <!-- 主内容区：各分类分区 -->
       <div class="tools-main">
@@ -50,6 +52,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { toolCategories } from '../data/tools.js'
 import ToolsSection from '../components/ToolsSection.vue'
 import AppIcon from '../components/AppIcon.vue'
+import { useTocDrag } from '../composables/useTocDrag.js'
 
 // 点击目录项，平滑滚动到对应分区 / 工具卡片
 function scrollTo(id) {
@@ -57,8 +60,8 @@ function scrollTo(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
-// 桌面端左侧目录是否展开（横向展开/收起状态），默认收起
-const tocOpen = ref(false)
+// 目录展开/收起：点击切换，长按拖拽伸缩（拖拽条固定在目录右侧垂直居中）
+const { tocOpen, tocStyle, handleStyle, onHandlePointerDown } = useTocDrag()
 
 // 目录元素引用
 const tocEl = ref(null)
@@ -122,43 +125,49 @@ onUnmounted(() => {
   transform: translateX(calc(-100% - 20px));
 }
 
-/* 目录展开/收起切换按钮：fixed 固定在左侧，展开时位于目录面板内最右侧（与“目录”标题同行），收起时位于屏幕左边缘 */
-.tools-toc-toggle {
+/* 目录拖拽条：fixed 固定在目录右侧垂直居中位置，展开时贴目录右边缘，收起时位于屏幕左边缘。
+   水平位置（left）由 JS 内联控制，拖拽时关闭过渡跟手，非拖拽时平滑过渡 */
+.tools-toc-handle {
   position: fixed;
-  left: 122px;
-  top: 74px;
   z-index: 3;
+  /* 垂直居中：目录区域 top 60px、最大高度 calc(100vh - 118px) */
+  top: calc(60px + (100vh - 118px) / 2);
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+  width: 10px;
+  height: 64px;
+  border-radius: 5px;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
-  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  cursor: ew-resize;
+  /* 允许水平拖拽不被页面滚动抢占 */
+  touch-action: none;
+  user-select: none;
   opacity: 0.85;
   padding: 0;
-  /* left 与图标旋转同步过渡 */
-  transition: left 0.3s ease, transform 0.3s ease, background var(--transition), color var(--transition), opacity var(--transition);
+  transition: left 0.3s ease, background var(--transition), color var(--transition), opacity var(--transition);
 }
 
-.tools-toc-toggle:hover {
+.tools-toc-handle:hover {
   opacity: 1;
   background: var(--bg-secondary);
 }
 
-.tools-toc-toggle-closed {
-  left: 20px;
+.tools-toc-handle:active {
+  opacity: 1;
+  background: var(--bg-secondary);
 }
 
-.tools-toc-toggle-icon {
+.tools-toc-handle-icon {
   transition: transform 0.3s ease;
 }
 
 /* 收起时箭头旋转 180° 指向右侧（提示可展开） */
-.tools-toc-toggle-icon-closed {
+.tools-toc-handle-icon-closed {
   transform: rotate(180deg);
 }
 
@@ -247,7 +256,7 @@ onUnmounted(() => {
     display: none;
   }
 
-  .tools-toc-toggle {
+  .tools-toc-handle {
     display: none;
   }
 

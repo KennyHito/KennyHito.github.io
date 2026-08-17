@@ -3,7 +3,8 @@
   <section class="page-section">
     <div class="container news-layout">
       <!-- 桌面端（>860px）：固定在屏幕左侧的年月日目录，点击平滑定位到对应日期分组；支持横向展开/收起 -->
-      <aside ref="tocEl" class="news-toc" :class="{ 'news-toc-closed': !tocOpen }" aria-label="资讯日期目录">
+      <aside ref="tocEl" class="news-toc" :class="{ 'news-toc-closed': !tocOpen }" :style="tocStyle"
+        aria-label="资讯日期目录">
         <h4 class="news-toc-title">目录</h4>
         <ul class="news-toc-list">
           <li v-for="g in newsGroups" :key="g.date">
@@ -12,12 +13,13 @@
         </ul>
       </aside>
 
-      <!-- 目录展开/收起切换按钮（桌面端）：展开时贴在目录右侧，收起时回到屏幕左边缘 -->
-      <button class="news-toc-toggle" :class="{ 'news-toc-toggle-closed': !tocOpen }" @click="tocOpen = !tocOpen"
-        aria-label="展开或收起目录" :aria-expanded="tocOpen">
-        <AppIcon name="chevron-left" :size="14" class="news-toc-toggle-icon"
-          :class="{ 'news-toc-toggle-icon-closed': !tocOpen }" />
-      </button>
+      <!-- 目录拖拽条（桌面端）：位于目录右侧垂直居中，点击切换开合，长按水平拖拽可伸缩目录（松手吸附） -->
+      <div class="news-toc-handle" :style="handleStyle" role="button" tabindex="0"
+        :aria-expanded="tocOpen" aria-label="展开或收起目录" @pointerdown="onHandlePointerDown"
+        @keydown.enter.prevent="tocOpen = !tocOpen" @keydown.space.prevent="tocOpen = !tocOpen">
+        <AppIcon name="chevron-left" :size="10" class="news-toc-handle-icon"
+          :class="{ 'news-toc-handle-icon-closed': !tocOpen }" />
+      </div>
 
       <!-- 主内容区：资讯列表 -->
       <div class="news-main">
@@ -54,6 +56,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { newsGroups } from '../data/news.js'
 import AppIcon from '../components/AppIcon.vue'
 import NewsPanel from '../components/NewsPanel.vue'
+import { useTocDrag } from '../composables/useTocDrag.js'
 
 // 点击目录项，平滑滚动到对应日期分组
 function scrollToDate(date) {
@@ -64,8 +67,8 @@ function scrollToDate(date) {
 // 目录元素引用
 const tocEl = ref(null)
 
-// 桌面端左侧目录是否展开（横向展开/收起状态）
-const tocOpen = ref(false)
+// 目录展开/收起：点击切换，长按拖拽伸缩（拖拽条固定在目录右侧垂直居中）
+const { tocOpen, tocStyle, handleStyle, onHandlePointerDown } = useTocDrag()
 
 // 目录上滚动：始终阻止默认行为（避免穿透滚动资讯/页面），手动滚动年月日列表本身
 function onTocWheel(e) {
@@ -134,43 +137,49 @@ onUnmounted(() => {
   transform: translateX(calc(-100% - 20px));
 }
 
-/* 目录展开/收起切换按钮：fixed 固定在左侧，展开时位于目录面板内最右侧（与“目录”标题同行），收起时位于屏幕左边缘 */
-.news-toc-toggle {
+/* 目录拖拽条：fixed 固定在目录右侧垂直居中位置，展开时贴目录右边缘，收起时位于屏幕左边缘。
+   水平位置（left）由 JS 内联控制，拖拽时关闭过渡跟手，非拖拽时平滑过渡。
+   垂直居中基于目录区域（top 60px、最大高度 calc(100vh - 118px - var(--toc-bottom-offset))） */
+.news-toc-handle {
   position: fixed;
-  left: 122px;
-  top: 76px;
   z-index: 3;
+  top: calc(60px + (100vh - 118px - var(--toc-bottom-offset)) / 2);
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+  width: 10px;
+  height: 64px;
+  border-radius: 5px;
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text);
-  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  cursor: ew-resize;
+  /* 允许水平拖拽不被页面滚动抢占 */
+  touch-action: none;
+  user-select: none;
   opacity: 0.85;
   padding: 0;
-  /* left 与图标旋转同步过渡 */
-  transition: left 0.3s ease, transform 0.3s ease, background var(--transition), color var(--transition), opacity var(--transition);
+  transition: left 0.3s ease, background var(--transition), color var(--transition), opacity var(--transition);
 }
 
-.news-toc-toggle:hover {
+.news-toc-handle:hover {
   opacity: 1;
   background: var(--bg-secondary);
 }
 
-.news-toc-toggle-closed {
-  left: 20px;
+.news-toc-handle:active {
+  opacity: 1;
+  background: var(--bg-secondary);
 }
 
-.news-toc-toggle-icon {
+.news-toc-handle-icon {
   transition: transform 0.3s ease;
 }
 
 /* 收起时箭头旋转 180° 指向右侧（提示可展开） */
-.news-toc-toggle-icon-closed {
+.news-toc-handle-icon-closed {
   transform: rotate(180deg);
 }
 
@@ -225,7 +234,7 @@ onUnmounted(() => {
     display: none;
   }
 
-  .news-toc-toggle {
+  .news-toc-handle {
     display: none;
   }
 
