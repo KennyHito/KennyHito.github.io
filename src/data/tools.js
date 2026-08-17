@@ -5,7 +5,7 @@ export const toolCategories = [
     key: 'network',
     title: '网络类',
     color: '#34c759',
-    desc: '网络接入与合规访问工具，仅供个人技术学习、学术查阅使用',
+    desc: '网络接入与合规访问工具，仅供个人技术学习、学术查阅使用。',
     tools: [
       {
         key: 'vpn',
@@ -25,7 +25,7 @@ export const toolCategories = [
     key: 'tool',
     title: '工具类',
     color: '#0071e3',
-    desc: '日常开发与效率小工具，全部在浏览器本地完成，数据不上传',
+    desc: '日常开发与效率小工具，全部在浏览器本地完成，数据不上传。',
     tools: [
       {
         key: 'json-viewer',
@@ -37,42 +37,6 @@ export const toolCategories = [
         example: '',
         exampleDesc: '',
         page: 'jsonviewer',
-        linkText: '打开工具'
-      },
-      {
-        key: 'password-generator',
-        name: '随机密码生成器',
-        shortName: '随机密码',
-        desc: '安全随机密码生成工具：自由组合大写字母、小写字母、数字与特殊字符，自定义密码长度，使用浏览器原生加密随机数生成高强度密码，一键复制使用。适合账号注册、密钥创建、安全凭证生成等场景。',
-        features: ['自定义字符集', '自定义长度', '加密随机数', '一键复制'],
-        steps: [],
-        example: '',
-        exampleDesc: '',
-        page: 'pwdgenerator',
-        linkText: '打开工具'
-      },
-      {
-        key: 'base64-codec',
-        name: 'BASE64 加密/解密',
-        shortName: 'BASE64加解密',
-        desc: '支持 UTF-8 与 GBK 字符编码的 Base64 加密、解密工具，输入文本或 Base64 字符串后一键提交，结果可复制，支持输入输出互换。适合接口调试、编码转换、中文 GBK 编解码等场景。',
-        features: ['加密 / 解密切换', 'UTF-8 与 GBK 编码', '输入输出互换', '一键复制结果'],
-        steps: [],
-        example: '',
-        exampleDesc: '',
-        page: 'base64codec',
-        linkText: '打开工具'
-      },
-      {
-        key: 'md5-hash',
-        name: 'MD5 加密',
-        shortName: 'MD5加密',
-        desc: '在线 MD5 加密工具：输入任意文本即可计算 32 位小写 MD5 哈希值，结果支持一键复制。适合接口签名生成、数据校验、密码摘要等场景。',
-        features: ['在线 MD5 加密', '32 位小写结果', '一键复制结果', '本地计算不上传'],
-        steps: [],
-        example: '',
-        exampleDesc: '',
-        page: 'md5hash',
         linkText: '打开工具'
       },
       {
@@ -110,6 +74,42 @@ export const toolCategories = [
         exampleDesc: '',
         page: 'colorconverter',
         linkText: '打开工具'
+      },
+      {
+        key: 'base64-codec',
+        name: 'BASE64 加密/解密',
+        shortName: 'BASE64加解密',
+        desc: '支持 UTF-8 与 GBK 字符编码的 Base64 加密、解密工具，输入文本或 Base64 字符串后一键提交，结果可复制，支持输入输出互换。适合接口调试、编码转换、中文 GBK 编解码等场景。',
+        features: ['加密 / 解密切换', 'UTF-8 与 GBK 编码', '输入输出互换', '一键复制结果'],
+        steps: [],
+        example: '',
+        exampleDesc: '',
+        page: 'base64codec',
+        linkText: '打开工具'
+      },
+      {
+        key: 'md5-hash',
+        name: 'MD5 加密',
+        shortName: 'MD5加密',
+        desc: '在线 MD5 加密工具：输入任意文本即可计算 32 位小写 MD5 哈希值，结果支持一键复制。适合接口签名生成、数据校验、密码摘要等场景。',
+        features: ['在线 MD5 加密', '32 位小写结果', '一键复制结果', '本地计算不上传'],
+        steps: [],
+        example: '',
+        exampleDesc: '',
+        page: 'md5hash',
+        linkText: '打开工具'
+      },
+      {
+        key: 'password-generator',
+        name: '随机密码生成器',
+        shortName: '随机密码',
+        desc: '安全随机密码生成工具：自由组合大写字母、小写字母、数字与特殊字符，自定义密码长度，使用浏览器原生加密随机数生成高强度密码，一键复制使用。适合账号注册、密钥创建、安全凭证生成等场景。',
+        features: ['自定义字符集', '自定义长度', '加密随机数', '一键复制'],
+        steps: [],
+        example: '',
+        exampleDesc: '',
+        page: 'pwdgenerator',
+        linkText: '打开工具'
       }
     ]
   },
@@ -117,7 +117,7 @@ export const toolCategories = [
     key: 'ai',
     title: 'AI类',
     color: '#af52de',
-    desc: 'AI 智能体搭建与本地大模型运行',
+    desc: 'AI 智能体搭建与本地大模型运行。',
     tools: [
       {
         key: 'openclaw',
@@ -173,7 +173,7 @@ export const toolCategories = [
     key: 'api',
     title: 'API类',
     color: '#ff9500',
-    desc: '免费开放的 API 接口资源，即取即用',
+    desc: '免费开放的 API 接口资源，即取即用。',
     tools: [
       {
         key: 'deepseek',
