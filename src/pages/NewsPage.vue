@@ -134,10 +134,10 @@ onUnmounted(() => {
   transform: translateX(calc(-100% - 20px));
 }
 
-/* 目录展开/收起切换按钮：fixed 固定在左侧，展开时位于目录右侧，收起时位于屏幕左边缘 */
+/* 目录展开/收起切换按钮：fixed 固定在左侧，展开时位于目录面板内最右侧（与“目录”标题同行），收起时位于屏幕左边缘 */
 .news-toc-toggle {
   position: fixed;
-  left: 152px;
+  left: 122px;
   top: 76px;
   z-index: 3;
   display: flex;
