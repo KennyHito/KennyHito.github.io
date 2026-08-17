@@ -40,6 +40,18 @@ export const toolCategories = [
         linkText: '打开工具'
       },
       {
+        key: 'file-diff',
+        name: '文件对比工具',
+        shortName: '文件对比',
+        desc: '在线文件差异对比工具：支持左右分屏粘贴或打开任意文本文件（日志、代码、配置、JSON 等），实时高亮新增与删除内容，拖动分隔条自由调节两侧区域（移动端上下分屏），可一键互换两侧、载入示例快速体验、一键清空重来；内容为 JSON 时自动格式化后再对比，让差异一目了然。',
+        features: ['打开文件', '实时差异高亮', '左右/上下分屏拖拽', '一键互换', '载入示例', '清空重来', 'JSON 自动格式化对比'],
+        steps: [],
+        example: '',
+        exampleDesc: '',
+        page: 'filediff',
+        linkText: '打开工具'
+      },
+      {
         key: 'url-codec',
         name: 'URL 在线转码/解码',
         shortName: 'URL编解码',

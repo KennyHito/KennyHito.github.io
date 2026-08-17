@@ -45,6 +45,7 @@ import Md5Hash from './pages/tools/Md5Hash.vue'
 import UrlCodec from './pages/tools/UrlCodec.vue'
 import ImageBase64 from './pages/tools/ImageBase64.vue'
 import ColorConverter from './pages/tools/ColorConverter.vue'
+import FileDiff from './pages/tools/FileDiff.vue'
 
 // 工具页支持的站内子页面映射：hash 子路径 -> 组件
 const toolSubPages = {
@@ -54,7 +55,8 @@ const toolSubPages = {
   md5hash: Md5Hash,
   urlcodec: UrlCodec,
   imagebase64: ImageBase64,
-  colorconverter: ColorConverter
+  colorconverter: ColorConverter,
+  filediff: FileDiff
 }
 
 // 从 URL hash 解析当前页与子页面（支持刷新保持 / 直接访问 #/tools/jsonviewer）
