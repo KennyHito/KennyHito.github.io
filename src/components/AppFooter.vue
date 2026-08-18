@@ -2,12 +2,14 @@
 <template>
   <footer class="footer">
     <div class="container">
-      © {{ currentYear }} 知识分享站 ｜ 个人分享 · 仅供学习
+      © {{ currentYear }} KennyHito. All Rights Reserved. Ver:{{ version }}
     </div>
   </footer>
 </template>
 
 <script setup>
+// 版本号，直接读取 package.json 中的 version 字段
+import { version } from '../../package.json'
 // 当前年份，用于页脚版权显示
 const currentYear = new Date().getFullYear()
 </script>
