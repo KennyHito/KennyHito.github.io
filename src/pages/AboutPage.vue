@@ -229,7 +229,6 @@ const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHello
 .intro-sublist {
   margin: 10px 0 4px;
   padding: 4px 20px;
-  background: var(--surface);
   border-radius: var(--radius-sm);
 }
 

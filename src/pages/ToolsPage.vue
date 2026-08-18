@@ -5,8 +5,7 @@
   <section class="page-section page-root">
     <div class="container tools-layout">
       <!-- 桌面端（>860px）：固定在屏幕左侧的分类目录，大类下展示子类（工具项），点击平滑定位 -->
-      <aside ref="tocEl" class="toc" :class="{ 'toc-closed': !tocOpen }" :style="tocStyle"
-        aria-label="工具分类目录">
+      <aside ref="tocEl" class="toc" :class="{ 'toc-closed': !tocOpen }" :style="tocStyle" aria-label="工具分类目录">
         <h4 class="toc-title">目录</h4>
         <ul class="toc-list">
           <li v-for="c in toolCategories" :key="c.key">
@@ -17,7 +16,7 @@
             <ul class="toc-sub">
               <li v-for="t in c.tools" :key="t.key">
                 <a class="toc-link" href="#" @click.prevent="scrollTo('tool-' + t.key)">{{ t.shortName || t.name
-                  }}</a>
+                }}</a>
               </li>
             </ul>
           </li>
@@ -101,6 +100,7 @@ onUnmounted(() => {
 .tools-main {
   flex: 1;
   min-width: 0;
+  padding: 0 45px;
 }
 
 /* ===== 工具页专属：大类（带分类颜色圆点）目录条目样式 =====

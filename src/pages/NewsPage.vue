@@ -5,8 +5,7 @@
   <section class="page-section page-root">
     <div class="container news-layout">
       <!-- 桌面端（>860px）：固定在屏幕左侧的年月日目录，点击平滑定位到对应日期分组；支持横向展开/收起 -->
-      <aside ref="tocEl" class="toc" :class="{ 'toc-closed': !tocOpen }" :style="tocStyle"
-        aria-label="资讯日期目录">
+      <aside ref="tocEl" class="toc" :class="{ 'toc-closed': !tocOpen }" :style="tocStyle" aria-label="资讯日期目录">
         <h4 class="toc-title">目录</h4>
         <ul class="toc-list">
           <li v-for="g in newsGroups" :key="g.date">
@@ -107,6 +106,7 @@ onUnmounted(() => {
 .news-main {
   flex: 1;
   min-width: 0;
+  padding: 0 45px;
 }
 
 /* 每个日期分组锚点：scrollIntoView 定位时避开吸顶导航 */
