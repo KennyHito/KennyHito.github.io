@@ -5,9 +5,9 @@
       <!-- 左侧信息栏 -->
       <aside class="about-aside">
         <div class="avatar">
-          <img src="../img/about.jpg" alt="KennyHito" @click="iconClick" />
+          <img src="../img/about.jpg" :alt="site.author" @click="iconClick" />
         </div>
-        <h1 class="about-name">KennyHito</h1>
+        <h1 class="about-name">{{ site.author }}</h1>
         <p class="about-role">iOS &amp; Vue 开发者</p>
         <p class="about-meta">中国 · 北京</p>
         <p class="about-quote">Look for and don't give up, give up, don't look back!</p>
@@ -32,7 +32,7 @@
         <section class="about-block">
           <h2 class="block-title">关于我</h2>
           <div class="prose">
-            <p>☕️ I'm KennyHito。</p>
+            <p>☕️ I'm {{ site.author }}。</p>
             <p>🌟 搭建的个人网站 <a class="inline-link" :href="site.devnote" target="_blank" rel="noopener">点击前往</a>。</p>
             <p>🍇 自用 <a class="inline-link" :href="site.vpn" target="_blank" rel="noopener">梯子🪜</a>（可注册试用 24
               小时，访问提示不安全请忽略继续）。</p>

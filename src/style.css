@@ -75,6 +75,7 @@
   --text: #e5e5ea;
   --title: #f5f5f7;
   --border: #2c2c36;
+  /* 强调色在暗色背景下提亮为更亮的蓝，保证对比可读 */
   --accent: #2997ff;
   --accent-hover: #47a6ff;
   --accent-active: #0077ed;
@@ -138,13 +139,17 @@ a {
 
 /* 通用居中容器：限制最大宽度并水平居中，左右留白 */
 .container {
+  /* 内容最大宽度，超出后两侧留白 */
   max-width: 1080px;
+  /* 上下为 0、左右自动 → 水平居中 */
   margin: 0 auto;
+  /* 左右内边距，避免内容贴边 */
   padding: 0 24px;
 }
 
 /* 主内容区：保证至少占满视口大部分高度，避免页脚上贴 */
 main {
+  /* 最小高度取视口的 60%，内容偏少时页脚也不会上移贴顶 */
   min-height: 60vh;
 }
 
@@ -182,11 +187,17 @@ main {
 
 /* ===== 通用组件：卡片 ===== */
 .card {
+  /* 卡片表面背景（亮色为纯白，暗色为深灰） */
   background: var(--surface);
+  /* 1px 细分边框，勾勒卡片轮廓 */
   border: 1px solid var(--border);
+  /* 大圆角，呼应全站圆角体系 */
   border-radius: var(--radius-lg);
+  /* 内部留白 */
   padding: 28px;
+  /* 默认轻投影，营造悬浮层次 */
   box-shadow: var(--shadow-sm);
+  /* 悬停位移 / 阴影 / 边框变化时的平滑过渡 */
   transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
@@ -198,53 +209,75 @@ main {
 
 /* ===== 通用组件：按钮 ===== */
 .btn {
+  /* 字体：常规字重、16px、行高 1（按钮文字不换行） */
   font: 400 16px/1 var(--font-sans);
+  /* 内边距，确定按钮点击热区大小 */
   padding: 12px 22px;
-  /* 胶囊按钮 */
+  /* 胶囊形圆角（全圆） */
   border-radius: var(--radius-pill);
+  /* 默认透明边框，为主/次按钮预留边框色位置 */
   border: 1px solid transparent;
+  /* 手型光标，提示可点击 */
   cursor: pointer;
+  /* 行内块，便于与文字并排 */
   display: inline-block;
+  /* 背景 / 文字 / 缩放下变化时的平滑过渡 */
   transition: background var(--transition), color var(--transition), transform 0.1s ease;
 }
 
 /* 主按钮（外部链接）：无背景，仅蓝色文字 + 蓝色边框 */
 .btn-primary {
+  /* 无填充背景，仅描边 + 文字，轻量风格 */
   background: transparent;
+  /* 文字用主强调色（蓝） */
   color: var(--accent);
+  /* 边框同主强调色 */
   border-color: var(--accent);
 }
 
 .btn-primary:hover {
+  /* 悬停时填入强调色半透明底，给出反馈 */
   background: var(--accent-soft);
 }
 
 .btn-primary:active {
+  /* 按下时轻微缩小，提供点击触感 */
   transform: scale(0.98);
 }
 
 /* 次按钮（站内跳转）：无背景，仅橙色文字 + 橙色边框，与外部链接区分 */
 .btn-secondary {
+  /* 无填充背景 */
   background: transparent;
+  /* 文字用暖色强调（橙），区分于外部链接按钮 */
   color: var(--accent-warm);
+  /* 边框同暖色 */
   border-color: var(--accent-warm);
 }
 
 .btn-secondary:hover {
+  /* 悬停填入暖色半透明底（亮色主题） */
   background: rgba(255, 107, 53, 0.1);
 }
 
 [data-theme="dark"] .btn-secondary:hover {
+  /* 暗色主题下换成对应的暗色暖色透明底，保持对比 */
   background: rgba(255, 122, 69, 0.14);
 }
 
 /* ===== 通用组件：标签 / 徽章 ===== */
 .badge {
+  /* 行内块，可与文字同行显示 */
   display: inline-block;
+  /* 中等字重、13px 小号标签文字 */
   font: 500 13px/1 var(--font-sans);
+  /* 文字用主强调色 */
   color: var(--accent);
+  /* 强调色半透明底，作为标签底色 */
   background: var(--accent-soft);
+  /* 胶囊圆角 */
   border-radius: var(--radius-pill);
+  /* 标签内边距 */
   padding: 6px 12px;
 }
 

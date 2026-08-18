@@ -113,6 +113,14 @@ onUnmounted(() => {
   padding: 0 66px;
 }
 
+@media (max-width: 1264px) {
+  .news-main {
+    flex: 1;
+    min-width: 0;
+    padding: 0px 0px;
+  }
+}
+
 /* 每个日期分组锚点：scrollIntoView 定位时避开吸顶导航 */
 .news-anchor {
   scroll-margin-top: 72px;

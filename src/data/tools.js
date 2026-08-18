@@ -1,6 +1,9 @@
 // ===== 数据：工具箱分类与工具数据 =====
 // 工具数据：按分类分组展示（网络 / 工具 / AI / API）
 // 每个分类独立使用 useMasonry 瀑布流布局
+// 引入站点作者名，供示例文案中派生 GitHub 用户名占位
+import { author } from './site.js'
+
 export const toolCategories = [
   {
     key: 'network',
@@ -207,8 +210,8 @@ export const toolCategories = [
         desc: 'GitHub 官方提供的用户搜索接口，在链接末尾拼接 GitHub 用户名即可查询该用户的基本信息、仓库数、粉丝数等公开资料，返回标准 JSON。适合做开发者主页检索、贡献者查证、技术社区用户分析，或接入智能体实现「查一下某个 GitHub 用户」的对话能力。',
         features: ['官方接口', '用户名检索', 'JSON 返回', '免费调用'],
         steps: [],
-        example: '例如：https://api.github.com/search/users?q=KennyHito',
-        exampleDesc: '将链接末尾的 KennyHito 替换为任意 GitHub 用户名即可查询',
+        example: `例如：https://api.github.com/search/users?q=${author}`,
+        exampleDesc: `将链接末尾的 ${author} 替换为任意 GitHub 用户名即可查询`,
         link: 'https://api.github.com/search/users?q=',
         linkText: '查看接口'
       },

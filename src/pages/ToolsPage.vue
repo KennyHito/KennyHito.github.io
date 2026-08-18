@@ -16,7 +16,7 @@
             <ul class="toc-sub">
               <li v-for="t in c.tools" :key="t.key">
                 <a class="toc-link" href="#" @click.prevent="scrollTo('tool-' + t.key)">{{ t.shortName || t.name
-                }}</a>
+                  }}</a>
               </li>
             </ul>
           </li>
@@ -105,6 +105,14 @@ onUnmounted(() => {
   flex: 1;
   min-width: 0;
   padding: 0 66px;
+}
+
+@media (max-width: 1264px) {
+  .tools-main {
+    flex: 1;
+    min-width: 0;
+    padding: 0px 0px;
+  }
 }
 
 /* ===== 工具页专属：大类（带分类颜色圆点）目录条目样式 =====

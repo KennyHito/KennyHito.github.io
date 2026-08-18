@@ -2,7 +2,7 @@
 <template>
   <footer class="footer">
     <div class="container">
-      © {{ currentYear }} KennyHito. All Rights Reserved. Ver:{{ version }}
+      © {{ currentYear }} {{ site.author }}. All Rights Reserved. Ver:{{ version }}
     </div>
   </footer>
 </template>
@@ -10,6 +10,8 @@
 <script setup>
 // 版本号，直接读取 package.json 中的 version 字段
 import { version } from '../../package.json'
+// 站点配置（含作者名 author，用于页脚版权展示）
+import { site } from '../data/site.js'
 // 当前年份，用于页脚版权显示
 const currentYear = new Date().getFullYear()
 </script>
