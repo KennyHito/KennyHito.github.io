@@ -40,12 +40,12 @@
 | 状态共享 | Composition API + `provide / inject`（`composables/useTheme.js`） |
 | 公共逻辑 | `useClipboard`（复制，含降级）、`useSplitPane`（双端拖拽分割）、`useToolStandalone`（工具页全屏）、`useMasonry`（瀑布流） |
 | 样式 | 原生 CSS + CSS 变量（主题 / 间距统一维护），含 `scoped` 局部样式 |
-| 主题持久化 | `localStorage`（`explorenet-theme`）+ `storage` 事件跨窗口同步 |
+| 主题持久化 | `localStorage`（`knowshare-theme`）+ `storage` 事件跨窗口同步 |
 
 ## 📂 项目结构
 
 ```
-ExploreNet/
+KnowShare/
 ├── index.html              # 入口 HTML，含主题预设置内联脚本
 ├── vite.config.js          # Vite 配置
 ├── package.json

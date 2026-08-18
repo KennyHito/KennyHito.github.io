@@ -1,7 +1,7 @@
 // ===== 组合式函数：主题切换（亮 / 暗，持久化 + 跨页同步）=====
 import { ref, watch } from 'vue'
 
-const STORAGE_KEY = 'explorenet-theme'
+const STORAGE_KEY = 'knowshare-theme'
 
 function initial() {
   try {

@@ -110,7 +110,7 @@ onUnmounted(() => {
 .news-main {
   flex: 1;
   min-width: 0;
-  padding: 0 45px;
+  padding: 0 66px;
 }
 
 /* 每个日期分组锚点：scrollIntoView 定位时避开吸顶导航 */
