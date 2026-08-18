@@ -1,37 +1,62 @@
 <template>
-    <div class="thought-bubble-wrap">
-        <!-- 思考气泡svg -->
-        <svg width="320" height="300" viewBox="0 0 320 300">
-            <!-- 云朵思考框 -->
+    <div class="thought-wrap" v-if="showBubble">
+        <svg width="240" height="220" viewBox="0 0 340 320">
             <path
-                d="M160 40 C220 10,280 60,270 120 C290 180,230 240,160 230 C90 250,30 190,50 120 C20 70,100 20,160 40Z"
-                fill="#fff" stroke="#222" stroke-width="8" />
-            <!-- 尾巴三个圆点 -->
-            <circle cx="40" cy="260" r="14" fill="#fff" stroke="#222" stroke-width="8" />
-            <circle cx="90" cy="265" r="18" fill="#fff" stroke="#222" stroke-width="8" />
-            <circle cx="150" cy="245" r="26" fill="#fff" stroke="#222" stroke-width="8" />
+                d="M170 45 C235 12,295 68,282 128 C302 190,238 250,170 238 C98 258,35 195,54 126 C24 74,108 24,170 45Z"
+                fill="#ffffff" stroke="#111111" stroke-width="7" />
+            <circle cx="42" cy="278" r="12" fill="#fff" stroke="#111" stroke-width="7" />
+            <circle cx="96" cy="282" r="15" fill="#fff" stroke="#111" stroke-width="7" />
+            <circle cx="158" cy="258" r="22" fill="#fff" stroke="#111" stroke-width="7" />
         </svg>
-        <!-- 气泡内文字内容，绝对定位放在云朵里面 -->
-        <div class="bubble-text">这里放思考的文字内容</div>
+        <div class="inner-content">
+            点击和拖拽可以打开目录
+            <div class="ok-btn" @click="handleOk">OK</div>
+        </div>
     </div>
 </template>
+
 <script setup>
-import { useToolStandalone } from '../composables/useToolStandalone.js'
-/* ---------- 隐藏站点全局导航栏（tool-standalone 模式） ---------- */
+import { ref } from 'vue'
+import { useToolStandalone } from '../composables/useToolStandalone';
 useToolStandalone()
+// 控制气泡显示隐藏
+const showBubble = ref(true)
+
+const handleOk = () => {
+    showBubble.value = false
+}
 </script>
+
 <style scoped>
-.thought-bubble-wrap {
+.thought-wrap {
     position: relative;
-    width: 320px;
-    height: 300px;
+    width: 240px;
 }
 
-.bubble-text {
+.inner-content {
     position: absolute;
-    top: 60px;
-    left: 60px;
-    right: 40px;
-    font-size: 16px;
+    top: 52px;
+    left: 48px;
+    right: 32px;
+    font-size: 15px;
+    color: #222;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ok-btn {
+    width: 64px;
+    align-self: center;
+    text-align: center;
+    padding: 4px 0;
+    border: 2px solid #333;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #fff;
+}
+
+.ok-btn:hover {
+    background: #eee;
 }
 </style>
