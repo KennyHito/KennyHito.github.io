@@ -31,6 +31,9 @@
           :class="{ 'toc-handle-icon-closed': !tocOpen }" />
       </div>
 
+      <!-- 目录收起提示：拖拽条右侧显示「点击或拖拽可展开」，拖拽时自动隐藏 -->
+      <TocCollapsedHint :toc-open="tocOpen" :dragging="isDragging" />
+
       <!-- 主内容区：各分类分区 -->
       <div class="tools-main">
         <!-- 移动端（≤860px）：顶部横向滚动的大类胶囊，点击同样平滑定位 -->
@@ -54,6 +57,7 @@ import { toolCategories } from '../data/tools.js'
 import ToolsSection from '../components/ToolsSection.vue'
 import AppIcon from '../components/AppIcon.vue'
 import { useTocDrag } from '../composables/useTocDrag.js'
+import TocCollapsedHint from '../components/TocCollapsedHint.vue'
 
 // 引入 Vue API、工具数据源、目录拖拽组合式函数与页面组件
 // 点击目录项，平滑滚动到对应分区 / 工具卡片
@@ -63,7 +67,7 @@ function scrollTo(id) {
 }
 
 // 目录展开/收起：点击切换，长按拖拽伸缩（拖拽条固定在目录右侧垂直居中）
-const { tocOpen, tocStyle, handleStyle, onHandlePointerDown } = useTocDrag()
+const { tocOpen, tocStyle, handleStyle, onHandlePointerDown, isDragging } = useTocDrag()
 
 // 目录元素引用
 const tocEl = ref(null)

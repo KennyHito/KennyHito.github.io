@@ -5,7 +5,7 @@
 // 2. 长按水平拖拽：目录跟随手柄位置实时伸缩，松手后按当前位置吸附到展开或收起。
 // 使用 Pointer Events 统一处理鼠标与触摸（PointerEvent 同样含 clientX/clientY），
 // 配合 CSS touch-action:none，移动端拖拽不会被浏览器滚动抢走。
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 /**
  * @param {Object} options
@@ -21,9 +21,11 @@ export function useTocDrag(options = {}) {
   const closedOffset = options.closedOffset ?? 150
 
   // 桌面端左侧目录是否展开（横向展开/收起状态）
-  const tocOpen = ref(true)
+  const tocOpen = ref(false)
   // 拖拽中目录的水平偏移（px），null 表示非拖拽状态
   const dragX = ref(null)
+  // 是否正处于拖拽（按下即 true，松手即 false），供气泡提示在拖拽时立即隐藏
+  const isDragging = ref(false)
 
   let startClientX = 0   // 按下时的指针横坐标
   let startHandleLeft = 0 // 按下时拖拽条中心位置
@@ -35,6 +37,8 @@ export function useTocDrag(options = {}) {
     startClientX = e.clientX
     startHandleLeft = tocOpen.value ? handleOpenLeft : handleClosedLeft
     dragging = false
+    // 按下即进入拖拽态：气泡提示立即隐藏（不等拖拽结束）
+    isDragging.value = true
     // 按下即接管目录 transform（值不变，无跳动），供拖拽跟手 / 点击后平滑吸附
     dragX.value = tocOpen.value ? 0 : -closedOffset
     // 锁定全局选中，防止拖拽时选中文本
@@ -64,10 +68,12 @@ export function useTocDrag(options = {}) {
       // 拖拽松手：以中间位置为界吸附到展开或收起
       tocOpen.value = dragX.value > -closedOffset / 2
     } else {
-      // 未产生拖拽视为点击，直接切换开合
+      //  `未产生拖拽视为点击，直接切换开合
       tocOpen.value = !tocOpen.value
     }
     dragX.value = null
+    // 拖拽结束，气泡提示恢复按 tocOpen 判断是否显示
+    isDragging.value = false
   }
 
   // 目录元素内联样式：拖拽时覆盖 transform 并关闭过渡（跟手），非拖拽时交给 class 平滑过渡
@@ -92,5 +98,10 @@ export function useTocDrag(options = {}) {
     transition: dragX.value !== null ? 'none' : 'left 0.3s ease',
   }))
 
-  return { tocOpen, tocStyle, handleStyle, onHandlePointerDown }
+  // 同步拖拽条中心位置到全局 CSS 变量，供 TocCollapsedHint 跟随定位
+  watch(handleLeft, (val) => {
+    document.documentElement.style.setProperty('--toc-handle-left', val + 'px')
+  }, { immediate: true })
+
+  return { tocOpen, tocStyle, handleStyle, onHandlePointerDown, isDragging }
 }

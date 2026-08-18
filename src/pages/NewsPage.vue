@@ -22,6 +22,9 @@
           :class="{ 'toc-handle-icon-closed': !tocOpen }" />
       </div>
 
+      <!-- 目录收起提示：拖拽条右侧显示「点击或拖拽可展开」，拖拽时自动隐藏 -->
+      <TocCollapsedHint :toc-open="tocOpen" :dragging="isDragging" />
+
       <!-- 主内容区：资讯列表 -->
       <div class="news-main">
         <!-- 移动端（≤860px）：顶部横向滚动的日期胶囊，点击同样平滑定位 -->
@@ -58,6 +61,7 @@ import { newsGroups } from '../data/news.js'
 import AppIcon from '../components/AppIcon.vue'
 import NewsPanel from '../components/NewsPanel.vue'
 import { useTocDrag } from '../composables/useTocDrag.js'
+import TocCollapsedHint from '../components/TocCollapsedHint.vue'
 
 // 引入 Vue API、资讯数据源、目录拖拽组合式函数与页面组件
 // 点击目录项，平滑滚动到对应日期分组
@@ -70,7 +74,7 @@ function scrollToDate(date) {
 const tocEl = ref(null)
 
 // 目录展开/收起：点击切换，长按拖拽伸缩（拖拽条固定在目录右侧垂直居中）
-const { tocOpen, tocStyle, handleStyle, onHandlePointerDown } = useTocDrag()
+const { tocOpen, tocStyle, handleStyle, onHandlePointerDown, isDragging } = useTocDrag()
 
 // 目录上滚动：始终阻止默认行为（避免穿透滚动资讯/页面），手动滚动年月日列表本身
 function onTocWheel(e) {
