@@ -47,6 +47,7 @@ import UrlCodec from './pages/tools/UrlCodec.vue'
 import ImageBase64 from './pages/tools/ImageBase64.vue'
 import ColorConverter from './pages/tools/ColorConverter.vue'
 import FileDiff from './pages/tools/FileDiff.vue'
+import TestPage from './pages/TestPage.vue'
 
 // 工具页支持的站内子页面映射：hash 子路径 -> 组件
 const toolSubPages = {
@@ -57,7 +58,12 @@ const toolSubPages = {
   urlcodec: UrlCodec,
   imagebase64: ImageBase64,
   colorconverter: ColorConverter,
-  filediff: FileDiff
+  filediff: FileDiff,
+}
+
+// 独立页面映射（不显示在顶部导航栏，可通过 #/testpage 直接访问）
+const extraPages = {
+  testpage: TestPage,
 }
 
 // 从 URL hash 解析当前页与子页面（支持刷新保持 / 直接访问 #/tools/jsonviewer）
@@ -66,8 +72,8 @@ function parseHash() {
   const h = (window.location.hash || '').replace(/^#\/?/, '')
   // 拆出主 key 与可选子路径
   const [key, sub] = h.split('/')
-  // 主 key 合法则使用，否则回退到首页
-  const validKey = tabs.some((t) => t.key === key) ? key : 'home'
+  // 主 key 属于导航 tab 或独立页面则使用，否则回退到首页
+  const validKey = tabs.some((t) => t.key === key) || extraPages[key] ? key : 'home'
   // 子路径必须对应工具页支持的子页面，否则视为无子页面
   const validSub = validKey === 'tools' && toolSubPages[sub] ? sub : ''
   return { key: validKey, sub: validSub }
@@ -80,6 +86,10 @@ const currentSub = ref(initialSub)
 
 // 根据当前 key 计算出需要渲染的页面组件（优先渲染工具子页面）
 const currentComp = computed(() => {
+  // 优先渲染独立页面（如测试页）
+  if (extraPages[current.value]) {
+    return extraPages[current.value]
+  }
   if (current.value === 'tools' && currentSub.value) {
     return toolSubPages[currentSub.value]
   }

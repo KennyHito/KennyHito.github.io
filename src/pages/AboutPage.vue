@@ -5,7 +5,7 @@
       <!-- 左侧信息栏 -->
       <aside class="about-aside">
         <div class="avatar">
-          <img src="../img/about.jpg" alt="KennyHito" />
+          <img src="../img/about.jpg" alt="KennyHito" @click="iconClick" />
         </div>
         <h1 class="about-name">KennyHito</h1>
         <p class="about-role">iOS &amp; Vue 开发者</p>
@@ -81,6 +81,11 @@ const navigate = inject('navigate')
 
 // 将 repos 数组按固定顺序解构为具名引用，对应下方「关于我」中的尚硅谷系列仓库链接
 const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHelloVue3] = repos
+
+function iconClick() {
+  // 点击头像跳转到 TestPage.vue 独立页面
+  // navigate('testpage')
+}
 </script>
 
 <style scoped>
@@ -118,6 +123,7 @@ const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHello
   height: 100%;
   object-fit: cover;
   display: block;
+  cursor: pointer;
 }
 
 .about-name {
