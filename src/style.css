@@ -175,7 +175,7 @@ main {
 
 /* 页面根区块（每个页面最外层 <section class="page-section page-root">）：
    顶部预留悬浮导航栏高度，避免内容被固定导航栏遮挡；
-   移动端（≤734px）导航栏略矮，顶部留白收窄（见下方媒体查询） */
+   移动端（≤1264px）导航栏略矮，顶部留白收窄（见下方媒体查询） */
 .page-root {
   padding-top: 120px;
 }
@@ -370,7 +370,7 @@ main {
   display: none;
 }
 
-@media (max-width: 734px) {
+@media (max-width: 1264px) {
   .toc {
     display: none;
   }
