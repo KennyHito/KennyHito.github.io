@@ -396,12 +396,6 @@ main {
   flex: 0 0 20px;
 }
 
-.rgb-field {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .rgb-field input[type="number"] {
   width: 88px;
   flex: 0 0 88px;
