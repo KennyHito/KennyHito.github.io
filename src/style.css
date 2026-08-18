@@ -414,10 +414,7 @@ main {
     opacity: 1;
     background: var(--bg-secondary);
   }
-}
 
-/* ===== 响应式（全局部分） ===== */
-@media (max-width: 734px) {
   .page-section {
     /* 移动端压缩区块上下间距 */
     padding: 10px 0;
