@@ -6,6 +6,8 @@
 export const author = 'KennyHito'
 
 export const site = {
+  // 站点作者（站主昵称 / GitHub 用户名）：关于页展示名、页脚版权均由 site.author 读取
+  author: author,
   // 站点名称
   name: '知识分享站',
   // 站点 Slogan（移动端菜单底部展示）
