@@ -9,12 +9,7 @@
           <!-- 手动刷新评论：Giscus 非实时推送，切换 tab 后点此拉取最新评论。
                直接复用全站 .btn / .btn-secondary 胶囊描边样式，与工具卡按钮同款；
                按钮文字精简为「刷新」，hover 时气泡显示完整「刷新评论」说明 -->
-          <button
-            class="btn btn-secondary mb-refresh"
-            type="button"
-            @click="refreshComments"
-            aria-label="刷新评论"
-          >
+          <button class="btn btn-secondary mb-refresh" type="button" @click="refreshComments" aria-label="刷新评论">
             刷新
             <span class="mb-refresh-tooltip">刷新评论</span>
           </button>
@@ -124,6 +119,7 @@ function refreshComments() {
 
 .mb-desc {
   font-size: 15px;
+  font-family: var(--font-mono, ui-monospace, Menlo, Consolas, monospace);
   line-height: 1.7;
   color: var(--text);
   opacity: 0.8;
