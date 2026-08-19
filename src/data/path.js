@@ -41,3 +41,6 @@ export const iconMail = 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-
 
 // 移动端菜单：邮箱封口
 export const iconMailFlap = 'M22 6l-10 7L2 6'
+
+// 导航栏：搜索（放大镜手柄）
+export const iconSearch = 'M21 21l-4.3-4.3'

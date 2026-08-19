@@ -10,6 +10,9 @@
   <!-- 底部页脚 -->
   <AppFooter />
 
+  <!-- 全局搜索弹窗：由导航栏搜索按钮唤起，通过 openSearch 注入到各组件 -->
+  <SearchModal :open="searchOpen" @close="searchOpen = false" />
+
   <!-- 回到顶部：滚动超过半屏后悬浮于右下角 -->
   <transition name="backtop-fade">
     <button v-if="showBackTop" class="back-to-top" @click="backToTop" aria-label="回到顶部">
@@ -38,6 +41,8 @@ import AppFooter from './components/AppFooter.vue'
 import AppIcon from './components/AppIcon.vue'
 // 导入页面导航配置（key / label / comp）
 import { tabs } from './data/tabs.js'
+// 导入全局搜索弹窗组件
+import SearchModal from './components/SearchModal.vue'
 // 导入工具子页面（如 JSON 格式化查看器、随机密码生成器），通过 #/tools/<sub> 访问
 import JsonViewer from './pages/tools/JsonViewer.vue'
 import PwdGenerator from './pages/tools/PwdGenerator.vue'
@@ -185,6 +190,24 @@ onMounted(() => {
 
 // 供子页面（如首页快捷入口）触发 tab 切换
 provide('navigate', navigate)
+
+// 供导航栏搜索按钮唤起全局搜索弹窗
+const searchOpen = ref(false)
+function openSearch() {
+  searchOpen.value = true
+}
+provide('openSearch', openSearch)
+
+// 全局快捷键：Mac 用 Command+K，Windows 用 Ctrl+K 唤起搜索弹窗
+function onKeydown(e) {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+    // 阻止浏览器默认行为（如聚焦地址栏）
+    e.preventDefault()
+    openSearch()
+  }
+}
+onMounted(() => window.addEventListener('keydown', onKeydown))
+onUnmounted(() => window.removeEventListener('keydown', onKeydown))
 </script>
 
 <style scoped>

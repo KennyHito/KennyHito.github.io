@@ -12,6 +12,8 @@
         @click.prevent="switchTab(t.key)">{{ t.label }}</a>
     </nav>
     <div class="nav-actions">
+      <!-- 搜索按钮：唤起全局搜索弹窗，置于主题切换图标之前 -->
+      <SearchButton />
       <ThemeToggle />
       <!-- 移动端：汉堡菜单按钮（展开/收起） -->
       <button class="nav-menu-btn" @click="mobileMenuOpen = !mobileMenuOpen"
@@ -49,6 +51,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import ThemeToggle from './ThemeToggle.vue'
+import SearchButton from './SearchButton.vue'
 import AppIcon from './AppIcon.vue'
 import { site } from '../data/site.js'
 
@@ -171,7 +174,7 @@ if (typeof window !== 'undefined') {
   transform: scale(0.94);
 }
 
-/* 导航右侧操作区（主题开关 → 汉堡按钮），推到最右侧 */
+/* 导航右侧操作区（搜索 → 主题开关 → 汉堡按钮），推到最右侧 */
 .nav-actions {
   display: flex;
   align-items: center;

@@ -145,7 +145,7 @@ export const toolCategories = [
         example: '',
         exampleDesc: '',
         link: 'https://docs.openclaw.ai/zh-CN',
-        linkText: '前往OpenClaw官方文档'
+        linkText: '前往官网'
       },
       {
         key: 'wordbuddy',
@@ -157,7 +157,7 @@ export const toolCategories = [
         example: '',
         exampleDesc: '',
         link: 'https://www.codebuddy.cn/docs/workbuddy/Overview',
-        linkText: '前往WordBuddy官网'
+        linkText: '前往官网'
       },
       {
         key: 'coze',
@@ -169,7 +169,7 @@ export const toolCategories = [
         example: '',
         exampleDesc: '',
         link: 'https://www.coze.cn',
-        linkText: '前往Coze官网'
+        linkText: '前往官网'
       },
       {
         key: 'ollama',
@@ -181,7 +181,7 @@ export const toolCategories = [
         example: '',
         exampleDesc: '',
         link: 'https://ollama.com/',
-        linkText: '前往Ollama官网'
+        linkText: '前往官网'
       }
     ]
   },
@@ -201,7 +201,7 @@ export const toolCategories = [
         example: '',
         exampleDesc: '',
         link: 'https://platform.deepseek.com/',
-        linkText: '前往DeepSeek开放平台'
+        linkText: '前往官网'
       },
       {
         key: 'github-user-search',

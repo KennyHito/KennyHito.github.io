@@ -54,6 +54,11 @@
       <path :d="iconMail" />
       <path :d="iconMailFlap" />
     </template>
+    <!-- search：搜索（放大镜：圆 + 手柄） -->
+    <template v-else-if="name === 'search'">
+      <circle cx="11" cy="11" r="7" />
+      <path :d="iconSearch" />
+    </template>
   </svg>
 </template>
 
@@ -61,7 +66,7 @@
 import { computed } from 'vue'
 import {
   iconSun, iconMoon, iconChevronLeft, iconArrowUp, iconGithub,
-  iconHome, iconHomeDoor, iconTools, iconNews, iconAbout, iconMail, iconMailFlap
+  iconHome, iconHomeDoor, iconTools, iconNews, iconAbout, iconMail, iconMailFlap, iconSearch
 } from '../data/path.js'
 
 // 组件属性：name 指定图标名称，size 控制边长，strokeWidth 控制描边宽度
