@@ -70,6 +70,7 @@ const mobileIconMap = {
   home: 'home',
   tools: 'tools',
   news: 'news',
+  message: 'mail',
   about: 'about'
 }
 

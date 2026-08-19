@@ -5,10 +5,12 @@ import HomePage from '../pages/HomePage.vue'
 import ToolsPage from '../pages/ToolsPage.vue'
 import NewsPage from '../pages/NewsPage.vue'
 import AboutPage from '../pages/AboutPage.vue'
+import MessageBoard from '../pages/MessageBoard.vue'
 
 export const tabs = [
   { key: 'home', label: '首页', comp: HomePage },
   { key: 'tools', label: '工具', comp: ToolsPage },
   { key: 'news', label: '资讯', comp: NewsPage },
+  { key: 'message', label: '留言', comp: MessageBoard },
   { key: 'about', label: '关于', comp: AboutPage }
 ]

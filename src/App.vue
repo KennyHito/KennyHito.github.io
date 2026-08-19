@@ -4,8 +4,11 @@
   <AppNav :tabs="tabs" :current="current" @switch="navigate" />
   <!-- 主内容区：根据当前组件动态渲染对应页面 -->
   <main class="app-main">
-    <!-- 使用动态组件渲染当前页面，key 用于强制重新创建组件实例 -->
-    <component :is="currentComp" :key="current" class="page" />
+    <!-- 留言板首次进入后常驻挂载，用 v-show 仅隐藏不卸载，
+         避免 Giscus 的 iframe 在 tab 切换时被浏览器重新加载（KeepAlive 对 iframe 无效） -->
+    <MessageBoard v-if="messageMounted" v-show="current === 'message'" class="page" />
+    <!-- 其余页面动态渲染；留言板不在此渲染，避免重复实例 -->
+    <component v-if="current !== 'message' && currentComp" :is="currentComp" class="page" />
   </main>
   <!-- 底部页脚 -->
   <AppFooter />
@@ -32,7 +35,7 @@
 
 <script setup>
 // 从 Vue 中导入响应式状态、计算属性、依赖注入及生命周期钩子
-import { ref, computed, provide, onMounted, onUnmounted } from 'vue'
+import { ref, computed, provide, onMounted, onUnmounted, watch } from 'vue'
 // 导入顶部导航栏组件
 import AppNav from './components/AppNav.vue'
 // 导入底部页脚组件
@@ -53,6 +56,7 @@ import ImageBase64 from './pages/tools/ImageBase64.vue'
 import ColorConverter from './pages/tools/ColorConverter.vue'
 import FileDiff from './pages/tools/FileDiff.vue'
 import TestPage from './pages/TestPage.vue'
+import MessageBoard from './pages/MessageBoard.vue'
 
 // 工具页支持的站内子页面映射：hash 子路径 -> 组件
 const toolSubPages = {
@@ -99,6 +103,12 @@ const currentComp = computed(() => {
     return toolSubPages[currentSub.value]
   }
   return tabs.find((t) => t.key === current.value).comp
+})
+
+// 留言板首次进入后才常驻挂载：避免一进首页就加载 Giscus，同时保证切走再切回不重载
+const messageMounted = ref(initialKey === 'message')
+watch(current, (k) => {
+  if (k === 'message') messageMounted.value = true
 })
 
 // tab 切换 = 改变 URL hash；真正的内容切换由 hashchange 驱动

@@ -34,7 +34,7 @@
           <div class="prose">
             <p>☕️ I'm {{ site.author }}。</p>
             <p>🌟 搭建的个人网站 <a class="inline-link" :href="site.devnote" target="_blank" rel="noopener">点击前往</a>。</p>
-            <p>🍇 自用 <a class="inline-link" :href="site.vpn" target="_blank" rel="noopener">梯子🪜</a>（可注册试用 24
+            <p>🍇 自用 <a class="inline-link" :href="site.vpn" target="_blank" rel="noopener">梯子🚀</a>（可注册试用 24
               小时，访问提示不安全请忽略继续）。</p>
             <p>🤔 主攻 iOS 和 Vue。</p>
             <p>📱 iOS 工作主要用 Objective-C，日常封装了一些功能，见 <a class="inline-link" :href="repoIOS.url" target="_blank"

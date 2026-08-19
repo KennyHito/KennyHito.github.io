@@ -59,6 +59,12 @@
       <circle cx="11" cy="11" r="7" />
       <path :d="iconSearch" />
     </template>
+    <!-- refresh：刷新（循环双箭头） -->
+    <template v-else-if="name === 'refresh'">
+      <polyline points="23 4 23 10 17 10" />
+      <polyline points="1 20 1 14 7 14" />
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+    </template>
   </svg>
 </template>
 
@@ -71,7 +77,7 @@ import {
 
 // 组件属性：name 指定图标名称，size 控制边长，strokeWidth 控制描边宽度
 const props = defineProps({
-  // 图标名称：sun / moon / menu / close / chevron-left / arrow-up / github / home / tools / news / about / mail
+  // 图标名称：sun / moon / menu / close / chevron-left / arrow-up / github / home / tools / news / about / mail / search / refresh
   name: { type: String, required: true },
   // 图标边长：数字按 px，字符串按原样（如 '1em'）
   size: { type: [Number, String], default: 20 },
