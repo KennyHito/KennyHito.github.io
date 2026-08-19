@@ -119,7 +119,7 @@ function refreshComments() {
 
 .mb-desc {
   font-size: 15px;
-  font-family: var(--font-mono, ui-monospace, Menlo, Consolas, monospace);
+  font-family: var(--font-sans);
   line-height: 1.7;
   color: var(--text);
   opacity: 0.8;
