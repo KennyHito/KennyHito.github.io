@@ -21,7 +21,7 @@ export function useTocDrag(options = {}) {
   const closedOffset = options.closedOffset ?? 150
 
   // 桌面端左侧目录是否展开（横向展开/收起状态）
-  const tocOpen = ref(false)
+  const tocOpen = ref(true)
   // 拖拽中目录的水平偏移（px），null 表示非拖拽状态
   const dragX = ref(null)
   // 是否正处于拖拽（按下即 true，松手即 false），供气泡提示在拖拽时立即隐藏
