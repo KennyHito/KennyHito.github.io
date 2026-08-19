@@ -150,7 +150,7 @@ function chooseActive() {
   if (r) goResult(r)
 }
 
-// 点击结果：一律在新窗口打开（站内工具切 hash、外链开原链接），弹窗保持打开
+// 点击结果：一律在新窗口打开（站内工具切 hash、外链开原链接），随后关闭搜索弹窗
 function goResult(tool) {
   if (tool.page) {
     // 站内工具为 hash 路由，拼上当前页面基址后新窗口打开
@@ -160,6 +160,8 @@ function goResult(tool) {
     // 外链工具直接新窗口打开
     window.open(tool.link, '_blank', 'noopener')
   }
+  // 跳转后关闭弹窗
+  close()
 }
 
 // 转义 HTML，避免注入
