@@ -94,7 +94,7 @@ export const toolCategories = [
       {
         key: 'base64-codec',
         name: 'BASE64 加密/解密',
-        shortName: 'Base64',
+        shortName: 'Base64加/解',
         desc: '支持 UTF-8 与 GBK 字符编码的 Base64 加密、解密工具，输入文本或 Base64 字符串后一键提交，结果可复制，支持输入输出互换。适合接口调试、编码转换、中文 GBK 编解码等场景。',
         features: ['加密 / 解密切换', 'UTF-8 与 GBK 编码', '输入输出互换', '一键复制结果'],
         steps: [],
