@@ -212,7 +212,7 @@ export const toolCategories = [
         steps: [],
         example: `例如：https://api.github.com/search/users?q=${author}`,
         exampleDesc: `将链接末尾的 ${author} 替换为任意 GitHub 用户名即可查询`,
-        link: 'https://api.github.com/search/users?q=',
+        link: `https://api.github.com/search/users?q=${author}`,
         linkText: '查看接口'
       },
       {
