@@ -34,7 +34,7 @@ import GiscusComments from '../components/GiscusComments.vue'
 const giscusRef = ref(null)
 // 点击刷新按钮：拉取最新评论
 function refreshComments() {
-  conslole.log('[留言板] 手动刷新评论')
+  console.log('[留言板] 手动刷新评论');
   giscusRef.value?.refresh()
 }
 </script>
