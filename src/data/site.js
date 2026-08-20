@@ -41,8 +41,9 @@ export const site = {
     strict: '0',
     // 是否显示反应表情（0/1）
     reactionsEnabled: '1',
-    // 是否回传页面元数据（0/1）
-    emitMetadata: '0',
+    // 是否回传页面元数据（0/1）：必须开启 1，否则 Giscus 不会向父页面
+    // postMessage discussion 元数据，前端也就拿不到评论数变化来触发飞书通知
+    emitMetadata: '1',
     // 输入框位置：top / bottom
     inputPosition: 'bottom',
     // 界面语言

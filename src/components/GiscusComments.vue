@@ -24,6 +24,8 @@ const { theme } = useTheme()
 const cfg = site.giscus || {}
 // 重试计时器：iframe 尚未加载完成时轮询同步主题
 let retryTimer = null
+// 上一次 discussion 的评论数，用于检测新增评论（首次收到时不触发通知）
+let lastCommentCount = null
 
 // 根据配置与当前站点主题推导 Giscus 主题
 function buildTheme() {
@@ -75,35 +77,35 @@ function updateTheme() {
   )
 }
 
-// 监听 Giscus 跨域消息：评论成功发布时，Giscus 会向父页面 postMessage 一条
-// { giscus: { reply: <新评论节点> } }；据此触发飞书通知。出错时推送 { giscus: { error } }。
+// 监听 Giscus 跨域消息：
+// Giscus 官方只向父页面推送 error / discussion / resizeHeight / signOut 四类消息，
+// **没有 reply 事件**——不要监听 g.reply，它永远不会触发。discussion 元数据
+// （需 emitMetadata=1）包含评论总数，评论数增加时视为有新评论，触发飞书通知。
+// 注意：纯前端拿不到单条评论的作者与内容，只能拿到「评论数变化」。
 function onGiscusMessage(e) {
   // 仅接受 giscus.app 来源，避免误收页面内其它 postMessage
   if (e.origin !== 'https://giscus.app') return
   const g = e.data?.giscus
   if (!g) return
-  if (g.reply) {
-    // ✅ 评论成功发布：推送飞书通知
-    console.log('[Giscus] 评论成功发布，触发飞书通知：', g.reply)
-    notifyFeishu(g.reply)
+  if (g.discussion) {
+    const total = g.discussion.totalCommentCount ?? 0
+    // 首次加载只记录基数，不触发通知；后续评论数增加才通知
+    if (lastCommentCount !== null && total > lastCommentCount) {
+      console.log('[Giscus] 评论数增加，触发飞书通知：', g)
+      notifyFeishu()
+    }
+    lastCommentCount = total
   } else if (g.error) {
     console.warn('[Giscus] 评论出错：', g.error)
   }
 }
 
-// 向飞书机器人推送「新留言」通知（纯前端 fetch，飞书 webhook 已开放 CORS）
-async function notifyFeishu(reply) {
+// 向飞书机器人推送「新评论提醒」通知（纯前端 fetch，飞书 webhook 已开放 CORS）
+async function notifyFeishu() {
   const hook = site.notify?.feishuWebhook
   if (!hook) return
-  const login = reply?.author?.login || '匿名用户'
-  const body = (reply?.body || '').replace(/\s+/g, ' ').trim()
-  const url = reply?.url || ''
-  const text = [
-    '💬 网站留言板收到新留言',
-    '用户：' + login,
-    '内容：' + (body.length > 200 ? body.slice(0, 200) + '…' : body),
-    url ? '链接：' + url : ''
-  ].filter(Boolean).join('\n')
+  // 通知模板：站点名 + 一句话提醒 + 讨论链接（飞书自动将 URL 渲染为可点击链接）
+  const text = '网站devnote.site收到新的评论/回复，点击链接前往查看！'
   try {
     await fetch(hook, {
       method: 'POST',
