@@ -1,0 +1,11 @@
+name = "github-discussions-feishu"
+main = "worker.js"
+compatibility_date = "2024-09-23"
+
+# 普通变量（可明文写在这里）
+[vars]
+SITE_NAME = "devnote.site"
+IGNORE_AUTHOR = "KennyHito"
+
+# 注意：FEISHU_WEBHOOK / GH_SECRET 因含 token，不要在仓库里明文保存，
+# 请在 Cloudflare Dashboard / Git 集成配置页面作为「加密」Secret 设置。

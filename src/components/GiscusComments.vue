@@ -24,8 +24,6 @@ const { theme } = useTheme()
 const cfg = site.giscus || {}
 // 重试计时器：iframe 尚未加载完成时轮询同步主题
 let retryTimer = null
-// 上一次 discussion 的评论数，用于检测新增评论（首次收到时不触发通知）
-let lastCommentCount = null
 
 // 根据配置与当前站点主题推导 Giscus 主题
 function buildTheme() {
@@ -89,61 +87,15 @@ function updateTheme() {
   }
 }
 
-// 监听 Giscus 跨域消息：
-// Giscus 官方只向父页面推送 error / discussion / resizeHeight / signOut 四类消息，
-// **没有 reply 事件**——不要监听 g.reply，它永远不会触发。discussion 元数据
-// （需 emitMetadata=1）包含评论总数，评论数增加时视为有新评论，触发飞书通知。
-// 注意：纯前端拿不到单条评论的作者与内容，只能拿到「评论数变化」。
-function onGiscusMessage(e) {
-  // 仅接受 giscus.app 来源，避免误收页面内其它 postMessage
-  if (e.origin !== 'https://giscus.app') return
-  const g = e.data?.giscus
-  if (!g) return
-  if (g.discussion) {
-    const total = g.discussion.totalCommentCount ?? 0
-    // 首次加载只记录基数，不触发通知；后续评论数增加才通知
-    if (lastCommentCount !== null && total > lastCommentCount) {
-      console.log('[Giscus] 评论数增加，触发飞书通知：', g)
-      notifyFeishu(g)
-    }
-    lastCommentCount = total
-  } else if (g.error) {
-    console.warn('[Giscus] 评论出错：', g.error)
-  }
-}
-
-// 向飞书机器人推送「新评论提醒」通知（纯前端 fetch，飞书 webhook 已开放 CORS）
-async function notifyFeishu(g) {
-  const hook = site.notify?.feishuWebhook
-  if (!hook) return
-  // 从 site.devnote（如 https://devnote.site）解析出域名（devnote.site），避免文案硬编码
-  const domain = new URL(site.devnote).hostname
-  // 通知模板：站点名 + 一句话提醒 + 讨论链接（飞书自动将 URL 渲染为可点击链接）
-  const text = '网友：' + g.viewer.login + '，发表新的评论/回复，点击' + domain + '前往查看！'
-  try {
-    await fetch(hook, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ msg_type: 'text', content: { text } })
-    })
-  } catch (err) {
-    // 通知失败不影响评论本身，仅记录到控制台
-    console.warn('[Feishu] 留言通知推送失败：', err)
-  }
-}
-
 // 组件挂载即加载评论；首次尝试同步主题（iframe 加载后由轮询补发）
 onMounted(() => {
   load()
   updateTheme()
-  // 监听 Giscus 推送的跨域消息，捕获评论成功事件以触发飞书通知
-  window.addEventListener('message', onGiscusMessage)
 })
 
-// 卸载时清理重试计时器与消息监听（Vue 会移除整个组件子树，含脚本与 iframe）
+// 卸载时清理重试计时器（Vue 会移除整个组件子树，含脚本与 iframe）
 onUnmounted(() => {
   if (retryTimer) clearTimeout(retryTimer)
-  window.removeEventListener('message', onGiscusMessage)
 })
 
 // 站点主题切换时同步到评论区
