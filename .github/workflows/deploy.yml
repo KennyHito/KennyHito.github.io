@@ -64,3 +64,49 @@ jobs:
       - name: Deploy to GitHub Pages  # 从 artifact 发布站点
         id: deployment
         uses: actions/deploy-pages@v5
+
+  # ============ 飞书通知任务 ============
+  # 监听 build + deploy 结果，向飞书机器人推送一条文本消息。
+  # 依赖说明：
+  #   needs: [build, deploy]  -> 等 build 与 deploy 两个任务都结束（无论结果）后再执行本任务
+  # 触发条件说明：
+  #   if: always()            -> 无论 build / deploy 成功还是失败，本任务都会执行，发送通知
+  #   ⚠️ 如果你只想在「部署失败时」才通知，请把上面的 if: always() 改成 if: failure()
+  #      （failure() 表示任一前置任务失败时执行；若只想成功时通知则用 if: success()）
+  # 前置要求：
+  #   需在 GitHub 仓库 Settings → Secrets and variables → Actions 中配置仓库密钥
+  #   FEISHU_WEBHOOK（值为飞书机器人 webhook 地址）。未配置时本任务会失败，
+  #   但不会影响 build / deploy 任务，站点仍会正常部署。
+  notify:
+    needs: [build, deploy]
+    if: always()   # 成功/失败都通知；仅失败时通知请改为 if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Feishu notification   # 组装并发送飞书文本消息
+        env:
+          # 飞书机器人 webhook 地址，取自仓库密钥（不硬编码在文件中）
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          # 综合 build 与 deploy 结果得出最终状态（两者都成功才视为成功）
+          STATUS: ${{ (needs.build.result == 'success' && needs.deploy.result == 'success') && '成功' || '失败' }}
+          BUILD_RESULT: ${{ needs.build.result }}    # build 任务结果（success/failure/cancelled）
+          DEPLOY_RESULT: ${{ needs.deploy.result }}  # deploy 任务结果（success/failure/cancelled）
+          REPO: ${{ github.repository }}             # 仓库名（owner/repo）
+          BRANCH: ${{ github.ref_name }}             # 触发部署的分支名
+          COMMIT_MSG: ${{ github.event.head_commit.message || '手动触发 / Workflow dispatch' }}  # 提交信息（手动触发时回退）
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}  # Actions 运行详情链接
+        run: |
+          # 用 jq 构造飞书 msg_type:text 消息体，再通过 curl POST 到飞书 webhook
+          jq -n \
+            --arg status "$STATUS" \
+            --arg repo "$REPO" \
+            --arg branch "$BRANCH" \
+            --arg commit "$COMMIT_MSG" \
+            --arg build "$BUILD_RESULT" \
+            --arg deploy "$DEPLOY_RESULT" \
+            --arg url "$RUN_URL" \
+            '{
+              msg_type: "text",
+              content: {
+                text: "GitHub Pages 部署\($status)\n仓库：\($repo)\n分支：\($branch)\n提交：\($commit)\n构建：\($build) | 部署：\($deploy)\n查看详情：\($url)"
+              }
+            }' | curl -s -X POST "$FEISHU_WEBHOOK" -H "Content-Type: application/json" -d @-
