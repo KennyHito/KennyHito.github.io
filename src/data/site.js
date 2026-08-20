@@ -34,7 +34,7 @@ export const site = {
     // Discussions 分类名称（data-category，仅展示/校验用，实际以 categoryId 定位）
     category: 'Announcements',
     // 分类节点 ID（data-category-id，形如 DIC_kw...）
-    categoryId: 'DIC_kwDOOu_ypM4DDs5D',
+    categoryId: 'DIC_kwDOOu_ypM4DDx-I',
     // 讨论串映射方式：pathname = 按页面路径定位（留言页固定路径即固定讨论串）
     mapping: 'pathname',
     // 是否严格匹配 pathname（0/1）
@@ -47,8 +47,8 @@ export const site = {
     inputPosition: 'bottom',
     // 界面语言
     lang: 'zh-CN',
-    // 评论区主题：'sync' = 跟随站点明暗切换（推荐）；'system' = 跟随访客系统配色（preferred_color_scheme）
-    themeMode: 'sync'
+    // 评论区主题：'system' = 跟随访客系统配色（preferred_color_scheme）；'sync' = 跟随站点明暗切换
+    themeMode: 'system'
   }
 }
 
