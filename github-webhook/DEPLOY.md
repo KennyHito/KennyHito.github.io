@@ -35,7 +35,8 @@ Cloudflare Worker（验签 → 解析 → 组装）
 ```bash
 npm i -g wrangler && wrangler login
 cd github-webhook
-wrangler deploy            # 部署 worker.js（需同级 wrangler.toml，见下）
+# 部署 worker.js（需同级 wrangler.toml，见下）
+wrangler deploy            
 
 # 设置敏感变量（交互输入，不会落盘到文件）
 wrangler secret put FEISHU_WEBHOOK
