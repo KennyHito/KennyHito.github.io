@@ -11,6 +11,7 @@
 //   GH_SECRET       (必须 Secret) GitHub Webhook 设置的 Secret（用于验签，防伪造）
 //   SITE_NAME       (普通变量)      站点展示名，默认 devnote.site
 //   IGNORE_AUTHOR   (普通变量)      要排除的 GitHub 用户名（多个逗号分隔，如站主自己），留空不过滤
+// 测试
 
 export default {
   async fetch(request, env) {
