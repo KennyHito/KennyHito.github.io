@@ -84,6 +84,7 @@ function onGiscusMessage(e) {
   if (!g) return
   if (g.reply) {
     // ✅ 评论成功发布：推送飞书通知
+    conslole.log('[Giscus] 评论成功发布，触发飞书通知：', g.reply)
     notifyFeishu(g.reply)
   } else if (g.error) {
     console.warn('[Giscus] 评论出错：', g.error)
