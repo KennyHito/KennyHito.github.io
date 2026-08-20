@@ -75,15 +75,58 @@ function updateTheme() {
   )
 }
 
+// 监听 Giscus 跨域消息：评论成功发布时，Giscus 会向父页面 postMessage 一条
+// { giscus: { reply: <新评论节点> } }；据此触发飞书通知。出错时推送 { giscus: { error } }。
+function onGiscusMessage(e) {
+  // 仅接受 giscus.app 来源，避免误收页面内其它 postMessage
+  if (e.origin !== 'https://giscus.app') return
+  const g = e.data?.giscus
+  if (!g) return
+  if (g.reply) {
+    // ✅ 评论成功发布：推送飞书通知
+    notifyFeishu(g.reply)
+  } else if (g.error) {
+    console.warn('[Giscus] 评论出错：', g.error)
+  }
+}
+
+// 向飞书机器人推送「新留言」通知（纯前端 fetch，飞书 webhook 已开放 CORS）
+async function notifyFeishu(reply) {
+  const hook = site.notify?.feishuWebhook
+  if (!hook) return
+  const login = reply?.author?.login || '匿名用户'
+  const body = (reply?.body || '').replace(/\s+/g, ' ').trim()
+  const url = reply?.url || ''
+  const text = [
+    '💬 网站留言板收到新留言',
+    '用户：' + login,
+    '内容：' + (body.length > 200 ? body.slice(0, 200) + '…' : body),
+    url ? '链接：' + url : ''
+  ].filter(Boolean).join('\n')
+  try {
+    await fetch(hook, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ msg_type: 'text', content: { text } })
+    })
+  } catch (err) {
+    // 通知失败不影响评论本身，仅记录到控制台
+    console.warn('[Feishu] 留言通知推送失败：', err)
+  }
+}
+
 // 组件挂载即加载评论；首次尝试同步主题（iframe 加载后由轮询补发）
 onMounted(() => {
   load()
   updateTheme()
+  // 监听 Giscus 推送的跨域消息，捕获评论成功事件以触发飞书通知
+  window.addEventListener('message', onGiscusMessage)
 })
 
-// 卸载时清理重试计时器（Vue 会移除整个组件子树，含脚本与 iframe）
+// 卸载时清理重试计时器与消息监听（Vue 会移除整个组件子树，含脚本与 iframe）
 onUnmounted(() => {
   if (retryTimer) clearTimeout(retryTimer)
+  window.removeEventListener('message', onGiscusMessage)
 })
 
 // 站点主题切换时同步到评论区

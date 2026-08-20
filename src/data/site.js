@@ -49,6 +49,13 @@ export const site = {
     lang: 'zh-CN',
     // 评论区主题：'sync' = 跟随站点明暗切换（推荐）；'system' = 跟随访客系统配色（preferred_color_scheme）
     themeMode: 'sync'
+  },
+  // ===== 留言成功通知配置 =====
+  // 评论成功发布后，向前端配置的飞书机器人 webhook 推送一条通知。
+  // 纯前端 fetch 即可：飞书自定义机器人 webhook 已开放 CORS（access-control-allow-origin: *）。
+  notify: {
+    // 飞书自定义机器人 webhook 地址（open.feishu.cn/open-apis/bot/v2/hook/...）
+    feishuWebhook: 'https://open.feishu.cn/open-apis/bot/v2/hook/834ca0ac-de7a-49be-bb1f-4ee995e45b56'
   }
 }
 
