@@ -67,14 +67,26 @@ function load() {
 // 向 Giscus iframe 发送主题切换指令；iframe 未就绪时轮询重试
 function updateTheme() {
   const iframe = document.querySelector('iframe.giscus-frame')
-  if (!iframe) {
+  // iframe 元素尚未注入，或 src 还没切到 giscus.app（仍处于 about:blank / 本地 dev 等中间态），
+  // 都说明 Giscus 还没真正就绪，继续轮询即可，不要调用 postMessage。
+  if (!iframe || !iframe.src || !iframe.src.startsWith('https://giscus.app')) {
     retryTimer = setTimeout(updateTheme, 300)
     return
   }
-  iframe.contentWindow.postMessage(
-    { giscus: { setConfig: { theme: buildTheme() } } },
-    'https://giscus.app'
-  )
+  try {
+    iframe.contentWindow.postMessage(
+      { giscus: { setConfig: { theme: buildTheme(), pollIntervalMs: 3000 } } },
+      'https://giscus.app'
+    )
+    if (retryTimer) {
+      clearTimeout(retryTimer)
+      retryTimer = null
+    }
+  } catch (err) {
+    // 极端情况下 postMessage 仍抛错（如 contentWindow origin 未就绪），捕获后继续轮询
+    if (retryTimer) clearTimeout(retryTimer)
+    retryTimer = setTimeout(updateTheme, 300)
+  }
 }
 
 // 监听 Giscus 跨域消息：
@@ -92,7 +104,7 @@ function onGiscusMessage(e) {
     // 首次加载只记录基数，不触发通知；后续评论数增加才通知
     if (lastCommentCount !== null && total > lastCommentCount) {
       console.log('[Giscus] 评论数增加，触发飞书通知：', g)
-      notifyFeishu()
+      notifyFeishu(g)
     }
     lastCommentCount = total
   } else if (g.error) {
@@ -101,11 +113,13 @@ function onGiscusMessage(e) {
 }
 
 // 向飞书机器人推送「新评论提醒」通知（纯前端 fetch，飞书 webhook 已开放 CORS）
-async function notifyFeishu() {
+async function notifyFeishu(g) {
   const hook = site.notify?.feishuWebhook
   if (!hook) return
+  // 从 site.devnote（如 https://devnote.site）解析出域名（devnote.site），避免文案硬编码
+  const domain = new URL(site.devnote).hostname
   // 通知模板：站点名 + 一句话提醒 + 讨论链接（飞书自动将 URL 渲染为可点击链接）
-  const text = '网站devnote.site收到新的评论/回复，点击链接前往查看！'
+  const text = '网友：' + g.viewer.login + '，发表新的评论/回复，点击' + domain + '前往查看！'
   try {
     await fetch(hook, {
       method: 'POST',
