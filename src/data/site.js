@@ -48,7 +48,7 @@ export const site = {
     // 界面语言
     lang: 'zh-CN',
     // 评论区主题：'system' = 跟随访客系统配色（preferred_color_scheme）；'sync' = 跟随站点明暗切换
-    themeMode: 'system'
+    themeMode: 'sync'
   }
 }
 
