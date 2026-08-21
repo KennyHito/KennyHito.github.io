@@ -116,18 +116,6 @@ export const toolCategories = [
         linkText: '打开工具'
       },
       {
-        key: 'qrcode-generator',
-        name: '二维码生成器',
-        shortName: '二维码生成',
-        desc: '在线二维码生成工具：输入文本或链接，实时生成二维码，支持自定义尺寸、纠错级别与边距，可一键下载 PNG 图片或复制到剪贴板。适合分享链接、WiFi 配置、名片信息等场景，全部在浏览器本地生成，内容不上传。',
-        features: ['实时生成', '尺寸可调', '纠错级别', '下载 PNG', '复制图片'],
-        steps: [],
-        example: '',
-        exampleDesc: '',
-        page: 'qrcode',
-        linkText: '打开工具'
-      },
-      {
         key: 'password-generator',
         name: '随机密码生成器',
         shortName: '随机密码',
