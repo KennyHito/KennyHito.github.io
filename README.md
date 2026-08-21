@@ -1,6 +1,6 @@
 <div align="center">
 
-# 关于本站
+# 版本说明
 
 [![License](https://img.shields.io/badge/License-MIT-ffb347?style=flat-square&logo=open-source-initiative&logoColor=black)](./LICENSE)
 [![Copyright](https://img.shields.io/badge/©%202026-KennyHito-6caff5?style=flat-square)](./LICENSE)
