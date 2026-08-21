@@ -90,7 +90,7 @@ jobs:
           STATUS: ${{ (needs.build.result == 'success' && needs.deploy.result == 'success') && '成功' || '失败' }}
           BUILD_RESULT: ${{ needs.build.result }}    # build 任务结果（success/failure/cancelled）
           DEPLOY_RESULT: ${{ needs.deploy.result }}  # deploy 任务结果（success/failure/cancelled）
-          REPO: ${{ github.repository }}             # 仓库名（owner/repo）
+          REPO: ${{ github.server_url }}/${{ github.repository }}  # 仓库全链接（如 https://github.com/owner/repo）
           BRANCH: ${{ github.ref_name }}             # 触发部署的分支名
           COMMIT_MSG: ${{ github.event.head_commit.message || '手动触发 / Workflow dispatch' }}  # 提交信息（手动触发时回退）
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}  # Actions 运行详情链接
