@@ -20,6 +20,7 @@ import UrlCodec from '../pages/tools/UrlCodec.vue'
 import ImageBase64 from '../pages/tools/ImageBase64.vue'
 import ColorConverter from '../pages/tools/ColorConverter.vue'
 import FileDiff from '../pages/tools/FileDiff.vue'
+import QrCodeGenerator from '../pages/tools/QrCodeGenerator.vue'
 
 // 工具子页映射：hash 子路径 -> 组件，新增工具子页在此登记一处即可
 export const toolSubPages = {
@@ -30,7 +31,8 @@ export const toolSubPages = {
   urlcodec: UrlCodec,
   imagebase64: ImageBase64,
   colorconverter: ColorConverter,
-  filediff: FileDiff
+  filediff: FileDiff,
+  qrcode: QrCodeGenerator
 }
 
 // 由映射自动生成 /tools/<sub> 子路由（无 name，避免与 /tools 主路由重名告警）
