@@ -28,6 +28,8 @@ const cfg = site.giscus || {}
 let retryTimer = null
 // 延迟确认计时器：postMessage 后二次确认主题已生效
 let confirmTimer = null
+// 是否已核对过 iframe 加载时的 theme 参数（仅首次就绪时核对一次）
+let themeParamChecked = false
 
 // 根据配置与当前站点主题推导 Giscus 主题
 function buildTheme() {
@@ -80,6 +82,22 @@ function updateTheme() {
     return
   }
   try {
+    // 首次就绪时核对 iframe 的 theme 参数是否与站点主题一致。
+    // 若不一致（如加载瞬间主题被切换、脚本缓存等因素导致 iframe 用了旧主题），
+    // 直接重建一次，确保所有组件都按目标主题渲染；postMessage 动态切换不可靠。
+    if (!themeParamChecked) {
+      themeParamChecked = true
+      try {
+        const params = new URL(iframe.src).searchParams
+        const iframeTheme = params.get('theme')
+        const currentTheme = buildTheme()
+        if (iframeTheme && iframeTheme !== currentTheme) {
+          if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
+          themeRebuildTimer = setTimeout(() => refresh(), 300)
+          return
+        }
+      } catch (e) { /* URL 解析失败则跳过核对，走正常 postMessage 同步 */ }
+    }
     const giscusTheme = buildTheme()
     // 同步 Giscus 内部主题
     iframe.contentWindow.postMessage(
@@ -115,6 +133,8 @@ function updateTheme() {
 // 上一次记录到的评论总数。Giscus 在「初次加载讨论」和「评论成功」时都会发 discussion 消息，
 // 数据结构完全相同，因此改用「评论数增量」判断：首次加载只记录基数，后续评论数增加才触发烟花。
 let lastCommentCount = null
+// 主题切换重建的防抖计时器：合并快速连续切换，避免多次重建
+let themeRebuildTimer = null
 
 // 监听 Giscus iframe 向父窗口发送的消息。
 // 仅接受 giscus.app 来源，避免误收页面内其它 postMessage。
@@ -141,15 +161,25 @@ onMounted(() => {
   updateTheme()
 })
 
-// 卸载时清理监听器与重试计时器（Vue 会移除整个组件子树，含脚本与 iframe）
+// 卸载时清理监听器与计时器（Vue 会移除整个组件子树，含脚本与 iframe）
 onUnmounted(() => {
   window.removeEventListener('message', onGiscusMessage)
   if (retryTimer) clearTimeout(retryTimer)
   if (confirmTimer) clearTimeout(confirmTimer)
+  if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
 })
 
-// 站点主题切换时同步到评论区
-watch(theme, () => updateTheme())
+// 站点主题切换时同步评论区。
+// 不依赖 postMessage 动态切换：实测移动端 Safari 上 Giscus 的部分组件
+// （表情反应栏、评论头部等）不会跟随 setConfig 切换主题，出现白底残留。
+// 最可靠的方式是重建 Giscus iframe——用目标主题的 URL 参数重新加载，
+// 所有组件都会按新主题渲染。300ms 防抖合并快速连续切换，避免频繁重建。
+watch(theme, () => {
+  if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
+  themeRebuildTimer = setTimeout(() => {
+    refresh()
+  }, 300)
+})
 
 // 手动刷新评论：Giscus 非实时推送，切换 tab 不会自动更新，需用户主动触发。
 // postMessage 的 refresh 指令在不同版本稳定性差，这里直接重建 Giscus 脚本，
@@ -159,6 +189,7 @@ function refresh() {
   if (!el) return
   if (retryTimer) clearTimeout(retryTimer)
   if (confirmTimer) clearTimeout(confirmTimer)
+  if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
   // 重置评论数基线：重建后重新记录基数，期间不会误触发烟花
   lastCommentCount = null
   // 移除已注入的 Giscus 脚本与评论 iframe
