@@ -17,8 +17,9 @@
         <p class="mb-desc">
           欢迎在此留言、交流或提问。评论需使用 GitHub 账号登录后发表，由 Giscus 基于仓库的 Discussions 承载。
         </p>
-        <!-- 全局评论组件：使用 pathname 映射，对应留言页固定讨论串 -->
-        <GiscusComments ref="giscusRef" />
+        <!-- 全局评论组件：使用 pathname 映射，对应留言页固定讨论串；
+             评论发布成功时触发烟花（@commented） -->
+        <GiscusComments ref="giscusRef" @commented="onCommented" />
       </div>
     </div>
   </section>
@@ -26,13 +27,19 @@
 
 <script setup>
 // 引入 Vue 响应式引用
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 // 引入 Giscus 评论组件
 import GiscusComments from '../components/GiscusComments.vue'
 
 // 评论组件实例引用，用于调用其暴露的 refresh 方法
 const giscusRef = ref(null)
-// 点击刷新按钮：拉取最新评论
+// 全屏烟花触发函数（由 App 通过 provide 下发；未注入时安全降级）
+const launchFireworks = inject('launchFireworks', null)
+// 评论发布成功（Giscus 讨论更新）时触发烟花
+function onCommented() {
+  launchFireworks?.()
+}
+// 点击刷新按钮：仅拉取最新评论（烟花改由「评论成功」事件触发）
 function refreshComments() {
   console.log('[留言板] 手动刷新评论');
   giscusRef.value?.refresh()

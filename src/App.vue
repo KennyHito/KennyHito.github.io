@@ -13,6 +13,9 @@
   <!-- 底部页脚 -->
   <AppFooter />
 
+  <!-- 全屏烟花覆盖层：留言板评论发布成功时升空炸开（透明、不拦截点击） -->
+  <Fireworks ref="fireworksRef" />
+
   <!-- 全局搜索弹窗：由导航栏搜索按钮唤起，通过 openSearch 注入到各组件 -->
   <SearchModal :open="searchOpen" @close="searchOpen = false" />
 
@@ -49,6 +52,8 @@ import { tabs } from './data/tabs.js'
 // 导入全局搜索弹窗组件
 import SearchModal from './components/SearchModal.vue'
 import MessageBoard from './pages/MessageBoard.vue'
+// 导入全屏烟花覆盖层组件
+import Fireworks from './components/Fireworks.vue'
 
 // ===== 路由相关（vue-router）=====
 // 当前激活的 tab 由路由推导：工具子页面 route.name 为 undefined，统一归到 tools 标签
@@ -150,6 +155,13 @@ function openSearch() {
   searchOpen.value = true
 }
 provide('openSearch', openSearch)
+
+// 全屏烟花：留言板评论发布成功时调用，触发升空炸开效果
+const fireworksRef = ref(null)
+function launchFireworks(count) {
+  fireworksRef.value?.launch(count)
+}
+provide('launchFireworks', launchFireworks)
 
 // 全局快捷键：Mac 用 Command+K，Windows 用 Ctrl+K 唤起搜索弹窗
 function onKeydown(e) {

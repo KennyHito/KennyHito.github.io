@@ -18,6 +18,8 @@ import { useTheme } from '../composables/useTheme.js'
 const props = defineProps({
   term: { type: String, default: '站点留言板' }
 })
+// 评论发布成功时向父组件（留言板页）发出事件，用于触发烟花
+const emit = defineEmits(['commented'])
 
 const container = ref(null)
 const { theme } = useTheme()
@@ -54,7 +56,9 @@ function load() {
   }
   s.setAttribute('data-strict', cfg.strict ?? '0')
   s.setAttribute('data-reactions-enabled', cfg.reactionsEnabled ?? '1')
-  s.setAttribute('data-emit-metadata', cfg.emitMetadata ?? '0')
+  // 必须开启 emit-metadata：评论成功后 Giscus 会向父窗口 postMessage 含 discussion 的消息，
+  // 用于在 MessageBoard 中触发烟花。关闭时父页面收不到任何讨论更新事件。
+  s.setAttribute('data-emit-metadata', '1')
   s.setAttribute('data-input-position', cfg.inputPosition || 'bottom')
   s.setAttribute('data-theme', buildTheme())
   s.setAttribute('data-lang', cfg.lang || 'zh-CN')
@@ -92,14 +96,38 @@ function updateTheme() {
   }
 }
 
+// 上一次记录到的评论总数。Giscus 在「初次加载讨论」和「评论成功」时都会发 discussion 消息，
+// 数据结构完全相同，因此改用「评论数增量」判断：首次加载只记录基数，后续评论数增加才触发烟花。
+let lastCommentCount = null
+
+// 监听 Giscus iframe 向父窗口发送的消息。
+// 仅接受 giscus.app 来源，避免误收页面内其它 postMessage。
+function onGiscusMessage(event) {
+  if (event.origin !== 'https://giscus.app') return
+  const g = event.data?.giscus
+  if (!g) return
+  if (g.discussion) {
+    const total = g.discussion.totalCommentCount ?? 0
+    // 首次加载只记录基数，不触发烟花；后续评论数增加 = 新评论发布成功
+    if (lastCommentCount !== null && total > lastCommentCount) {
+      emit('commented')
+    }
+    lastCommentCount = total
+  } else if (g.error) {
+    console.warn('[Giscus] 评论出错：', g.error)
+  }
+}
+
 // 组件挂载即加载评论；首次尝试同步主题（iframe 加载后由轮询补发）
 onMounted(() => {
+  window.addEventListener('message', onGiscusMessage)
   load()
   updateTheme()
 })
 
-// 卸载时清理重试计时器（Vue 会移除整个组件子树，含脚本与 iframe）
+// 卸载时清理监听器与重试计时器（Vue 会移除整个组件子树，含脚本与 iframe）
 onUnmounted(() => {
+  window.removeEventListener('message', onGiscusMessage)
   if (retryTimer) clearTimeout(retryTimer)
 })
 
@@ -113,6 +141,8 @@ function refresh() {
   const el = container.value
   if (!el) return
   if (retryTimer) clearTimeout(retryTimer)
+  // 重置评论数基线：重建后重新记录基数，期间不会误触发烟花
+  lastCommentCount = null
   // 移除已注入的 Giscus 脚本与评论 iframe
   el.querySelectorAll('script').forEach((s) => s.remove())
   const g = el.querySelector('.giscus')
