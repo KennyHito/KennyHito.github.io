@@ -8,6 +8,8 @@
   <!-- 预连接 Giscus 评论服务，减少 DNS 与 TCP 握手耗时 -->
   <link rel="preconnect" href="https://giscus.app" crossorigin>
   <link rel="dns-prefetch" href="https://giscus.app">
+  <!-- 预解析不蒜子统计服务域名，加速后续动态注入的脚本请求 -->
+  <link rel="dns-prefetch" href="https://busuanzi.ibruce.info">
   <title>知识分享站</title>
   <script>
     (function () {
