@@ -72,10 +72,15 @@ function updateTheme() {
     return
   }
   try {
+    const giscusTheme = buildTheme()
+    // 同步 Giscus 内部主题
     iframe.contentWindow.postMessage(
-      { giscus: { setConfig: { theme: buildTheme(), pollIntervalMs: 3000 } } },
+      { giscus: { setConfig: { theme: giscusTheme, pollIntervalMs: 3000 } } },
       'https://giscus.app'
     )
+    // 强制 iframe 的 color-scheme 与站点主题一致：防止系统级 UI
+    // （滚动条、原生下拉、表情选择器等）在系统开暗色时自动变暗
+    iframe.style.colorScheme = theme.value === 'dark' ? 'dark' : 'light'
     if (retryTimer) {
       clearTimeout(retryTimer)
       retryTimer = null
@@ -128,10 +133,11 @@ defineExpose({ refresh })
   min-height: 200px;
 }
 
-/* Giscus 注入的 iframe 默认宽度 100%，此处无需额外处理 */
+/* Giscus 注入的 iframe 默认宽度 100%，此处无需额外处理。
+   color-scheme 由 JS 在 updateTheme 中动态设为 light/dark，与站点主题按钮保持一致，
+   避免系统暗色模式影响 iframe 内部的滚动条、表情选择器等系统/半系统 UI。 */
 .giscus :deep(iframe) {
   width: 100%;
   border: none;
-  color-scheme: normal;
 }
 </style>

@@ -5,7 +5,7 @@
       <!-- 左侧信息栏 -->
       <aside class="about-aside">
         <div class="avatar">
-          <img src="../img/about.jpg" :alt="site.author" @click="iconClick" />
+          <img src="../img/about.jpg" :alt="site.author" />
         </div>
         <h1 class="about-name">{{ site.author }}</h1>
         <p class="about-role">iOS &amp; Vue 开发者</p>
@@ -67,8 +67,6 @@
 </template>
 
 <script setup>
-// 引入 Vue 依赖注入，获取全局路由跳转方法
-import { inject } from 'vue'
 // 站点配置（GitHub / 邮箱 / 外链等）与仓库列表 repos
 import { site, repos } from '../data/site.js'
 // 首页数据中的「关于本站」介绍段落（intro 数组）
@@ -76,16 +74,8 @@ import { intro } from '../data/home.js'
 // 通用图标组件（GitHub / 邮件图标）
 import AppIcon from '../components/AppIcon.vue'
 
-// 从根组件注入的 navigate 方法
-const navigate = inject('navigate')
-
 // 将 repos 数组按固定顺序解构为具名引用，对应下方「关于我」中的尚硅谷系列仓库链接
 const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHelloVue3] = repos
-
-function iconClick() {
-  // 点击头像跳转到 TestPage.vue 独立页面
-  // navigate('testpage')
-}
 </script>
 
 <style scoped>

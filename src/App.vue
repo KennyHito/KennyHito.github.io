@@ -2,13 +2,13 @@
 <template>
   <!-- 顶部导航栏：传入标签页配置与当前激活项，监听切换事件 -->
   <AppNav :tabs="tabs" :current="current" @switch="navigate" />
-  <!-- 主内容区：根据当前组件动态渲染对应页面 -->
+  <!-- 主内容区：由 vue-router 的 <router-view> 按路由渲染对应页面 -->
   <main class="app-main">
     <!-- 留言板首次进入后常驻挂载，用 v-show 仅隐藏不卸载，
-         避免 Giscus 的 iframe 在 tab 切换时被浏览器重新加载（KeepAlive 对 iframe 无效） -->
+         避免 Giscus 的 iframe 在路由切换时被浏览器重新加载（KeepAlive 对 iframe 无效）；
+         message 路由本身渲染空 stub，留言板由下方单独常驻渲染 -->
     <MessageBoard v-if="messageMounted" v-show="current === 'message'" class="page" />
-    <!-- 其余页面动态渲染；留言板不在此渲染，避免重复实例 -->
-    <component v-if="current !== 'message' && currentComp" :is="currentComp" class="page" />
+    <router-view />
   </main>
   <!-- 底部页脚 -->
   <AppFooter />
@@ -36,121 +36,64 @@
 <script setup>
 // 从 Vue 中导入响应式状态、计算属性、依赖注入及生命周期钩子
 import { ref, computed, provide, onMounted, onUnmounted, watch } from 'vue'
+// 导入 vue-router：useRoute 读取当前路由、useRouter 用于编程式跳转
+import { useRoute, useRouter } from 'vue-router'
 // 导入顶部导航栏组件
 import AppNav from './components/AppNav.vue'
 // 导入底部页脚组件
 import AppFooter from './components/AppFooter.vue'
 // 导入图标组件（统一渲染各 SVG 图标）
 import AppIcon from './components/AppIcon.vue'
-// 导入页面导航配置（key / label / comp）
+// 导入页面导航配置（key / label）
 import { tabs } from './data/tabs.js'
 // 导入全局搜索弹窗组件
 import SearchModal from './components/SearchModal.vue'
-// 导入工具子页面（如 JSON 格式化查看器、随机密码生成器），通过 #/tools/<sub> 访问
-import JsonViewer from './pages/tools/JsonViewer.vue'
-import PwdGenerator from './pages/tools/PwdGenerator.vue'
-import Base64Codec from './pages/tools/Base64Codec.vue'
-import Md5Hash from './pages/tools/Md5Hash.vue'
-import UrlCodec from './pages/tools/UrlCodec.vue'
-import ImageBase64 from './pages/tools/ImageBase64.vue'
-import ColorConverter from './pages/tools/ColorConverter.vue'
-import FileDiff from './pages/tools/FileDiff.vue'
-import TestPage from './pages/TestPage.vue'
 import MessageBoard from './pages/MessageBoard.vue'
 
-// 工具页支持的站内子页面映射：hash 子路径 -> 组件
-const toolSubPages = {
-  jsonviewer: JsonViewer,
-  pwdgenerator: PwdGenerator,
-  base64codec: Base64Codec,
-  md5hash: Md5Hash,
-  urlcodec: UrlCodec,
-  imagebase64: ImageBase64,
-  colorconverter: ColorConverter,
-  filediff: FileDiff,
-}
+// ===== 路由相关（vue-router）=====
+// 当前激活的 tab 由路由推导：工具子页面 route.name 为 undefined，统一归到 tools 标签
+const route = useRoute()
+const router = useRouter()
 
-// 独立页面映射（不显示在顶部导航栏，可通过 #/testpage 直接访问）
-const extraPages = {
-  testpage: TestPage,
-}
-
-// 从 URL hash 解析当前页与子页面（支持刷新保持 / 直接访问 #/tools/jsonviewer）
-function parseHash() {
-  // 去除 hash 中的 # 与可选斜杠，得到形如 "tools/jsonviewer" 的路径
-  const h = (window.location.hash || '').replace(/^#\/?/, '')
-  // 拆出主 key 与可选子路径
-  const [key, sub] = h.split('/')
-  // 主 key 属于导航 tab 或独立页面则使用，否则回退到首页
-  const validKey = tabs.some((t) => t.key === key) || extraPages[key] ? key : 'home'
-  // 子路径必须对应工具页支持的子页面，否则视为无子页面
-  const validSub = validKey === 'tools' && toolSubPages[sub] ? sub : ''
-  return { key: validKey, sub: validSub }
-}
-
-// 当前激活的 tab key 与子页面（初始化时根据 URL hash 解析）
-const { key: initialKey, sub: initialSub } = parseHash()
-const current = ref(initialKey)
-const currentSub = ref(initialSub)
-
-// 根据当前 key 计算出需要渲染的页面组件（优先渲染工具子页面）
-const currentComp = computed(() => {
-  // 优先渲染独立页面（如测试页）
-  if (extraPages[current.value]) {
-    return extraPages[current.value]
-  }
-  if (current.value === 'tools' && currentSub.value) {
-    return toolSubPages[currentSub.value]
-  }
-  return tabs.find((t) => t.key === current.value).comp
+const current = computed(() => {
+  const n = route.name
+  // 导航 tab（home/tools/news/message/about）直接取 route.name
+  if (n && tabs.some((t) => t.key === n)) return n
+  // 工具子页面（/tools/<sub>）归属 tools 标签
+  if (route.path.startsWith('/tools/')) return 'tools'
+  // 其余（如 404）不高亮任何标签
+  return ''
 })
 
-// 留言板首次进入后才常驻挂载：避免一进首页就加载 Giscus，同时保证切走再切回不重载
-const messageMounted = ref(initialKey === 'message')
-watch(current, (k) => {
-  if (k === 'message') messageMounted.value = true
-})
+// 留言板首次进入后才常驻挂载：避免一进首页就加载 Giscus，且切走再切回不重载 iframe
+const messageMounted = ref(route.name === 'message')
+watch(
+  () => route.name,
+  (n) => {
+    if (n === 'message') messageMounted.value = true
+  }
+)
 
-// tab 切换 = 改变 URL hash；真正的内容切换由 hashchange 驱动
+// tab 切换 = 路由跳转（变更 URL hash）；真正的内容渲染由 <router-view> 完成
 function navigate(key) {
-  // 若切换到当前已激活的 tab
+  // 再次点击当前已激活的 tab
   if (key === current.value) {
-    // 且为首页时，滚动到顶部
     if (key === 'home') {
+      // 首页：滚动到顶部
       try {
-        // 尝试滚动到页面顶部
         window.scrollTo({ top: 0 })
       } catch (e) {
         /* 某些内嵌环境无 scrollTo，忽略 */
       }
-    } else if (currentSub.value) {
+    } else if (key === 'tools') {
       // 已处于工具子页面时再次点击「工具」：回到工具列表页
-      window.location.hash = '#/tools'
+      router.push('/tools')
     }
     return
   }
-  // 否则通过设置 hash 触发 hashchange 完成切换
-  window.location.hash = '#/' + key
+  // 否则跳转到对应路由（home 经 router 配置重定向到 /）
+  router.push('/' + key)
 }
-
-// 监听 URL hash 变化，同步更新当前 tab / 子页面并滚动到顶部
-function onHashChange() {
-  // 根据新的 hash 更新当前激活 tab 与子页面
-  const { key, sub } = parseHash()
-  current.value = key
-  currentSub.value = sub
-  try {
-    // 切换后滚动到页面顶部
-    window.scrollTo({ top: 0 })
-  } catch (e) {
-    /* 某些内嵌环境无 scrollTo，忽略 */
-  }
-}
-
-// 组件挂载时注册 hashchange 监听
-onMounted(() => window.addEventListener('hashchange', onHashChange))
-// 组件卸载时移除 hashchange 监听，避免内存泄漏
-onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
 
 // ===== 回到顶部按钮 =====
 // 是否已滚动超过半屏（用于是否显示按钮）
