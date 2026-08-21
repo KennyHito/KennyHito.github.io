@@ -40,9 +40,7 @@ export const site = {
     // 是否严格匹配 pathname（0/1）
     strict: '0',
     // 是否显示反应表情（0/1）
-    // 注：移动端 Safari 上 reactions 区域在暗色主题下存在渲染层残留 bug
-    // （主题已切换但该栏不重绘，残留白底），故默认关闭；桌面端正常可改回 '1'
-    reactionsEnabled: '0',
+    reactionsEnabled: '1',
     // 是否回传页面元数据（0/1）
     emitMetadata: '0',
     // 输入框位置：top / bottom

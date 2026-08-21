@@ -26,10 +26,6 @@ const { theme } = useTheme()
 const cfg = site.giscus || {}
 // 重试计时器：iframe 尚未加载完成时轮询同步主题
 let retryTimer = null
-// 延迟确认计时器：postMessage 后二次确认主题已生效
-let confirmTimer = null
-// 是否已核对过 iframe 加载时的 theme 参数（仅首次就绪时核对一次）
-let themeParamChecked = false
 
 // 根据配置与当前站点主题推导 Giscus 主题
 function buildTheme() {
@@ -67,9 +63,7 @@ function load() {
   s.setAttribute('data-theme', buildTheme())
   s.setAttribute('data-lang', cfg.lang || 'zh-CN')
   s.setAttribute('data-loading', 'lazy')
-  // 标准做法：把脚本注入到 .giscus 容器内，确保 Giscus 能正确定位 iframe 挂载点
-  const giscusEl = container.value.querySelector('.giscus')
-  if (giscusEl) giscusEl.appendChild(s)
+  container.value.appendChild(s)
 }
 
 // 向 Giscus iframe 发送主题切换指令；iframe 未就绪时轮询重试
@@ -82,22 +76,6 @@ function updateTheme() {
     return
   }
   try {
-    // 首次就绪时核对 iframe 的 theme 参数是否与站点主题一致。
-    // 若不一致（如加载瞬间主题被切换、脚本缓存等因素导致 iframe 用了旧主题），
-    // 直接重建一次，确保所有组件都按目标主题渲染；postMessage 动态切换不可靠。
-    if (!themeParamChecked) {
-      themeParamChecked = true
-      try {
-        const params = new URL(iframe.src).searchParams
-        const iframeTheme = params.get('theme')
-        const currentTheme = buildTheme()
-        if (iframeTheme && iframeTheme !== currentTheme) {
-          if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
-          themeRebuildTimer = setTimeout(() => refresh(), 300)
-          return
-        }
-      } catch (e) { /* URL 解析失败则跳过核对，走正常 postMessage 同步 */ }
-    }
     const giscusTheme = buildTheme()
     // 同步 Giscus 内部主题
     iframe.contentWindow.postMessage(
@@ -107,18 +85,6 @@ function updateTheme() {
     // 强制 iframe 的 color-scheme 与站点主题一致：防止系统级 UI
     // （滚动条、原生下拉、表情选择器等）在系统开暗色时自动变暗
     iframe.style.colorScheme = theme.value === 'dark' ? 'dark' : 'light'
-    // 延迟二次确认：iframe 初始化期间首次 postMessage 可能未完全生效，
-    // 600ms 后再发一次确保所有组件（reactions、评论头部等）都正确跟随主题
-    if (confirmTimer) clearTimeout(confirmTimer)
-    confirmTimer = setTimeout(() => {
-      const reCheck = document.querySelector('iframe.giscus-frame')
-      if (reCheck && reCheck.src && reCheck.src.startsWith('https://giscus.app')) {
-        reCheck.contentWindow.postMessage(
-          { giscus: { setConfig: { theme: buildTheme(), pollIntervalMs: 3000 } } },
-          'https://giscus.app'
-        )
-      }
-    }, 600)
     if (retryTimer) {
       clearTimeout(retryTimer)
       retryTimer = null
@@ -133,8 +99,6 @@ function updateTheme() {
 // 上一次记录到的评论总数。Giscus 在「初次加载讨论」和「评论成功」时都会发 discussion 消息，
 // 数据结构完全相同，因此改用「评论数增量」判断：首次加载只记录基数，后续评论数增加才触发烟花。
 let lastCommentCount = null
-// 主题切换重建的防抖计时器：合并快速连续切换，避免多次重建
-let themeRebuildTimer = null
 
 // 监听 Giscus iframe 向父窗口发送的消息。
 // 仅接受 giscus.app 来源，避免误收页面内其它 postMessage。
@@ -161,25 +125,14 @@ onMounted(() => {
   updateTheme()
 })
 
-// 卸载时清理监听器与计时器（Vue 会移除整个组件子树，含脚本与 iframe）
+// 卸载时清理监听器与重试计时器（Vue 会移除整个组件子树，含脚本与 iframe）
 onUnmounted(() => {
   window.removeEventListener('message', onGiscusMessage)
   if (retryTimer) clearTimeout(retryTimer)
-  if (confirmTimer) clearTimeout(confirmTimer)
-  if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
 })
 
-// 站点主题切换时同步评论区。
-// 不依赖 postMessage 动态切换：实测移动端 Safari 上 Giscus 的部分组件
-// （表情反应栏、评论头部等）不会跟随 setConfig 切换主题，出现白底残留。
-// 最可靠的方式是重建 Giscus iframe——用目标主题的 URL 参数重新加载，
-// 所有组件都会按新主题渲染。300ms 防抖合并快速连续切换，避免频繁重建。
-watch(theme, () => {
-  if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
-  themeRebuildTimer = setTimeout(() => {
-    refresh()
-  }, 300)
-})
+// 站点主题切换时同步到评论区
+watch(theme, () => updateTheme())
 
 // 手动刷新评论：Giscus 非实时推送，切换 tab 不会自动更新，需用户主动触发。
 // postMessage 的 refresh 指令在不同版本稳定性差，这里直接重建 Giscus 脚本，
@@ -188,28 +141,15 @@ function refresh() {
   const el = container.value
   if (!el) return
   if (retryTimer) clearTimeout(retryTimer)
-  if (confirmTimer) clearTimeout(confirmTimer)
-  if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
   // 重置评论数基线：重建后重新记录基数，期间不会误触发烟花
   lastCommentCount = null
-  // 先隐藏容器：重建瞬间不闪旧主题；同时强制 iOS Safari 在重建后重新创建渲染层——
-  // 移动端暗色主题下 reactions 等区域残留白底，本质是旧渲染层未失效，隐藏 + reflow 可强制刷新
-  el.style.opacity = '0'
   // 移除已注入的 Giscus 脚本与评论 iframe
   el.querySelectorAll('script').forEach((s) => s.remove())
   const g = el.querySelector('.giscus')
   if (g) g.innerHTML = ''
-  // 强制 reflow：确保旧渲染层在此刻失效，新 iframe 按新主题重新合成
-  void el.offsetHeight
   // 重新注入脚本，拉取最新评论
   load()
   updateTheme()
-  // 等 iframe 完成首帧渲染后再恢复显示（双 rAF，确保新渲染层已就绪）
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      el.style.opacity = '1'
-    })
-  })
 }
 
 // 暴露 refresh 供父组件（留言板页）调用
@@ -221,12 +161,6 @@ defineExpose({ refresh })
 .giscus-wrap {
   margin-top: 8px;
   min-height: 200px;
-  /* 背景色跟随站点主题：iframe 加载前提供一致的视觉兜底，
-     暗色主题下避免白底突兀；iframe 内部若有透明间隙也能被外层颜色覆盖 */
-  background-color: var(--surface);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: background-color var(--transition);
 }
 
 /* Giscus 注入的 iframe 默认宽度 100%，此处无需额外处理。
@@ -235,7 +169,5 @@ defineExpose({ refresh })
 .giscus :deep(iframe) {
   width: 100%;
   border: none;
-  /* 让 iframe 背景透明，使外层 .giscus-wrap 的背景色能透过来作为兜底 */
-  background: transparent;
 }
 </style>
