@@ -192,13 +192,24 @@ function refresh() {
   if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
   // 重置评论数基线：重建后重新记录基数，期间不会误触发烟花
   lastCommentCount = null
+  // 先隐藏容器：重建瞬间不闪旧主题；同时强制 iOS Safari 在重建后重新创建渲染层——
+  // 移动端暗色主题下 reactions 等区域残留白底，本质是旧渲染层未失效，隐藏 + reflow 可强制刷新
+  el.style.opacity = '0'
   // 移除已注入的 Giscus 脚本与评论 iframe
   el.querySelectorAll('script').forEach((s) => s.remove())
   const g = el.querySelector('.giscus')
   if (g) g.innerHTML = ''
+  // 强制 reflow：确保旧渲染层在此刻失效，新 iframe 按新主题重新合成
+  void el.offsetHeight
   // 重新注入脚本，拉取最新评论
   load()
   updateTheme()
+  // 等 iframe 完成首帧渲染后再恢复显示（双 rAF，确保新渲染层已就绪）
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.style.opacity = '1'
+    })
+  })
 }
 
 // 暴露 refresh 供父组件（留言板页）调用
