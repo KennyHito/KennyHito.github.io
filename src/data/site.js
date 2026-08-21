@@ -52,6 +52,10 @@ export const site = {
   }
 }
 
+// 站点 LICENSE 文件线上地址：GitHub Pages 仅部署 dist/，仓库根目录的 LICENSE 不会进线上，
+// 故指向 GitHub 仓库内的 LICENSE 文件；复用 giscus.repo（owner/name）作为单一来源
+site.license = 'https://github.com/' + site.giscus.repo + '/blob/main/LICENSE'
+
 // 关于页展示的开源仓库列表（name：显示文本，url：仓库地址，均由 site.github 派生）
 export const repos = [
   { name: 'StudyiOS', url: site.github + '/StudyiOS' },

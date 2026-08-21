@@ -61,13 +61,39 @@
             <p class="site-text" v-for="(p, i) in intro" :key="i">{{ p }}</p>
           </div>
         </section>
+
+        <!-- 版权说明：内容与仓库 README「关于本站」章节一致，与「关于本站」平级 -->
+        <section class="about-block">
+          <h2 class="block-title">版权说明</h2>
+          <div class="prose copyright-prose">
+            <h3 class="sub-title">📌 开源协议 · Open Source License</h3>
+            <p>站点程序源码采用 <strong>MIT License</strong> 开源，详见 <a class="inline-link" :href="site.license" target="_blank" rel="noopener">LICENSE</a> 文件。</p>
+            <p class="en">The website source code is open-sourced under the <strong>MIT License</strong>. See the <a class="inline-link" :href="site.license" target="_blank" rel="noopener">LICENSE</a> file for details.</p>
+
+            <h3 class="sub-title">📝 版权声明 · Copyright Notice</h3>
+            <p>站内全部原创文章、笔记、图文内容，版权 © 2026 KennyHito，保留部分权利。</p>
+            <p class="en">All original articles, notes, and visual/text content on this site are © 2026 KennyHito. Some rights reserved.</p>
+
+            <h3 class="sub-title">🔗 转载与商用 · Redistribution &amp; Commercial Use</h3>
+            <p>非商业转载请注明原文出处与作者；未经书面许可，禁止用于商业用途。</p>
+            <p class="en">Non-commercial redistribution must credit the original source and author. Commercial use is prohibited without written permission.</p>
+
+            <h3 class="sub-title">⚠️ 免责声明 · Disclaimer</h3>
+            <p>本站所有内容仅供个人学习、知识参考之用，不构成专业建议。内容力求准确，但不保证信息绝对无误，因参考本站内容产生的一切后果由使用者自行承担。</p>
+            <p class="en">All content on this site is provided for personal study and informational reference only, and does not constitute professional advice. While we strive for accuracy, no guarantee is made that the information is absolutely error-free. Users bear full responsibility for any consequences arising from the use of this site's content.</p>
+
+            <h3 class="sub-title">🤖 AI 辅助内容 · AI-Assisted Content</h3>
+            <p>资讯如由 AI 辅助生成，若涉及侵权，请联系作者予以删除。</p>
+            <p class="en">Where content is AI-assisted, please contact the author for removal if any infringement is involved.</p>
+          </div>
+        </section>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-// 站点配置（GitHub / 邮箱 / 外链等）与仓库列表 repos
+// 站点配置（GitHub / 邮箱 / 外链等）与仓库列表 repos；site.license 为 LICENSE 线上地址
 import { site, repos } from '../data/site.js'
 // 首页数据中的「关于本站」介绍段落（intro 数组）
 import { intro } from '../data/home.js'
@@ -240,6 +266,38 @@ const [repoIOS, repoWebBasic, repoVueBasic, repoVueTest, repoVue3Test, repoHello
   font-size: 15.5px;
   line-height: 1.9;
   text-indent: 2em;
+}
+
+/* ===== 版权说明模块（与 README 内容一致）===== */
+/* 版权小节标题（H3，弱于 block-title 的 H2） */
+.prose .sub-title {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--title);
+  margin: 22px 0 8px;
+  line-height: 1.4;
+}
+
+.prose .sub-title:first-of-type {
+  margin-top: 4px;
+}
+
+/* 英文说明段落：次级信息，缩小字号 + 降低对比，与中文段落形成层次 */
+.prose .en {
+  font-size: 13.5px;
+  line-height: 1.7;
+  opacity: 0.6;
+  margin: -6px 0 12px;
+}
+
+/* 版权说明模块：中英文段落首行缩进 2 个汉字（仅作用于本模块，不影响关于我/关于本站） */
+/* 中文段落：按 .prose p 的 16px 字号，2em = 32px ≈ 2 个汉字宽 */
+.copyright-prose p {
+  text-indent: 2em;
+}
+/* 英文段落字号更小（13.5px），若也用 2em 仅 27px 不足 2 个汉字；强制 32px 与中文对齐为 2 个汉字宽 */
+.copyright-prose p.en {
+  text-indent: 32px;
 }
 
 /* 行内链接 */
