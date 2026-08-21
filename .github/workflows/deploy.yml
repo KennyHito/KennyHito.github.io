@@ -82,6 +82,13 @@ jobs:
     if: always()   # 成功/失败都通知；仅失败时通知请改为 if: failure()
     runs-on: ubuntu-latest
     steps:
+      - name: Read site URL   # 从 src/data/site.js 读取 site.devnote 作为线上访问地址
+        id: site
+        run: |
+          # 正则提取 site.js 中 site.devnote 的值（如 https://devnote.site），写入 step 输出供后续步骤使用
+          URL=$(node -e "const fs=require('fs');const s=fs.readFileSync('src/data/site.js','utf8');const m=s.match(/devnote:\s*['\"]([^'\"]+)['\"]/);process.stdout.write(m?m[1]:'')")
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+
       - name: Send Feishu notification   # 组装并发送飞书文本消息
         env:
           # 飞书机器人 webhook 地址，取自仓库密钥（不硬编码在文件中）
@@ -94,6 +101,7 @@ jobs:
           BRANCH: ${{ github.ref_name }}             # 触发部署的分支名
           COMMIT_MSG: ${{ github.event.head_commit.message || '手动触发 / Workflow dispatch' }}  # 提交信息（手动触发时回退）
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}  # Actions 运行详情链接
+          SITE_URL: ${{ steps.site.outputs.url }}   # 线上访问地址，取自 site.js 的 site.devnote
         run: |
           # 用 jq 构造飞书 msg_type:text 消息体，再通过 curl POST 到飞书 webhook
           jq -n \
@@ -104,9 +112,10 @@ jobs:
             --arg build "$BUILD_RESULT" \
             --arg deploy "$DEPLOY_RESULT" \
             --arg url "$RUN_URL" \
+            --arg site_url "$SITE_URL" \
             '{
               msg_type: "text",
               content: {
-                text: "GitHub Pages 部署\($status)\n仓库：\($repo)\n分支：\($branch)\n提交：\($commit)\n构建：\($build) | 部署：\($deploy)\n查看详情：\($url)"
+                text: "GitHub Pages 部署\($status)\n仓库：\($repo)\n分支：\($branch)\n提交：\($commit)\n构建：\($build) | 部署：\($deploy)\n查看详情：\($url)\n访问地址：\($site_url)"
               }
             }' | curl -s -X POST "$FEISHU_WEBHOOK" -H "Content-Type: application/json" -d @-
