@@ -26,6 +26,8 @@ const { theme } = useTheme()
 const cfg = site.giscus || {}
 // 重试计时器：iframe 尚未加载完成时轮询同步主题
 let retryTimer = null
+// 延迟确认计时器：postMessage 后二次确认主题已生效
+let confirmTimer = null
 
 // 根据配置与当前站点主题推导 Giscus 主题
 function buildTheme() {
@@ -63,7 +65,9 @@ function load() {
   s.setAttribute('data-theme', buildTheme())
   s.setAttribute('data-lang', cfg.lang || 'zh-CN')
   s.setAttribute('data-loading', 'lazy')
-  container.value.appendChild(s)
+  // 标准做法：把脚本注入到 .giscus 容器内，确保 Giscus 能正确定位 iframe 挂载点
+  const giscusEl = container.value.querySelector('.giscus')
+  if (giscusEl) giscusEl.appendChild(s)
 }
 
 // 向 Giscus iframe 发送主题切换指令；iframe 未就绪时轮询重试
@@ -85,6 +89,18 @@ function updateTheme() {
     // 强制 iframe 的 color-scheme 与站点主题一致：防止系统级 UI
     // （滚动条、原生下拉、表情选择器等）在系统开暗色时自动变暗
     iframe.style.colorScheme = theme.value === 'dark' ? 'dark' : 'light'
+    // 延迟二次确认：iframe 初始化期间首次 postMessage 可能未完全生效，
+    // 600ms 后再发一次确保所有组件（reactions、评论头部等）都正确跟随主题
+    if (confirmTimer) clearTimeout(confirmTimer)
+    confirmTimer = setTimeout(() => {
+      const reCheck = document.querySelector('iframe.giscus-frame')
+      if (reCheck && reCheck.src && reCheck.src.startsWith('https://giscus.app')) {
+        reCheck.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: buildTheme(), pollIntervalMs: 3000 } } },
+          'https://giscus.app'
+        )
+      }
+    }, 600)
     if (retryTimer) {
       clearTimeout(retryTimer)
       retryTimer = null
@@ -129,6 +145,7 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('message', onGiscusMessage)
   if (retryTimer) clearTimeout(retryTimer)
+  if (confirmTimer) clearTimeout(confirmTimer)
 })
 
 // 站点主题切换时同步到评论区
@@ -141,6 +158,7 @@ function refresh() {
   const el = container.value
   if (!el) return
   if (retryTimer) clearTimeout(retryTimer)
+  if (confirmTimer) clearTimeout(confirmTimer)
   // 重置评论数基线：重建后重新记录基数，期间不会误触发烟花
   lastCommentCount = null
   // 移除已注入的 Giscus 脚本与评论 iframe
@@ -161,6 +179,12 @@ defineExpose({ refresh })
 .giscus-wrap {
   margin-top: 8px;
   min-height: 200px;
+  /* 背景色跟随站点主题：iframe 加载前提供一致的视觉兜底，
+     暗色主题下避免白底突兀；iframe 内部若有透明间隙也能被外层颜色覆盖 */
+  background-color: var(--surface);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: background-color var(--transition);
 }
 
 /* Giscus 注入的 iframe 默认宽度 100%，此处无需额外处理。
@@ -169,5 +193,7 @@ defineExpose({ refresh })
 .giscus :deep(iframe) {
   width: 100%;
   border: none;
+  /* 让 iframe 背景透明，使外层 .giscus-wrap 的背景色能透过来作为兜底 */
+  background: transparent;
 }
 </style>
