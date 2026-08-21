@@ -82,6 +82,9 @@ jobs:
     if: always()   # 成功/失败都通知；仅失败时通知请改为 if: failure()
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout        # notify 是独立 job，需要先检出代码才能读取 src/data/site.js
+        uses: actions/checkout@v5
+
       - name: Read site URL   # 从 src/data/site.js 读取 site.devnote 作为线上访问地址
         id: site
         run: |
