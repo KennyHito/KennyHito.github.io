@@ -66,29 +66,25 @@ function load() {
   container.value.appendChild(s)
 }
 
-// 同步 Giscus 主题到 iframe；iframe 未就绪时轮询重试。
-// 关键：iframe 元素一旦出现，就立即强制其 color-scheme —— iframe 元素上的 color-scheme
-// 会传播到 iframe 内部文档，覆盖 Giscus 自带的 <meta name="color-scheme" content="light dark">，
-// 从而让滚动条、输入框、表情选择器等原生 UI 严格跟随网站主题开关，而不是跟随手机系统配色。
+// 向 Giscus iframe 发送主题切换指令；iframe 未就绪时轮询重试
 function updateTheme() {
   const iframe = document.querySelector('iframe.giscus-frame')
-  // iframe 元素只要存在即可设置 color-scheme（元素属性，无需等 src 就绪）
-  if (iframe) {
-    iframe.style.colorScheme = theme.value === 'dark' ? 'dark' : 'light'
-  }
-  // src 还没切到 giscus.app（仍处于 about:blank / 本地 dev 等中间态）说明 Giscus
-  // 尚未真正就绪，继续轮询，此时不要 postMessage（contentWindow origin 不对会抛错）。
+  // iframe 元素尚未注入，或 src 还没切到 giscus.app（仍处于 about:blank / 本地 dev 等中间态），
+  // 都说明 Giscus 还没真正就绪，继续轮询即可，不要调用 postMessage。
   if (!iframe || !iframe.src || !iframe.src.startsWith('https://giscus.app')) {
     retryTimer = setTimeout(updateTheme, 300)
     return
   }
   try {
     const giscusTheme = buildTheme()
-    // postMessage 动态同步内部主题（与 data-theme 双保险，供重建后微调使用）
+    // 同步 Giscus 内部主题
     iframe.contentWindow.postMessage(
       { giscus: { setConfig: { theme: giscusTheme, pollIntervalMs: 3000 } } },
       'https://giscus.app'
     )
+    // 强制 iframe 的 color-scheme 与站点主题一致：防止系统级 UI
+    // （滚动条、原生下拉、表情选择器等）在系统开暗色时自动变暗
+    iframe.style.colorScheme = theme.value === 'dark' ? 'dark' : 'light'
     if (retryTimer) {
       clearTimeout(retryTimer)
       retryTimer = null
@@ -133,17 +129,10 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('message', onGiscusMessage)
   if (retryTimer) clearTimeout(retryTimer)
-  if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
 })
 
-// 站点主题切换时重建评论 iframe：Giscus 的 postMessage 动态切主题在 iOS Safari 上不可靠
-// （部分组件不重绘、残留旧主题底色，表现为白底/灰字混合），重建让 iframe 从加载起就
-// 携带正确的 data-theme 渲染，所有组件（含表情反应栏）一次性到位。300ms 防抖合并快速连点。
-let themeRebuildTimer = null
-watch(theme, () => {
-  clearTimeout(themeRebuildTimer)
-  themeRebuildTimer = setTimeout(refresh, 300)
-})
+// 站点主题切换时同步到评论区
+watch(theme, () => updateTheme())
 
 // 手动刷新评论：Giscus 非实时推送，切换 tab 不会自动更新，需用户主动触发。
 // postMessage 的 refresh 指令在不同版本稳定性差，这里直接重建 Giscus 脚本，
@@ -152,7 +141,6 @@ function refresh() {
   const el = container.value
   if (!el) return
   if (retryTimer) clearTimeout(retryTimer)
-  if (themeRebuildTimer) clearTimeout(themeRebuildTimer)
   // 重置评论数基线：重建后重新记录基数，期间不会误触发烟花
   lastCommentCount = null
   // 移除已注入的 Giscus 脚本与评论 iframe
@@ -169,25 +157,17 @@ defineExpose({ refresh })
 </script>
 
 <style scoped>
-/* 评论容器：与站点主题一致的背景 + 圆角。
-   兜底作用：iframe 加载前、主题切换重建期间、或 iframe 内部任何渲染异常时，
-   容器背景始终保持与主题一致（暗色下为深色而非白色），杜绝白底突兀。 */
+/* 评论容器：限制最大宽度、与页面风格一致的留白 */
 .giscus-wrap {
   margin-top: 8px;
   min-height: 200px;
-  background: var(--surface);
-  border-radius: 12px;
-  overflow: hidden;
 }
 
-/* Giscus 注入的 iframe 默认宽度 100%。
-   iframe 背景透明：让外层 .giscus-wrap 的主题背景能透过去，覆盖任何内部异常白底。
-   color-scheme 由 JS 在 updateTheme 中动态设为 light/dark（iframe 元素 color-scheme
-   会传播到内部文档，覆盖其 <meta name="color-scheme">），强制原生 UI 跟随网站主题开关，
-   而不是跟随手机系统配色。 */
+/* Giscus 注入的 iframe 默认宽度 100%，此处无需额外处理。
+   color-scheme 由 JS 在 updateTheme 中动态设为 light/dark，与站点主题按钮保持一致，
+   避免系统暗色模式影响 iframe 内部的滚动条、表情选择器等系统/半系统 UI。 */
 .giscus :deep(iframe) {
   width: 100%;
   border: none;
-  background: transparent;
 }
 </style>
