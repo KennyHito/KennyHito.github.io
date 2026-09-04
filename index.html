@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <!-- 声明文档字符编码为 UTF-8，必须置于 head 最前，避免中文乱码 -->
+  <meta charset="UTF-8" />
+  <!-- 移动端视口配置：宽度=设备宽度、初始/最大缩放=1、禁止用户双指缩放，保证移动端布局与桌面一致 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <!-- 浏览器标签页 / 书签栏显示的站点图标（favicon），指向站点根目录的 favicon.ico -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- 预连接 Giscus 评论服务（preconnect）：提前完成 DNS + TLS + TCP 握手，加速后续评论脚本加载 -->
+  <link rel="preconnect" href="https://giscus.app" crossorigin>
+  <!-- 预解析 Giscus 域名（dns-prefetch，兼容不支持 preconnect 的浏览器）：提前做 DNS 解析 -->
+  <link rel="dns-prefetch" href="https://giscus.app">
+  <!-- 预解析自建访问统计接口域名（Cloudflare Worker /count，与 AI 对话同域），加速首次计数请求 -->
+  <link rel="dns-prefetch" href="https://itdevelop.cloud">
+  <!-- 浏览器标题栏与搜索引擎结果中展示的站点标题 -->
+  <title>知识分享站</title>
+  <!-- 页面摘要：默认全站描述，路由切换时由 router.afterEach 按当前页动态覆盖 -->
+  <meta name="description" content="知识分享站是一个面向开发者的技术笔记与在线工具集合，收录常用开发小工具、AI 资讯与学习心得，工具全部在浏览器本地运行，数据不上传。" />
+  <!-- 首屏主题防闪烁（FOUC）脚本：
+   在 HTML 解析阶段从 localStorage 读取用户主题偏好并写入 <html data-theme>，确保暗色模式首屏不白闪 
+  -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('knowshare-theme') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+        console.log('[Theme] 首屏解析 data-theme=', t, '| color-scheme=', document.documentElement.style.colorScheme);
+      } catch (e) { }
+    })();
+  </script>
+  <!--
+    Google AdSense 广告加载脚本（站点级自动广告入口）
+      async             ：异步加载，不阻塞页面解析与渲染（广告脚本晚于首屏内容执行）
+      client=ca-pub-... ：本站的 AdSense 发布商 ID（publisher ID），标识广告收益归属，不可随意更改
+      crossorigin       ：以匿名跨域方式请求脚本，满足广告投放与效果统计所需的 CORS 头
+  -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4198423792336569"
+    crossorigin="anonymous"></script>
+  <!-- Google AdSense 站点所有权元标记：声明本站关联的 AdSense 发布商账号（ca-pub-4198423792336569），作为脚本 / ads.txt 之外的补充验证方式；为纯静态标签，爬虫无需执行 JS 即可读取，验证更稳更快 -->
+  <meta name="google-adsense-account" content="ca-pub-4198423792336569">
+  <script type="module" crossorigin src="/assets/index-FInZVjQV.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DXWa7OP8.css">
+</head>
+
+<body>
+  <!-- Vue 应用挂载点：构建后的页面内容由 main.js 渲染并注入此容器 -->
+  <div id="app"></div>
+  <!-- Vue 应用入口脚本：以 ES Module 方式加载并执行 src/main.js，启动整个前端应用（含路由、组件树等） -->
+</body>
+
+</html>
