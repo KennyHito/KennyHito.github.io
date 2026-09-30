@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 - 页面走丢了</title>
+  <!--
+    GitHub Pages 默认 404 处理：
+    当用户直接访问一个真实路径（非 hash）下不存在的链接时，
+    GitHub Pages 会返回本文件。脚本把"真实路径"转成 hash 路由
+    （例如 /foo/bar -> /#/foo/bar），交给 vue-router 的兜底路由，
+    从而渲染站内自定义的 404 页面（src/pages/NotFound.vue）。
+  -->
+  <script>
+    (function () {
+      var path = window.location.pathname + window.location.search
+      window.location.replace(window.location.origin + '/#' + path)
+    })()
+  </script>
+</head>
+<body>
+  <p>页面不存在，正在跳转…</p>
+</body>
+</html>
