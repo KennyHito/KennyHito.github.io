@@ -1,0 +1,1 @@
+import{_ as t}from"./index-B-z1hNCE.js";import{o,c as r,r as n,h as d,z as p}from"./vue-BcFuepVB.js";const l={__name:"PageEnd",props:{spaced:{type:Boolean,default:!0}},setup(a){return(s,e)=>(o(),r("div",{class:d(["page-end",{"page-end--flat":!a.spaced}])},[n(s.$slots,"default",{},()=>[e[0]||(e[0]=p("叮！已达到最底部",-1))])],2))}},_=t(l,[["__scopeId","data-v-3b54d5b9"]]);export{_ as P};

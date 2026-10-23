@@ -1,0 +1,1 @@
+import{_ as e}from"./index-B-z1hNCE.js";import{c as o,o as c}from"./vue-BcFuepVB.js";import"./markdown-injMQ18E.js";const s={},t={class:"message-placeholder"};function r(a,_){return c(),o("section",t)}const m=e(s,[["render",r],["__scopeId","data-v-e536eee6"]]);export{m as default};
